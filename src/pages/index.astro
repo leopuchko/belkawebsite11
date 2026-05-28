@@ -71,7 +71,9 @@ const groups = [
 
 <!-- ══ HERO ══ -->
 <section class="hero" id="hero">
-  <img class="hero-bigsquirrel" src="/logo-orange.png" alt="" />
+  <div class="hero-squirrel-wrap">
+    <img class="hero-bigsquirrel" src="/logo-orange.png" alt="" />
+  </div>
   <div class="hero-stage">
     <div>
       <h1 class="hero-title">
@@ -617,9 +619,20 @@ const groups = [
   paint-order: stroke fill;   /* сначала обводка, потом заливка поверх */
 }
 .hero-title .accent { color:var(--orange); font-style:italic; }
+/* Wrapper: позиция + вертикальное центрирование по заголовку */
+.hero-squirrel-wrap {
+  position: absolute;
+  top: 50%;
+  right: clamp(20px, 6vw, 90px);
+  transform: translateY(-50%);
+  z-index: 1;
+  pointer-events: none;
+}
+/* Картинка: только размер + боб-анимация */
 .hero-bigsquirrel {
-  position:absolute; top:60px; right: clamp(0px, 2vw, 40px);
-  width: min(50vw, 660px); opacity:0.95; z-index:1;
+  display: block;
+  width: min(50vw, 660px);
+  opacity: 0.95;
   filter: drop-shadow(0 30px 60px rgba(0,0,0,0.4));
   animation: bob 6s ease-in-out infinite;
 }
