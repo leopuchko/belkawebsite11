@@ -619,19 +619,19 @@ const groups = [
   paint-order: stroke fill;   /* сначала обводка, потом заливка поверх */
 }
 .hero-title .accent { color:var(--orange); font-style:italic; }
-/* Wrapper: позиция + вертикальное центрирование по заголовку */
+/* Wrapper: позиция по right + top рассчитан так, чтобы центр белки
+   совпал с центром заголовка (padding 140px + 3 строки × font × 0.86) */
 .hero-squirrel-wrap {
   position: absolute;
-  top: 50%;
-  left: 43%;                   /* левый край белки = правый край текста */
-  transform: translateY(-50%);
+  top: calc(140px + 1.29 * clamp(86px, 17vw, 280px) - min(50vw, 660px) / 2);
+  right: clamp(0px, 2vw, 40px);
   z-index: 1;
   pointer-events: none;
 }
-/* Картинка: заполняет от текста до правого края экрана */
+/* Картинка: оригинальный размер + боб-анимация */
 .hero-bigsquirrel {
   display: block;
-  width: min(55vw, 1100px);
+  width: min(50vw, 660px);
   opacity: 0.95;
   filter: drop-shadow(0 30px 60px rgba(0,0,0,0.4));
   animation: bob 6s ease-in-out infinite;
@@ -670,7 +670,7 @@ const groups = [
   animation: pulse 1.6s ease-in-out infinite;
 }
 @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.3);} }
-@media(max-width:760px){ .hero-meta{grid-template-columns:repeat(2,1fr);} .hero-squirrel-wrap{left:30%;opacity:0.22;} .hero-bigsquirrel{width:min(68vw,520px);} }
+@media(max-width:760px){ .hero-meta{grid-template-columns:repeat(2,1fr);} .hero-squirrel-wrap{opacity:0.18;} }
 
 /* ══ MARQUEE ══ */
 .marquee { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--orange); color:var(--ink); overflow:hidden; padding:22px 0; }
