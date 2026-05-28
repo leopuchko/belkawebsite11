@@ -1,0 +1,154 @@
+---
+const nav = [
+  { href: '/#directions', label: 'Направления' },
+  { href: '/#schedule', label: 'Расписание' },
+  { href: '/#coaches', label: 'Тренеры' },
+  { href: '/#prices', label: 'Цены' },
+  { href: '/#contacts', label: 'Контакты' },
+];
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo" aria-label="Белка — школа танца">
+      <img src="/logo.png" alt="Белка" width="42" height="42" />
+      <span class="logo-text">Белка</span>
+    </a>
+
+    <nav class="nav" aria-label="Главное меню">
+      {nav.map((item) => (
+        <a href={item.href}>{item.label}</a>
+      ))}
+    </nav>
+
+    <a href="/#signup" class="btn btn-primary btn-sm">Записаться</a>
+
+    <button class="burger" aria-label="Меню" id="burger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    {nav.map((item) => (
+      <a href={item.href}>{item.label}</a>
+    ))}
+    <a href="/#signup" class="btn btn-primary">Записаться</a>
+  </div>
+</header>
+
+<script>
+  const burger = document.getElementById('burger');
+  const menu = document.getElementById('mobileMenu');
+  burger?.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    menu?.classList.toggle('open');
+  });
+  document.querySelectorAll('#mobileMenu a').forEach((a) => {
+    a.addEventListener('click', () => {
+      burger?.classList.remove('open');
+      menu?.classList.remove('open');
+    });
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: 72px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .logo img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+  }
+
+  .logo-text {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .nav {
+    display: flex;
+    gap: 32px;
+    margin-left: auto;
+    margin-right: 24px;
+  }
+
+  .nav a {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--fg-muted);
+  }
+
+  .nav a:hover { color: var(--fg); }
+
+  .btn-sm {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+  }
+
+  .burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+  }
+
+  .burger span {
+    width: 24px;
+    height: 2px;
+    background: var(--fg);
+    transition: all 0.2s ease;
+  }
+
+  .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .burger.open span:nth-child(2) { opacity: 0; }
+  .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .mobile-menu {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+    background: var(--bg-elev);
+    border-top: 1px solid var(--border);
+  }
+
+  .mobile-menu.open { display: flex; }
+
+  .mobile-menu a {
+    font-size: 1.1rem;
+    padding: 8px 0;
+  }
+
+  @media (max-width: 860px) {
+    .nav, .header-inner > .btn { display: none; }
+    .burger { display: flex; }
+  }
+</style>

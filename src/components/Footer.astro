@@ -1,0 +1,104 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="brand">
+      <img src="/logo.png" alt="Белка" width="36" height="36" />
+      <div>
+        <div class="brand-name">Белка</div>
+        <div class="brand-sub">Школа танца · Витебск</div>
+      </div>
+    </div>
+
+    <nav class="foot-nav">
+      <a href="/#directions">Направления</a>
+      <a href="/#schedule">Расписание</a>
+      <a href="/#coaches">Тренеры</a>
+      <a href="/#prices">Цены</a>
+      <a href="/#contacts">Контакты</a>
+    </nav>
+
+    <div class="socials">
+      <a href="https://instagram.com/belka.empire" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a>
+    </div>
+  </div>
+
+  <div class="container copyright">
+    © {year} Белка · Все права защищены
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 80px;
+    padding: 56px 0 24px;
+    background: var(--bg-elev);
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 32px;
+    align-items: start;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .brand-sub {
+    font-size: 0.85rem;
+    color: var(--fg-muted);
+  }
+
+  .foot-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+  }
+
+  .foot-nav a {
+    font-size: 0.9rem;
+    color: var(--fg-muted);
+  }
+
+  .socials {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+  }
+
+  .socials a {
+    font-size: 0.9rem;
+    color: var(--fg-muted);
+  }
+
+  .copyright {
+    margin-top: 24px;
+    font-size: 0.8rem;
+    color: var(--fg-muted);
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .foot-nav, .socials { justify-content: center; }
+  }
+</style>

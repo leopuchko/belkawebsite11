@@ -1,0 +1,1012 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const marqueeItems1 = ["Hip-Hop", "Breaking", "Acro", "Stretch", "Crew", "Battles", "Performances", "Витебск", "с 2014", "Belka"];
+const marqueeItems2 = ["Belka Crew", "от 4 до 45+", "Витебск · Belka", "Hip-Hop / Breaking / Acro", "2026 / 27 SEASON"];
+
+const stylesData = [
+  { n: "01", name: "Hip-Hop", ital: "& Choreo", desc: "Groove, OG-style, choreo. База, на которой держится всё остальное.", tag: "5+ групп", thumb: "hop" },
+  { n: "02", name: "Breaking", ital: "Bboy / Bgirl", desc: "Олимпийская дисциплина. Footwork, power, freezes — джемы и батлы.", tag: "4 группы", thumb: "break" },
+  { n: "03", name: "Acrobatics", ital: "Acro", desc: "Колёса, рондаты, фляки, стойки. Маты, страховка, тренер рядом.", tag: "3 группы", thumb: "acro" },
+  { n: "04", name: "Stretch", ital: "& Body", desc: "Растяжка и мобилити. Идеально как «второе занятие» в неделю.", tag: "2 группы", thumb: "stretch" },
+];
+
+const crewData = [
+  { name: "Имя Тренера", role: "Hip-Hop · Head Coach", bio: "Призёр чемпионатов РБ. В Belka с 2016." },
+  { name: "Имя Тренера", role: "Breaking · Bboy", bio: "Battle scene, RBC One Cypher." },
+  { name: "Имя Тренера", role: "Acro · Спортивная гимнастика", bio: "КМС, безопасная страховка детей." },
+  { name: "Имя Тренера", role: "Kids & Stretch", bio: "Работа с малышами и группой 30+." },
+];
+
+const stageTiles = [
+  { cls: "t-1", title: "Отчётный концерт", when: "июнь 2025", bg: "#FF5C1A" },
+  { cls: "t-2", title: "Чемпионат РБ Breaking", when: "апрель 2025", bg: "#F5F2EC" },
+  { cls: "t-3", title: "Open jam", when: "пт", bg: "#0A0A0A" },
+  { cls: "t-4", title: "Acro-шоу", when: "февраль", bg: "#FF5C1A" },
+  { cls: "t-5", title: "Belka Crew Jr.", when: "Кубок Top Step", bg: "#F5F2EC" },
+  { cls: "t-6", title: "Славянский базар", when: "лето 2024", bg: "#1a1a1a" },
+];
+
+const days = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+const times = ["16:00", "17:00", "18:00", "19:00", "20:00"];
+type SchedClass = [string, string, string];
+const sched: Record<string, Record<string, SchedClass>> = {
+  "16:00": { "Пн":["hop","4–6","Мини"], "Ср":["hop","4–6","Мини"], "Пт":["hop","4–6","Мини"], "Сб":["acro","4–6","Acro малыши"] },
+  "17:00": { "Пн":["hop","7–11","Hip-Hop Kids"], "Вт":["break","7–11","Break Kids"], "Ср":["hop","7–11","Hip-Hop Kids"], "Чт":["break","7–11","Break Kids"], "Сб":["hop","7–11","Hip-Hop Kids"] },
+  "18:00": { "Пн":["acro","12–17","Acro Teens"], "Вт":["hop","12–17","Hip-Hop Teens"], "Ср":["acro","12–17","Acro Teens"], "Чт":["hop","12–17","Hip-Hop Teens"], "Пт":["break","12–17","Crew"], "Сб":["hop","12–17","Crew"] },
+  "19:00": { "Пн":["hop","18+","Adult Hop"], "Вт":["break","18+","Break Adults"], "Ср":["hop","18+","Adult Hop"], "Чт":["break","18+","Break Adults"], "Пт":["hop","18+","Open Jam"] },
+  "20:00": { "Вт":["hop","30+","30+ Hip-Hop"], "Чт":["hop","30+","30+ Hip-Hop"], "Сб":["acro","30+","30+ Stretch"] },
+};
+
+const groups = [
+  { id: "mini",   age: "4–6",   label: "Мини",       title: "Танцевальный детский сад.", accent: "Первое касание сцены.", lead: "Раз в неделю по 45 минут. Игровая форма, ритмика, первая хореография.", bullets: ["Координация и чувство ритма","Первый отчётный концерт","Тренер с опытом с малышами"], price: 110, breakdown: [["Занятий в месяц","4"],["Длительность","45 мин"],["Размер группы","до 10"]], ribbon: "Хит" },
+  { id: "kids",   age: "7–11",  label: "Дети",        title: "Hip-Hop / Acro / Break.", accent: "Выбор первого стиля.", lead: "Дважды в неделю по 60 минут. Базы, связки, первые выступления.", bullets: ["Полноценная база стиля","Первые батлы и фестивали","Команда Belka Crew Jr."], price: 160, breakdown: [["Занятий в месяц","8"],["Длительность","60 мин"],["Размер группы","до 12"]] },
+  { id: "teens",  age: "12–17", label: "Подростки",   title: "Серьёзно и в команде.", accent: "Тренировки + выступления.", lead: "Три раза в неделю по 90 минут. Старшая команда — уже сборная.", bullets: ["Углублённая техника и фристайл","Чемпионаты РБ и высшие разряды","Тренерская ассистентура"], price: 195, breakdown: [["Занятий в месяц","12"],["Длительность","90 мин"],["Размер группы","до 14"]], ribbon: "Crew" },
+  { id: "adults", age: "18–29", label: "Взрослые",    title: "Танцевать как для себя.", accent: "Без оценочности.", lead: "Вечерние группы после работы. 90 минут разгрузки.", bullets: ["Без обязательных выступлений","Гибкое посещение по абонементу","Открытые джемы по пятницам"], price: 175, breakdown: [["Занятий в месяц","8"],["Длительность","90 мин"],["Размер группы","до 16"]] },
+  { id: "thirty", age: "30+",   label: "30+",          title: "Никогда не поздно.", accent: "Серьёзно — никогда.", lead: "Отдельная группа без подростковой суеты. Техника и удовольствие.", bullets: ["Тренер, понимающий тело 30+","Концерт «Belka 30+» каждый июнь","Без сравнений с детьми"], price: 175, breakdown: [["Занятий в месяц","8"],["Длительность","90 мин"],["Размер группы","до 14"]], ribbon: "Новое" },
+];
+---
+
+<BaseLayout>
+
+<!-- ══ NAV ══ -->
+<header class="nav" id="top">
+  <a href="#top" class="nav-brand">
+    <img src="/logo-white.png" alt="Belka" width="36" height="36" />
+    <span class="name">Belka</span>
+    <span class="city">Витебск · с 2014</span>
+  </a>
+  <nav class="nav-links">
+    <a href="#styles">Стили</a>
+    <a href="#groups">Группы</a>
+    <a href="#perf">Выступления</a>
+    <a href="#schedule">Расписание</a>
+    <a href="#contacts">Контакты</a>
+  </nav>
+  <div class="nav-cta">
+    <a href="#trial" class="btn btn-primary">Пробное занятие <span class="arrow">→</span></a>
+  </div>
+</header>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="hero">
+  <img class="hero-bigsquirrel" src="/logo-orange.png" alt="" />
+  <div class="hero-stage">
+    <div>
+      <div class="eyebrow" style="margin-bottom:28px">Школа танца · Витебск</div>
+      <h1 class="hero-title">
+        <span class="row">Dance</span>
+        <span class="row out">like a</span>
+        <span class="row accent">Belka.</span>
+      </h1>
+    </div>
+    <div class="hero-meta">
+      <div class="cell"><div class="k">Стили</div><div class="v">Hip-Hop<br/>Breaking<br/><span class="accent">Acro</span></div></div>
+      <div class="cell"><div class="k">Возраст</div><div class="v">от <span class="accent">4</span><br/>до 45+</div></div>
+      <div class="cell"><div class="k">Группы</div><div class="v"><span class="accent">12</span> групп<br/>6 уровней</div></div>
+      <div class="cell"><div class="k">Выступления</div><div class="v"><span class="accent">40+</span><br/>в год</div></div>
+    </div>
+    <div class="hero-actions">
+      <a href="#trial" class="btn btn-primary">Записаться на пробное <span class="arrow">→</span></a>
+      <a href="#styles" class="btn btn-ghost">Смотреть стили</a>
+    </div>
+  </div>
+  <div class="hero-tick">
+    <span class="dot"></span>
+    Сейчас идёт набор · сезон 2026 / 27
+  </div>
+</section>
+
+<!-- ══ MARQUEE 1 (orange) ══ -->
+<div class="marquee">
+  <div class="track">
+    {[...marqueeItems1, ...marqueeItems1].map((t) => (
+      <span class="item">{t}<span class="dot" /></span>
+    ))}
+  </div>
+</div>
+
+<!-- ══ REEL ══ -->
+<section class="reel" id="reel">
+  <div class="reel-head shell">
+    <div>
+      <div class="eyebrow" style="margin-bottom:16px">/ Showreel</div>
+      <h2 class="h2">Belka <span style="color:var(--orange)">в&nbsp;движении.</span></h2>
+    </div>
+    <p class="body-text" style="max-width:36ch">Живые выступления, отчётные концерты, чемпионаты.</p>
+  </div>
+  <div class="reel-stage shell">
+    <span class="tag">Showreel · 2025</span>
+    <div class="reel-placeholder ph-ink-stripe">
+      <span class="ph-label">Showreel · видео или постер</span>
+    </div>
+    <div class="play" aria-hidden="true"></div>
+    <div class="caption">
+      <span class="ttl">Belka Crew · отчётный концерт</span>
+      <span>02:34</span>
+    </div>
+  </div>
+  <div class="reel-grid shell">
+    <div class="reel-still ph-ink-stripe"><span class="ph-label">Кадр 1 · батл</span></div>
+    <div class="reel-still ph-ink-stripe"><span class="ph-label">Кадр 2 · акро</span></div>
+    <div class="reel-still ph-ink-stripe"><span class="ph-label">Кадр 3 · детская группа</span></div>
+  </div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section class="about" id="about">
+  <div class="col-l">
+    <div class="num">/ 01 — О школе</div>
+    <h2 class="h2">12 лет<br/><span class="o">в движении.</span></h2>
+  </div>
+  <div class="col-r">
+    <p class="lead">Танцевальная семья из Витебска. Hip-Hop, Breaking и Acro — от первой тренировки до сцены.</p>
+    <div class="stats">
+      <div class="stat"><div class="n">1&nbsp;200+</div><div class="l">учеников</div></div>
+      <div class="stat"><div class="n">23</div><div class="l">медали 2024–25</div></div>
+      <div class="stat"><div class="n">3</div><div class="l">зала в центре</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MARQUEE 2 (ink / reverse) ══ -->
+<div class="marquee ink reverse">
+  <div class="track">
+    {[...marqueeItems2, ...marqueeItems2].map((t) => (
+      <span class="item">{t}<span class="dot" /></span>
+    ))}
+  </div>
+</div>
+
+<!-- ══ STYLES ══ -->
+<section class="styles" id="styles">
+  <div class="styles-head">
+    <div>
+      <div class="eyebrow" style="margin-bottom:16px">/ 02 — Направления</div>
+      <h2 class="h2">Четыре <span class="o">направления.</span></h2>
+    </div>
+    <p class="body-text" style="color:rgba(10,10,10,0.7);max-width:42ch">Можно одно. Можно комбинировать.</p>
+  </div>
+  {stylesData.map((s) => (
+    <div class="style-row">
+      <div class="style-num">{s.tag}<br/>{s.n}</div>
+      <h3 class="style-name">{s.name} <span class="ital">{s.ital}</span></h3>
+      <p class="style-meta">{s.desc}</p>
+      <div class={`style-thumb thumb-${s.thumb}`}>
+        {s.thumb === "hop" && (
+          <svg viewBox="0 0 200 140" preserveAspectRatio="xMidYMid slice">
+            <defs><pattern id="pHop" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#0A0A0A"/><rect width="7" height="14" fill="#FF5C1A"/></pattern></defs>
+            <rect width="200" height="140" fill="url(#pHop)"/>
+            <circle cx="100" cy="70" r="40" fill="#F5F2EC"/>
+            <text x="100" y="76" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#0A0A0A" letter-spacing="2">HIP-HOP</text>
+          </svg>
+        )}
+        {s.thumb === "break" && (
+          <svg viewBox="0 0 200 140" preserveAspectRatio="xMidYMid slice">
+            <rect width="200" height="140" fill="#F5F2EC"/>
+            <g stroke="#0A0A0A" stroke-width="1" fill="none">
+              {Array.from({length:14},(_,i) => <line key={i} x1="0" y1={i*10} x2="200" y2={i*10+30}/>)}
+            </g>
+            <rect x="80" y="50" width="40" height="40" fill="#FF5C1A" transform="rotate(45 100 70)"/>
+          </svg>
+        )}
+        {s.thumb === "acro" && (
+          <svg viewBox="0 0 200 140" preserveAspectRatio="xMidYMid slice">
+            <rect width="200" height="140" fill="#FF5C1A"/>
+            {Array.from({length:8},(_,i) => <circle key={i} cx={25+i*22} cy="70" r={4+(i%3)*4} fill="#0A0A0A" opacity="0.8"/>)}
+            <path d="M 0 100 Q 100 20 200 100" stroke="#0A0A0A" stroke-width="3" fill="none"/>
+          </svg>
+        )}
+        {s.thumb === "stretch" && (
+          <svg viewBox="0 0 200 140" preserveAspectRatio="xMidYMid slice">
+            <rect width="200" height="140" fill="#0A0A0A"/>
+            {Array.from({length:20},(_,i) => <line key={i} x1={i*12} y1="0" x2={i*12-40} y2="140" stroke="#FF5C1A" stroke-width="2" opacity="0.55"/>)}
+          </svg>
+        )}
+        <span class="label">PHOTO · {s.name.toUpperCase()}</span>
+      </div>
+    </div>
+  ))}
+</section>
+
+<!-- ══ CREW ══ -->
+<section class="crew" id="crew">
+  <div class="crew-head">
+    <div>
+      <div class="eyebrow" style="margin-bottom:16px">/ Тренеры</div>
+      <h2 class="h2">Те, кто <span class="o">ведёт.</span></h2>
+    </div>
+    <p class="body-text" style="color:rgba(10,10,10,0.7)">Практикующие танцоры — тренеры с живой практикой.</p>
+  </div>
+  <div class="crew-grid">
+    {crewData.map((c, i) => (
+      <div class="crew-card">
+        <div class={`crew-photo ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}>
+          <span class="ph-label">{c.name}</span>
+        </div>
+        <div class="role">{c.role}</div>
+        <h3 class="name">{c.name}</h3>
+        <p class="bio">{c.bio}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
+<!-- ══ GROUPS ══ -->
+<section class="groups" id="groups">
+  <div class="groups-head">
+    <div>
+      <div class="eyebrow" style="margin-bottom:16px">/ 04 — Возрастные группы</div>
+      <h2 class="h2">От <span class="o">4</span> до <span class="o">∞</span>.</h2>
+    </div>
+    <p class="body-text" style="color:rgba(10,10,10,0.7)">Hip-Hop, Breaking и Acro — на каждой возрастной ступени.</p>
+  </div>
+
+  <div class="group-tabs" role="tablist" id="groupTabs">
+    {groups.map((g) => (
+      <button class={`group-tab${g.id === 'kids' ? ' active' : ''}`} data-group={g.id} role="tab" aria-selected={g.id === 'kids' ? 'true' : 'false'}>
+        <span class="age">{g.age}</span>
+        <span>{g.label}</span>
+      </button>
+    ))}
+  </div>
+
+  {groups.map((g) => (
+    <div class="group-panel" id={`panel-${g.id}`} style={g.id !== 'kids' ? 'display:none' : ''}>
+      <div>
+        <div class="pre">{g.label} · возраст {g.age}</div>
+        <h3>{g.title}<br/><span class="o">{g.accent}</span></h3>
+        <p class="lead">{g.lead}</p>
+        <ul>
+          {g.bullets.map((b) => <li>{b}</li>)}
+        </ul>
+      </div>
+      <div class="group-card">
+        {g.ribbon && <div class="ribbon">{g.ribbon}</div>}
+        <div class="pre" style="font-family:var(--mono);font-size:11px;letter-spacing:0.18em;color:rgba(245,242,236,0.55);text-transform:uppercase;margin-bottom:14px">Абонемент</div>
+        <div class="price"><span class="cur">BYN</span>{g.price}</div>
+        <div class="per">в месяц</div>
+        <div class="breakdown">
+          {g.breakdown.map(([k, v]) => (
+            <div class="brow"><span>{k}</span><span class="v">{v}</span></div>
+          ))}
+        </div>
+        <div style="margin-top:28px">
+          <a href="#trial" class="btn btn-primary" style="width:100%;justify-content:center">
+            Записаться — {g.label.toLowerCase()} <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  ))}
+</section>
+
+<!-- ══ STAGE ══ -->
+<section class="stage" id="perf">
+  <div class="stage-head shell">
+    <div>
+      <div class="eyebrow" style="margin-bottom:16px">/ 05 — Сцена и медали</div>
+      <h2 class="h2">Не репетируем <span style="color:var(--orange)">«в стол».</span></h2>
+    </div>
+    <p class="body-text" style="max-width:38ch">Каждый ученик — на сцене минимум 4 раза в год.</p>
+  </div>
+  <div class="stage-wall shell">
+    {stageTiles.map((t) => (
+      <div class={`tile ${t.cls}`} style={`background:${t.bg}`}>
+        <div class="tile-inner" style={`background:${t.bg}`}></div>
+        <div class="label">
+          <span>{t.title}</span>
+          <span class="when">{t.when}</span>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<!-- ══ ALUMNI ══ -->
+<section class="alumni" id="alumni">
+  <div class="alumni-head shell">
+    <div>
+      <div class="eyebrow" style="margin-bottom:16px">/ Гордость школы</div>
+      <h2 class="h2">Звёздные <span style="color:var(--orange)">выпускники.</span></h2>
+    </div>
+    <p class="body-text" style="max-width:40ch">Наши ученики выходят на большую сцену — чемпионаты, клипы, профессиональные коллективы.</p>
+  </div>
+  <div class="alumni-panels shell">
+    <div class="alumni-panel" tabindex="0">
+      <div class="ap-bg ph-ink-stripe"></div>
+      <div class="ap-overlay"></div>
+      <div class="ap-content">
+        <div class="ap-num">01</div>
+        <div class="ap-info">
+          <div class="ap-tag">Hip-Hop · Выпуск 2021</div>
+          <div class="ap-name">Имя Выпускника</div>
+          <div class="ap-ach">Чемпион РБ · Battle Pro 2023</div>
+        </div>
+      </div>
+    </div>
+    <div class="alumni-panel" tabindex="0">
+      <div class="ap-bg ph-orange-stripe"></div>
+      <div class="ap-overlay"></div>
+      <div class="ap-content">
+        <div class="ap-num">02</div>
+        <div class="ap-info">
+          <div class="ap-tag">Breaking · Выпуск 2019</div>
+          <div class="ap-name">Имя Выпускника</div>
+          <div class="ap-ach">Belka Crew · гастроли по РБ</div>
+        </div>
+      </div>
+    </div>
+    <div class="alumni-panel" tabindex="0">
+      <div class="ap-bg ph-ink-stripe"></div>
+      <div class="ap-overlay"></div>
+      <div class="ap-content">
+        <div class="ap-num">03</div>
+        <div class="ap-info">
+          <div class="ap-tag">Acro · Выпуск 2022</div>
+          <div class="ap-name">Имя Выпускника</div>
+          <div class="ap-ach">КМС · Чемпионат СНГ</div>
+        </div>
+      </div>
+    </div>
+    <div class="alumni-panel" tabindex="0">
+      <div class="ap-bg ph-orange-stripe"></div>
+      <div class="ap-overlay"></div>
+      <div class="ap-content">
+        <div class="ap-num">04</div>
+        <div class="ap-info">
+          <div class="ap-tag">Hip-Hop · Выпуск 2020</div>
+          <div class="ap-name">Имя Выпускника</div>
+          <div class="ap-ach">Постановщик · ТВ-проект</div>
+        </div>
+      </div>
+    </div>
+    <div class="alumni-panel" tabindex="0">
+      <div class="ap-bg ph-ink-stripe"></div>
+      <div class="ap-overlay"></div>
+      <div class="ap-content">
+        <div class="ap-num">05</div>
+        <div class="ap-info">
+          <div class="ap-tag">Breaking · Выпуск 2023</div>
+          <div class="ap-name">Имя Выпускника</div>
+          <div class="ap-ach">RBC One Cypher · финал</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ POSTERS ══ -->
+<section class="posters" id="posters">
+  <div class="posters-head">
+    <div>
+      <div class="eyebrow" style="margin-bottom:16px">/ Афиши и события</div>
+      <h2 class="h2">Ближайшие <span class="o">события.</span></h2>
+    </div>
+    <a href="#trial" class="btn btn-ghost">Все события →</a>
+  </div>
+  <div class="posters-grid">
+    <article class="poster-card poster-big">
+      <div class="poster-img ph-orange-stripe"></div>
+      <div class="poster-info">
+        <div class="poster-date">14 ИЮНЯ 2026</div>
+        <h3 class="poster-title">Отчётный концерт «BELKA × VITEBSK»</h3>
+        <div class="poster-where">Концертный зал «Витебск» · 720 мест</div>
+        <a href="#trial" class="btn btn-ink" style="margin-top:auto">Записаться <span class="arrow">→</span></a>
+      </div>
+    </article>
+    <article class="poster-card">
+      <div class="poster-img ph-ink-stripe"></div>
+      <div class="poster-info">
+        <div class="poster-date">3 ОКТЯБРЯ 2026</div>
+        <h3 class="poster-title">Open Jam · Hip-Hop & Break</h3>
+        <div class="poster-where">Belka Studio · вход свободный</div>
+        <a href="#trial" class="btn btn-primary" style="margin-top:auto">Участвовать <span class="arrow">→</span></a>
+      </div>
+    </article>
+    <article class="poster-card">
+      <div class="poster-img ph-orange-stripe" style="background:var(--ink) repeating-linear-gradient(-45deg,rgba(245,242,236,0.05) 0 6px,transparent 6px 12px)"></div>
+      <div class="poster-info">
+        <div class="poster-date">НОЯБРЬ 2026</div>
+        <h3 class="poster-title">Чемпионат РБ по Breaking</h3>
+        <div class="poster-where">Минск · Belka Crew участвует</div>
+        <a href="#trial" class="btn btn-ghost" style="margin-top:auto">Болеть за нас <span class="arrow">→</span></a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ══ SCHEDULE ══ -->
+<section class="schedule" id="schedule">
+  <div class="schedule-head">
+    <div class="eyebrow" style="margin-bottom:16px">/ 05 — Сетка занятий</div>
+    <h2 class="h2">Расписание <span class="o">2026 / 27.</span></h2>
+  </div>
+  <div class="sched-wrap">
+    <div class="sched-grid">
+      <div class="head"></div>
+      {days.map((d) => <div class="head">{d}</div>)}
+      {times.map((t) => (
+        <>
+          <div class="time">{t}</div>
+          {days.map((d) => {
+            const c = sched[t]?.[d];
+            return (
+              <div class="cell">
+                {c && (
+                  <div class={`class ${c[0]}`}>
+                    <span>{c[2]}</span>
+                    <span class="age">{c[1]}</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </>
+      ))}
+    </div>
+  </div>
+  <div class="sched-legend">
+    <div class="l"><span class="sw" style="background:var(--orange)"></span>Hip-Hop</div>
+    <div class="l"><span class="sw" style="background:var(--paper)"></span>Breaking</div>
+    <div class="l"><span class="sw" style="background:var(--ink);border:1px solid var(--orange)"></span>Acro</div>
+    <div class="l" style="opacity:0.5">· Адрес уточняется</div>
+  </div>
+</section>
+
+<!-- ══ TRIAL CTA ══ -->
+<section class="trial" id="trial">
+  <img class="trial-shadow-squirrel" src="/logo-black.png" alt="" />
+  <div class="trial-inner">
+    <div>
+      <div class="eyebrow" style="color:var(--ink);margin-bottom:16px">/ 06 — Пробное занятие</div>
+      <h2>
+        Первая тренировка<br/>
+        <span class="out">бесплатно</span>.
+      </h2>
+      <p class="sub">
+        Оставь номер — менеджер позвонит в течение часа в рабочее время, подберёт группу и день. Никаких автоматических рассылок.
+      </p>
+      <div class="trial-marks">
+        <span>· форма не нужна</span>
+        <span>· возраст от 4</span>
+        <span>· звонок ≈ 1 час</span>
+      </div>
+    </div>
+    <form class="trial-form" id="trialForm">
+      <div id="trialFields">
+        <div>
+          <div class="lbl">Имя ребёнка / ваше</div>
+          <input type="text" name="name" placeholder="Например: Ника" required />
+        </div>
+        <div>
+          <div class="lbl">Телефон</div>
+          <input type="tel" name="phone" placeholder="+375 ..." required />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+          <div>
+            <div class="lbl">Возрастная группа</div>
+            <select name="age">
+              <option>4–6</option><option>7–11</option><option>12–17</option><option>18–29</option><option>30+</option>
+            </select>
+          </div>
+          <div>
+            <div class="lbl">Стиль</div>
+            <select name="style">
+              <option>Hip-Hop</option><option>Breaking</option><option>Acro</option><option>Stretch</option><option>Ещё не выбрал</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="justify-content:center;margin-top:10px">
+          Записать на пробное <span class="arrow">→</span>
+        </button>
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(245,242,236,0.4);text-align:center">
+          Нажимая, вы соглашаетесь с обработкой данных
+        </div>
+      </div>
+      <div id="trialSuccess" style="display:none;text-align:center;padding:40px 20px">
+        <div style="font-family:var(--display);font-size:36px;font-weight:800;color:var(--orange);margin-bottom:12px">Готово.</div>
+        <div style="color:rgba(245,242,236,0.7)">Перезвоним в ближайший час.</div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer" id="contacts">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h3 class="name">Belka<span class="o">.</span></h3>
+      <p class="desc">Танцевальная школа в Витебске. Hip-Hop, Breaking, Acro для всех возрастов с 2014 года.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Адрес</h4>
+      <ul>
+        <li><a href="#">Витебск (уточняется)</a></li>
+        <li><a href="#">3 зала · парковка</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Связь</h4>
+      <ul>
+        <li><a href="tel:+375291234567">+375 29 XXX-XX-XX</a></li>
+        <li><a href="https://instagram.com/belka.empire" target="_blank" rel="noopener">Instagram @belka.empire</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Соцсети</h4>
+      <ul>
+        <li><a href="https://instagram.com/belka.empire" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="#">TikTok</a></li>
+        <li><a href="#">YouTube</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2014–2026 Belka Dance Studio</span>
+    <span>Витебск · Беларусь</span>
+    <span>Designed with movement</span>
+  </div>
+</footer>
+
+</BaseLayout>
+
+<script>
+  // Groups tabs
+  const tabs = document.querySelectorAll('.group-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const id = (tab as HTMLElement).dataset.group;
+      tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected','true');
+      document.querySelectorAll('.group-panel').forEach(p => ((p as HTMLElement).style.display = 'none'));
+      const panel = document.getElementById(`panel-${id}`);
+      if (panel) panel.style.display = 'grid';
+    });
+  });
+
+  // Trial form
+  const form = document.getElementById('trialForm') as HTMLFormElement | null;
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const fields = document.getElementById('trialFields');
+    const success = document.getElementById('trialSuccess');
+    if (fields) fields.style.display = 'none';
+    if (success) success.style.display = 'block';
+  });
+</script>
+
+<style>
+/* ══ NAV ══ */
+.nav {
+  position: fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 18px clamp(20px,4vw,64px);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  background: rgba(10,10,10,0.55);
+  border-bottom: 1px solid var(--line);
+}
+.nav-brand { display:flex; align-items:center; gap:12px; }
+.nav-brand img { width:36px; height:36px; object-fit:contain; }
+.nav-brand .name { font-family:var(--display); font-weight:800; font-size:22px; letter-spacing:-0.02em; }
+.nav-brand .city { font-family:var(--mono); font-size:10px; letter-spacing:0.2em; color:var(--orange); text-transform:uppercase; border-left:1px solid var(--line-strong); padding-left:12px; margin-left:4px; white-space:nowrap; }
+.nav-links { display:flex; gap:32px; }
+.nav-links a { font-family:var(--mono); font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(245,242,236,0.75); transition:color 0.15s ease; }
+.nav-links a:hover { color:var(--orange); }
+.nav-cta { display:flex; align-items:center; gap:14px; }
+@media(max-width:880px){ .nav-links{display:none;} }
+@media(max-width:600px){ .nav-brand .city{display:none;} .nav-cta .btn{padding:12px 16px;font-size:11px;} }
+
+/* ══ HERO ══ */
+.hero {
+  position:relative; min-height:100vh;
+  padding: 140px clamp(20px,4vw,64px) 64px;
+  display:grid; grid-template-columns:1fr; gap:32px; overflow:hidden;
+}
+.hero-stage { position:relative; display:grid; gap:32px; }
+.hero-title {
+  font-family:var(--display); font-weight:800;
+  font-size: clamp(86px,17vw,280px);
+  line-height:0.82; letter-spacing:-0.04em; margin:0; position:relative; z-index:2;
+  font-variation-settings:"wdth" 100,"opsz" 96;
+}
+.hero-title .row { display:block; }
+.hero-title .out { -webkit-text-stroke:2px var(--paper); color:transparent; }
+.hero-title .accent { color:var(--orange); font-style:italic; }
+.hero-bigsquirrel {
+  position:absolute; top:60px; right:-60px;
+  width: min(58vw,760px); opacity:0.95; z-index:1;
+  filter: drop-shadow(0 30px 60px rgba(0,0,0,0.4));
+  animation: bob 6s ease-in-out infinite;
+}
+@keyframes bob { 0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-18px) rotate(2deg);} }
+.hero-meta {
+  display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:24px; padding-top:36px; border-top:1px solid var(--line); position:relative; z-index:2;
+}
+.hero-meta .cell .k { font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(245,242,236,0.55); margin-bottom:8px; }
+.hero-meta .cell .v { font-family:var(--display); font-size:clamp(22px,2vw,30px); font-weight:700; line-height:1.1; }
+.hero-meta .cell .v .accent { color:var(--orange); }
+.hero-actions { display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-top:8px; }
+.hero-tick { position:absolute; left:clamp(20px,4vw,64px); bottom:28px; font-family:var(--mono); font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(245,242,236,0.5); display:flex; align-items:center; gap:12px; }
+.hero-tick .dot { width:8px; height:8px; border-radius:50%; background:var(--orange); box-shadow:0 0 0 6px rgba(255,92,26,0.18); animation:pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.3);} }
+@media(max-width:760px){ .hero-meta{grid-template-columns:repeat(2,1fr);} .hero-bigsquirrel{opacity:0.18;right:-30%;top:30%;} }
+
+/* ══ MARQUEE ══ */
+.marquee { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--orange); color:var(--ink); overflow:hidden; padding:22px 0; }
+.marquee .track { display:flex; gap:48px; animation:scroll 32s linear infinite; width:max-content; }
+.marquee.reverse .track { animation-direction:reverse; animation-duration:40s; }
+.marquee .item { font-family:var(--display); font-weight:800; font-size:clamp(36px,5vw,64px); letter-spacing:-0.02em; display:inline-flex; align-items:center; gap:36px; white-space:nowrap; font-variation-settings:"wdth" 100,"opsz" 96; }
+.marquee .item .dot { width:12px; height:12px; border-radius:50%; background:var(--ink); }
+.marquee.ink { background:var(--ink); color:var(--paper); }
+.marquee.ink .item .dot { background:var(--orange); }
+@keyframes scroll { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+/* ══ REEL ══ */
+.reel { padding:80px 0 100px; }
+.reel-head { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:32px; }
+.reel-stage { position:relative; border-radius:24px; overflow:hidden; border:1px solid var(--line); }
+.reel-placeholder { width:100%; height:62vh; min-height:480px; max-height:720px; display:flex; align-items:flex-end; padding:16px; }
+.reel-stage .play { position:absolute; inset:0; margin:auto; width:120px; height:120px; border-radius:50%; background:var(--orange); display:flex; align-items:center; justify-content:center; pointer-events:none; z-index:3; box-shadow:0 20px 60px rgba(255,92,26,0.45); transition:transform 0.3s ease; }
+.reel-stage:hover .play { transform:scale(1.08); }
+.reel-stage .play::after { content:""; width:0; height:0; border-style:solid; border-width:18px 0 18px 28px; border-color:transparent transparent transparent var(--ink); margin-left:6px; }
+.reel-stage .tag { position:absolute; top:22px; left:22px; z-index:3; font-family:var(--mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; background:var(--ink); color:var(--orange); padding:8px 14px; border-radius:999px; border:1px solid var(--line-strong); }
+.reel-stage .caption { position:absolute; bottom:22px; left:22px; right:22px; z-index:3; display:flex; justify-content:space-between; align-items:flex-end; font-family:var(--mono); font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:var(--paper); pointer-events:none; }
+.reel-stage .caption .ttl { font-family:var(--display); font-weight:700; font-size:clamp(20px,2.4vw,32px); letter-spacing:-0.02em; text-transform:none; }
+.reel-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:16px; }
+.reel-still { height:220px; border-radius:16px; overflow:hidden; display:flex; align-items:flex-end; padding:12px; }
+@media(max-width:800px){ .reel-grid{grid-template-columns:1fr 1fr;} .reel-still{height:160px;} }
+
+/* ══ ABOUT ══ */
+.about { padding:100px clamp(20px,4vw,64px); display:grid; grid-template-columns:1fr 1.2fr; gap:clamp(40px,5vw,100px); align-items:start; }
+.about .col-l .num { font-family:var(--mono); font-size:12px; letter-spacing:0.2em; color:rgba(245,242,236,0.45); margin-bottom:32px; text-transform:uppercase; }
+.about .h2 .o { color:var(--orange); }
+.about .col-r .lead { font-family:var(--display); font-weight:500; font-size:clamp(22px,2.2vw,32px); line-height:1.2; letter-spacing:-0.015em; color:var(--paper); margin:0 0 28px; }
+.stats { display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--line); margin-top:48px; }
+.stats .stat { padding:24px 24px 24px 0; border-right:1px solid var(--line); }
+.stats .stat:last-child { border-right:0; }
+.stats .stat .n { font-family:var(--display); font-weight:800; font-size:clamp(40px,4.5vw,64px); line-height:1; letter-spacing:-0.03em; color:var(--orange); }
+.stats .stat .l { font-family:var(--mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,242,236,0.55); margin-top:12px; }
+@media(max-width:900px){ .about{grid-template-columns:1fr;} .stats{grid-template-columns:1fr 1fr;} }
+
+/* ══ STYLES ══ */
+.styles { padding:100px 0 0; background:var(--paper); color:var(--ink); }
+.styles-head { display:flex; justify-content:space-between; align-items:flex-end; padding:0 clamp(20px,4vw,64px) 64px; gap:24px; flex-wrap:wrap; }
+.styles-head .h2 { color:var(--ink); }
+.styles-head .h2 .o { color:var(--orange); }
+.style-row { display:grid; grid-template-columns:200px 1fr 1.1fr 200px; gap:24px; align-items:center; padding:36px clamp(20px,4vw,64px); border-top:1px solid var(--line-ink); cursor:pointer; transition:background 0.25s ease,color 0.25s ease; }
+.style-row:last-child { border-bottom:1px solid var(--line-ink); }
+.style-row:hover { background:var(--ink); color:var(--paper); }
+.style-row:hover .style-num { color:var(--orange); }
+.style-row:hover .style-meta { color:rgba(245,242,236,0.55); }
+.style-num { font-family:var(--mono); font-size:12px; letter-spacing:0.18em; color:rgba(10,10,10,0.45); text-transform:uppercase; }
+.style-name { font-family:var(--display); font-weight:800; font-size:clamp(40px,5vw,88px); line-height:0.95; letter-spacing:-0.03em; margin:0; }
+.style-name .ital { font-style:italic; transition:color 0.2s ease; }
+.style-row:hover .style-name .ital { color:var(--orange); }
+.style-meta { font-size:15px; color:rgba(10,10,10,0.65); line-height:1.5; transition:color 0.25s ease; }
+.style-thumb { height:140px; border-radius:8px; overflow:hidden; background:var(--ink); position:relative; display:flex; align-items:center; justify-content:center; }
+.style-thumb svg { width:100%; height:100%; }
+.style-thumb .label { position:absolute; bottom:8px; left:10px; font-family:var(--mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--orange); }
+.style-row:hover .style-thumb { background:var(--orange); }
+@media(max-width:1000px){ .style-row{grid-template-columns:1fr;gap:16px;padding:28px clamp(20px,4vw,64px);} .style-thumb{height:200px;} }
+
+/* ══ CREW ══ */
+.crew { padding:120px clamp(20px,4vw,64px); background:var(--paper); color:var(--ink); }
+.crew-head { display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:flex-end; margin-bottom:56px; }
+.crew-head .h2 .o { color:var(--orange); }
+.crew-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+.crew-card { display:flex; flex-direction:column; gap:12px; }
+.crew-photo { width:100%; height:420px; border-radius:16px; overflow:hidden; display:flex; align-items:flex-end; padding:12px; }
+.crew-card .role { font-family:var(--mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--orange); }
+.crew-card .name { font-family:var(--display); font-weight:700; font-size:22px; letter-spacing:-0.02em; line-height:1; margin:4px 0 0; }
+.crew-card .bio { font-size:13px; line-height:1.45; color:rgba(10,10,10,0.65); }
+@media(max-width:1000px){ .crew-grid{grid-template-columns:1fr 1fr;} .crew-head{grid-template-columns:1fr;} }
+
+/* ══ GROUPS ══ */
+.groups { padding:120px clamp(20px,4vw,64px); background:var(--paper); color:var(--ink); border-top:1px solid var(--line-ink); }
+.groups-head { display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:flex-end; margin-bottom:60px; }
+.groups-head .h2 .o { color:var(--orange); }
+.group-tabs { display:flex; flex-wrap:wrap; border-top:1px solid var(--line-ink); border-bottom:1px solid var(--line-ink); margin-bottom:48px; }
+.group-tab { flex:1 1 0; padding:22px 18px; border-right:1px solid var(--line-ink); text-align:left; font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(10,10,10,0.5); transition:all 0.2s ease; display:flex; flex-direction:column; gap:6px; min-width:120px; }
+.group-tab:last-child { border-right:0; }
+.group-tab .age { font-family:var(--display); font-weight:800; font-size:28px; letter-spacing:-0.02em; color:var(--ink); text-transform:none; }
+.group-tab.active { background:var(--ink); color:var(--paper); }
+.group-tab.active .age { color:var(--orange); }
+.group-tab:hover:not(.active) { background:rgba(10,10,10,0.04); color:var(--ink); }
+.group-panel { display:grid; grid-template-columns:1.3fr 1fr; gap:clamp(30px,4vw,80px); align-items:start; }
+.group-panel .pre { font-family:var(--mono); font-size:12px; letter-spacing:0.18em; text-transform:uppercase; color:var(--orange); margin-bottom:16px; }
+.group-panel h3 { font-family:var(--display); font-weight:800; font-size:clamp(40px,4.5vw,72px); line-height:0.95; letter-spacing:-0.025em; margin:0 0 24px; }
+.group-panel h3 .o { color:var(--orange); }
+.group-panel .lead { font-size:18px; line-height:1.5; color:rgba(10,10,10,0.78); max-width:52ch; margin:0 0 28px; }
+.group-panel ul { list-style:none; padding:0; margin:0 0 32px; display:grid; gap:12px; }
+.group-panel li { display:grid; grid-template-columns:20px 1fr; gap:14px; align-items:start; font-size:15px; color:rgba(10,10,10,0.8); }
+.group-panel li::before { content:"→"; color:var(--orange); font-weight:700; }
+.group-card { background:var(--ink); color:var(--paper); border-radius:24px; padding:36px; position:relative; overflow:hidden; }
+.group-card .ribbon { position:absolute; top:24px; right:-52px; transform:rotate(45deg); background:var(--orange); color:var(--ink); font-family:var(--mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; padding:8px 60px; }
+.group-card .price { font-family:var(--display); font-weight:800; font-size:64px; letter-spacing:-0.03em; line-height:1; color:var(--paper); }
+.group-card .price .cur { color:var(--orange); font-size:36px; vertical-align:top; margin-right:4px; }
+.group-card .per { font-family:var(--mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,242,236,0.55); margin-top:8px; }
+.group-card .breakdown { margin-top:28px; border-top:1px solid var(--line); padding-top:20px; display:grid; gap:12px; font-size:14px; color:rgba(245,242,236,0.8); }
+.group-card .breakdown .brow { display:flex; justify-content:space-between; gap:12px; }
+.group-card .breakdown .brow .v { color:var(--paper); font-family:var(--mono); }
+@media(max-width:880px){ .groups-head{grid-template-columns:1fr;} .group-panel{grid-template-columns:1fr;} .group-tab{flex:1 1 50%;border-bottom:1px solid var(--line-ink);} }
+
+/* ══ STAGE ══ */
+.stage { padding:120px 0; }
+.stage-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:48px; gap:24px; flex-wrap:wrap; }
+.stage-wall { display:grid; grid-template-columns:repeat(6,1fr); grid-auto-rows:160px; gap:14px; }
+.tile { position:relative; overflow:hidden; border-radius:14px; border:1px solid var(--line); display:flex; align-items:flex-end; }
+.tile-inner { position:absolute; inset:0; }
+.tile .label { position:relative; z-index:2; width:100%; padding:10px 12px; display:flex; justify-content:space-between; font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--paper); text-shadow:0 2px 8px rgba(0,0,0,0.7); }
+.tile .label .when { color:var(--orange); }
+.t-1 { grid-column:span 3; grid-row:span 3; }
+.t-2 { grid-column:span 2; grid-row:span 2; }
+.t-3 { grid-column:span 1; grid-row:span 1; }
+.t-4 { grid-column:span 1; grid-row:span 2; }
+.t-5 { grid-column:span 2; grid-row:span 1; }
+.t-6 { grid-column:span 3; grid-row:span 2; }
+@media(max-width:1000px){ .stage-wall{grid-template-columns:repeat(2,1fr);grid-auto-rows:180px;} .tile{grid-column:span 1!important;grid-row:span 1!important;} .t-1{grid-column:span 2!important;grid-row:span 2!important;} }
+
+/* ══ SCHEDULE ══ */
+.schedule { padding:120px clamp(20px,4vw,64px); background:var(--ink); border-top:1px solid var(--line); }
+.schedule-head { margin-bottom:48px; }
+.schedule-head .h2 .o { color:var(--orange); }
+.sched-wrap { overflow-x:auto; }
+.sched-grid { display:grid; grid-template-columns:88px repeat(7,1fr); border:1px solid var(--line); border-radius:16px; overflow:hidden; background:rgba(245,242,236,0.02); min-width:720px; }
+.sched-grid .head,.sched-grid .time { font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(245,242,236,0.55); padding:14px 10px; border-bottom:1px solid var(--line); border-right:1px solid var(--line); }
+.sched-grid .head { background:rgba(245,242,236,0.04); }
+.sched-grid .head:last-child { border-right:0; }
+.sched-grid .time { background:rgba(245,242,236,0.02); }
+.sched-grid .cell { border-bottom:1px solid var(--line); border-right:1px solid var(--line); padding:10px; min-height:60px; }
+.sched-grid .cell:nth-child(8n) { border-right:0; }
+.sched-grid .class { background:var(--orange); color:var(--ink); border-radius:8px; padding:8px 10px; display:flex; flex-direction:column; gap:2px; font-size:12px; font-weight:600; cursor:pointer; transition:transform 0.15s ease,background 0.15s ease; height:100%; }
+.sched-grid .class:hover { transform:scale(1.03); background:var(--paper); }
+.sched-grid .class.break { background:var(--paper); color:var(--ink); }
+.sched-grid .class.acro { background:var(--ink); color:var(--orange); border:1px solid var(--orange); }
+.sched-grid .class .age { font-family:var(--mono); font-size:9px; font-weight:400; letter-spacing:0.14em; text-transform:uppercase; opacity:0.75; }
+.sched-legend { display:flex; gap:24px; margin-top:24px; flex-wrap:wrap; font-family:var(--mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(245,242,236,0.65); }
+.sched-legend .l { display:flex; align-items:center; gap:8px; }
+.sched-legend .sw { width:14px; height:14px; border-radius:3px; }
+
+/* ══ TRIAL ══ */
+.trial { padding:120px clamp(20px,4vw,64px); background:var(--orange); color:var(--ink); position:relative; overflow:hidden; }
+.trial-inner { display:grid; grid-template-columns:1.4fr 1fr; gap:clamp(30px,5vw,100px); align-items:center; position:relative; z-index:2; }
+.trial h2 { font-family:var(--display); font-weight:800; font-size:clamp(56px,8vw,144px); line-height:0.88; letter-spacing:-0.035em; margin:0 0 24px; font-variation-settings:"wdth" 100,"opsz" 96; }
+.trial h2 .out { -webkit-text-stroke:2.5px var(--ink); color:transparent; font-style:italic; }
+.trial .sub { font-size:19px; line-height:1.45; max-width:48ch; color:rgba(10,10,10,0.78); margin:0 0 36px; }
+.trial-marks { display:flex; gap:16px; flex-wrap:wrap; font-family:var(--mono); font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(10,10,10,0.7); }
+.trial-form { background:var(--ink); color:var(--paper); border-radius:24px; padding:32px; display:grid; gap:18px; }
+.trial-form .lbl { font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,242,236,0.55); margin-bottom:6px; }
+.trial-form input,.trial-form select { width:100%; background:transparent; border:0; border-bottom:1px solid var(--line); color:var(--paper); font:inherit; font-size:16px; padding:8px 0; outline:none; transition:border-color 0.2s ease; }
+.trial-form input:focus,.trial-form select:focus { border-color:var(--orange); }
+.trial-form select option { background:var(--ink); }
+.trial-shadow-squirrel { position:absolute; right:-120px; bottom:-120px; width:700px; opacity:0.12; z-index:1; pointer-events:none; }
+@media(max-width:900px){ .trial-inner{grid-template-columns:1fr;} }
+
+/* ══ FOOTER ══ */
+.footer { background:var(--ink); padding:80px clamp(20px,4vw,64px) 32px; border-top:1px solid var(--line); }
+.footer-grid { display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; margin-bottom:64px; }
+.footer-brand .name { font-family:var(--display); font-weight:800; font-size:clamp(48px,6vw,96px); letter-spacing:-0.035em; line-height:0.9; margin:0 0 16px; font-variation-settings:"wdth" 100,"opsz" 96; }
+.footer-brand .name .o { color:var(--orange); font-style:italic; }
+.footer-brand .desc { color:rgba(245,242,236,0.55); max-width:36ch; font-size:14px; }
+.footer-col h4 { font-family:var(--mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--orange); margin:0 0 18px; }
+.footer-col ul { list-style:none; padding:0; margin:0; display:grid; gap:10px; }
+.footer-col li a { color:rgba(245,242,236,0.7); font-size:14px; transition:color 0.15s ease; }
+.footer-col li a:hover { color:var(--orange); }
+.footer-bottom { display:flex; justify-content:space-between; align-items:center; padding-top:24px; border-top:1px solid var(--line); font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(245,242,236,0.4); flex-wrap:wrap; gap:16px; }
+@media(max-width:760px){ .footer-grid{grid-template-columns:1fr 1fr;} }
+
+/* ══ ALUMNI ══ */
+.alumni { padding: 120px 0; background: var(--ink); }
+.alumni-head { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:48px; }
+
+.alumni-panels {
+  display: flex;
+  gap: 6px;
+  height: 580px;
+}
+
+.alumni-panel {
+  position: relative;
+  flex: 1;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: flex 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--line);
+}
+
+.alumni-panel:hover,
+.alumni-panel:focus { flex: 4; outline: none; }
+
+.ap-bg {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.5s ease;
+}
+.alumni-panel:hover .ap-bg { transform: scale(1.03); }
+
+.ap-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.4) 45%, rgba(10,10,10,0.1) 100%);
+  z-index: 1;
+  transition: background 0.3s ease;
+}
+.alumni-panel:hover .ap-overlay {
+  background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.45) 55%, rgba(10,10,10,0.15) 100%);
+}
+
+.ap-content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.ap-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--orange);
+  text-transform: uppercase;
+}
+
+.ap-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease 0.1s, transform 0.35s ease 0.1s;
+}
+.alumni-panel:hover .ap-info,
+.alumni-panel:focus .ap-info {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Collapsed: show only num + rotated name */
+.ap-name-collapsed {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-90deg);
+  white-space: nowrap;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: rgba(245,242,236,0.6);
+  transition: opacity 0.2s ease;
+  transform-origin: center center;
+}
+.alumni-panel:hover .ap-name-collapsed { opacity: 0; }
+
+.ap-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+.ap-name {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(18px, 2vw, 28px);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--paper);
+}
+.ap-ach {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245,242,236,0.6);
+}
+
+@media(max-width:768px) {
+  .alumni-panels { height: auto; flex-direction: column; gap: 4px; }
+  .alumni-panel { flex: none !important; height: 100px; border-radius: 12px; }
+  .alumni-panel:focus { height: 300px; }
+  .ap-info { opacity: 1; transform: none; }
+  .alumni-panel:hover .ap-bg { transform: none; }
+}
+
+/* ══ POSTERS ══ */
+.posters {
+  padding: 120px clamp(20px,4vw,64px);
+  background: var(--paper);
+  color: var(--ink);
+  border-top: 1px solid var(--line-ink);
+}
+.posters-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 56px;
+}
+.posters-head .h2 { color: var(--ink); }
+.posters-head .h2 .o { color: var(--orange); }
+.posters-head .btn-ghost { border-color: var(--line-ink); color: var(--ink); }
+.posters-head .btn-ghost:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.posters-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.poster-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--line-ink);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.poster-card:hover { transform: translateY(-4px); border-color: var(--orange); }
+
+.poster-img {
+  width: 100%;
+}
+.poster-big .poster-img { height: 360px; }
+.poster-card:not(.poster-big) .poster-img { height: 240px; }
+
+.poster-info {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.poster-date {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+.poster-title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(20px, 2.2vw, 30px);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin: 0;
+  color: var(--paper);
+}
+.poster-big .poster-title { font-size: clamp(24px, 2.8vw, 40px); }
+.poster-where {
+  font-size: 13px;
+  color: rgba(245,242,236,0.55);
+  font-family: var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+@media(max-width:900px) {
+  .posters-grid { grid-template-columns: 1fr; }
+  .poster-big .poster-img,
+  .poster-card:not(.poster-big) .poster-img { height: 220px; }
+}
+
+/* ══ Placeholder styles ══ */
+.ph-stripe { background: repeating-linear-gradient(45deg,rgba(10,10,10,0.12) 0 6px,transparent 6px 12px); }
+.ph-orange-stripe { background: var(--orange) repeating-linear-gradient(45deg,rgba(10,10,10,0.12) 0 6px,transparent 6px 12px); }
+.ph-ink-stripe { background: var(--ink) repeating-linear-gradient(45deg,rgba(245,242,236,0.06) 0 6px,transparent 6px 12px); }
+.ph-label { font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; padding:4px 8px; background:var(--ink); color:var(--orange); border-radius:4px; }
+</style>
