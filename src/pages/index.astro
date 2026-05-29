@@ -139,7 +139,7 @@ const groups = [
 </section>
 
 <!-- ══ MARQUEE 2 (ink / reverse) ══ -->
-<div class="marquee ink reverse">
+<div class="marquee reverse">
   <div class="track">
     {[...marqueeItems2, ...marqueeItems2].map((t) => (
       <span class="item">{t}<span class="dot" /></span>
@@ -631,7 +631,7 @@ const groups = [
 }
 
 /* ══ MARQUEE ══ */
-.marquee { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--orange); color:var(--ink); overflow:hidden; padding:22px 0; }
+.marquee { border-bottom:1px solid var(--line); background:var(--orange); color:var(--ink); overflow:hidden; padding:22px 0; }
 .marquee .track { display:flex; gap:48px; animation:scroll 32s linear infinite; width:max-content; }
 .marquee.reverse .track { animation-direction:reverse; animation-duration:40s; }
 .marquee .item { font-family:var(--display); font-weight:800; font-size:clamp(36px,5vw,64px); letter-spacing:-0.02em; display:inline-flex; align-items:center; gap:36px; white-space:nowrap; font-variation-settings:"wdth" 100,"opsz" 96; }
