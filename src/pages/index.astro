@@ -8,10 +8,10 @@ const marqueeItems1 = ["Hip-Hop", "Breaking", "Acro", "Stretch", "Crew", "Battle
 const marqueeItems2 = ["Belka Crew", "4 to 45+", "Vitebsk · Belka", "Hip-Hop / Breaking / Acro", "2026 / 27 SEASON"];
 
 const stylesData = [
-  { n: "01", name: "Hip-Hop", ital: "& Choreo", desc: "Groove, OG-style, choreo. База, на которой держится всё остальное.", tag: "5+ групп", thumb: "hop" },
-  { n: "02", name: "Breaking", ital: "Bboy / Bgirl", desc: "Олимпийская дисциплина. Footwork, power, freezes — джемы и батлы.", tag: "4 группы", thumb: "break" },
-  { n: "03", name: "Acrobatics", ital: "Acro", desc: "Колёса, рондаты, фляки, стойки. Маты, страховка, тренер рядом.", tag: "3 группы", thumb: "acro" },
-  { n: "04", name: "Stretch", ital: "& Body", desc: "Растяжка и мобилити. Идеально как «второе занятие» в неделю.", tag: "2 группы", thumb: "stretch" },
+  { n: "01", name: "Hip-Hop", ital: "& Choreo", desc: "Groove, OG-style, choreo. База, на которой держится всё остальное.", thumb: "hop" },
+  { n: "02", name: "Breaking", ital: "Bboy / Bgirl", desc: "Олимпийская дисциплина. Footwork, power, freezes — джемы и батлы.", thumb: "break" },
+  { n: "03", name: "Acrobatics", ital: "Acro", desc: "Колёса, рондаты, фляки, стойки. Маты, страховка, тренер рядом.", thumb: "acro" },
+  { n: "04", name: "Stretch", ital: "& Body", desc: "Растяжка и мобилити. Гибкость и мобильность тела — основа любого стиля.", thumb: "stretch" },
 ];
 
 const crewData = [
@@ -154,11 +154,11 @@ const groups = [
       <div class="eyebrow" style="margin-bottom:16px">/ 02 — Направления</div>
       <h2 class="h2">Четыре <span class="o">направления.</span></h2>
     </div>
-    <p class="body-text" style="color:rgba(10,10,10,0.7);max-width:42ch">Можно одно. Можно комбинировать.</p>
+    <p class="body-text" style="color:rgba(10,10,10,0.7);max-width:42ch">Мы учим всем стилям вместе — широкая база делает танцора сильнее и свободнее.</p>
   </div>
   {stylesData.map((s) => (
     <div class="style-row">
-      <div class="style-num">{s.tag}<br/>{s.n}</div>
+      <div class="style-num">{s.n}</div>
       <h3 class="style-name">{s.name} <span class="ital">{s.ital}</span></h3>
       <p class="style-meta">{s.desc}</p>
       <div class={`style-thumb thumb-${s.thumb}`}>
