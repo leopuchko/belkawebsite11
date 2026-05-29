@@ -72,10 +72,10 @@ const groups = [
       </h1>
     </div>
     <div class="hero-meta">
-      <div class="cell"><div class="k">Стили</div><div class="v">Hip-Hop<br/>Breaking<br/><span class="accent">Acro</span></div></div>
+      <div class="cell"><div class="k">Стили</div><div class="v">Hip-Hop<br/>Breaking<br/>Acrobatics<br/><span class="accent">Stretch</span></div></div>
       <div class="cell"><div class="k">Возраст</div><div class="v">от <span class="accent">4</span><br/>до 45+</div></div>
-      <div class="cell"><div class="k">Группы</div><div class="v"><span class="accent">12</span> групп<br/>6 уровней</div></div>
-      <div class="cell"><div class="k">Выступления</div><div class="v"><span class="accent">40+</span><br/>в год</div></div>
+      <div class="cell"><div class="k">Группы</div><div class="v"><span class="accent">8</span> групп<br/>5 уровней</div></div>
+      <div class="cell"><div class="k">Выступления</div><div class="v"><span class="accent">10+</span><br/>в год</div></div>
     </div>
     <div class="hero-actions">
       <a href="#trial" class="btn btn-primary btn-white">Записаться на пробное</a>
@@ -593,7 +593,9 @@ const groups = [
 .hero-meta {
   display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
   gap:24px; padding-top:36px; border-top:1px solid var(--line); position:relative; z-index:2;
+  text-align:center;
 }
+.hero-meta .cell { display:flex; flex-direction:column; align-items:center; }
 .hero-meta .cell .k { font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(245,242,236,0.55); margin-bottom:8px; }
 .hero-meta .cell .v { font-family:var(--display); font-size:clamp(22px,2vw,30px); font-weight:700; line-height:1.1; }
 .hero-meta .cell .v .accent { color:var(--orange); }
