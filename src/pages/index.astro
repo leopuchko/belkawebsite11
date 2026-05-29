@@ -505,6 +505,12 @@ const groups = [
     });
   });
 
+  // Select placeholder colour
+  const ageSelect = document.querySelector('select[name="age"]') as HTMLSelectElement | null;
+  ageSelect?.addEventListener('change', () => {
+    ageSelect.classList.toggle('has-value', !!ageSelect.value);
+  });
+
   // Trial form
   const form = document.getElementById('trialForm') as HTMLFormElement | null;
   form?.addEventListener('submit', (e) => {
@@ -801,10 +807,14 @@ const groups = [
 .trial .sub { font-size:19px; line-height:1.45; max-width:48ch; color:rgba(10,10,10,0.78); margin:0 0 36px; }
 .trial-marks { display:flex; gap:16px; flex-wrap:wrap; font-family:var(--mono); font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(10,10,10,0.7); }
 .trial-form { background:var(--ink); color:var(--paper); border-radius:24px; padding:32px; display:grid; gap:18px; }
-.trial-form .lbl { font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,242,236,0.55); margin-bottom:6px; }
+#trialFields { display:grid; gap:28px; }
+.trial-form .lbl { font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,242,236,0.55); margin-bottom:10px; }
 .trial-form input,.trial-form select { width:100%; background:transparent; border:0; border-bottom:1px solid var(--line); color:var(--paper); font:inherit; font-size:16px; padding:8px 0; outline:none; transition:border-color 0.2s ease; }
 .trial-form input:focus,.trial-form select:focus { border-color:var(--orange); }
-.trial-form select option { background:var(--ink); }
+.trial-form input::placeholder { color:rgba(245,242,236,0.35); }
+.trial-form select { color:rgba(245,242,236,0.35); }
+.trial-form select.has-value { color:var(--paper); }
+.trial-form select option { background:var(--ink); color:var(--paper); }
 .trial-shadow-squirrel { position:absolute; right:-120px; bottom:-120px; width:700px; opacity:0.12; z-index:1; pointer-events:none; }
 @media(max-width:900px){ .trial-inner{grid-template-columns:1fr;} }
 
