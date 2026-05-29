@@ -420,24 +420,30 @@ const groups = [
     </div>
     <form class="trial-form" id="trialForm">
       <div id="trialFields">
-        <div>
-          <div class="lbl">Ваше имя или имя ребёнка</div>
-          <input type="text" name="name" placeholder="Например, Ника" required />
+        <div class="form-field">
+          <div class="lbl">Ваше имя</div>
+          <input type="text" name="name" placeholder="или имя ребёнка" required />
         </div>
-        <div>
+        <div class="form-field">
           <div class="lbl">Возрастная группа</div>
-          <select name="age">
-            <option value="">Выберите возраст</option>
-            <option>4–6 лет</option>
-            <option>7–11 лет</option>
-            <option>12–17 лет</option>
-            <option>18–29 лет</option>
-            <option>30+</option>
-          </select>
+          <div class="cs-wrap" id="ageWrap">
+            <div class="cs-trigger" id="ageTrigger" tabindex="0">
+              <span class="cs-val">Выберите возраст</span>
+              <svg class="cs-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="cs-list" id="ageList">
+              <div class="cs-opt" data-val="4-6">4–6 лет</div>
+              <div class="cs-opt" data-val="7-11">7–11 лет</div>
+              <div class="cs-opt" data-val="12-17">12–17 лет</div>
+              <div class="cs-opt" data-val="18-29">18–29 лет</div>
+              <div class="cs-opt" data-val="30+">30+</div>
+            </div>
+            <input type="hidden" name="age" id="ageVal" />
+          </div>
         </div>
-        <div>
+        <div class="form-field">
           <div class="lbl">Номер телефона</div>
-          <input type="tel" name="phone" placeholder="+375 XX XXX-XX-XX" required />
+          <input type="tel" name="phone" id="phoneInput" placeholder="+375 (XX) XXX-XX-XX" autocomplete="tel" required />
         </div>
         <button type="submit" class="btn btn-primary btn-white trial-submit">
           Записаться на пробное
@@ -505,10 +511,59 @@ const groups = [
     });
   });
 
-  // Select placeholder colour
-  const ageSelect = document.querySelector('select[name="age"]') as HTMLSelectElement | null;
-  ageSelect?.addEventListener('change', () => {
-    ageSelect.classList.toggle('has-value', !!ageSelect.value);
+  // Custom age select
+  const ageWrap = document.getElementById('ageWrap');
+  const ageTrigger = document.getElementById('ageTrigger');
+  const ageList = document.getElementById('ageList');
+  const ageValInput = document.getElementById('ageVal') as HTMLInputElement | null;
+
+  ageTrigger?.addEventListener('click', () => {
+    const open = ageTrigger.classList.toggle('open');
+    ageList?.classList.toggle('open', open);
+  });
+  ageTrigger?.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const open = ageTrigger.classList.toggle('open');
+      ageList?.classList.toggle('open', open);
+    }
+  });
+  document.querySelectorAll('.cs-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const val = (opt as HTMLElement).dataset.val || '';
+      const text = opt.textContent?.trim() || '';
+      const valSpan = ageTrigger?.querySelector('.cs-val');
+      if (valSpan) valSpan.textContent = text;
+      ageTrigger?.classList.add('has-val');
+      ageTrigger?.classList.remove('open');
+      ageList?.classList.remove('open');
+      if (ageValInput) ageValInput.value = val;
+      document.querySelectorAll('.cs-opt').forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+    });
+  });
+  document.addEventListener('click', (e) => {
+    if (!ageWrap?.contains(e.target as Node)) {
+      ageTrigger?.classList.remove('open');
+      ageList?.classList.remove('open');
+    }
+  });
+
+  // Phone mask — +375 (XX) XXX-XX-XX
+  const phoneInput = document.getElementById('phoneInput') as HTMLInputElement | null;
+  phoneInput?.addEventListener('input', () => {
+    let d = phoneInput.value.replace(/\D/g, '');
+    if (d.startsWith('375')) d = d.slice(3);
+    else if (d.startsWith('8')) d = d.slice(1);
+    d = d.slice(0, 9);
+    if (!d) { phoneInput.value = ''; return; }
+    let v = '+375 (';
+    if (d.length <= 2) { phoneInput.value = v + d; return; }
+    v += d.slice(0, 2) + ') ';
+    if (d.length <= 5) { phoneInput.value = v + d.slice(2); return; }
+    v += d.slice(2, 5) + '-';
+    if (d.length <= 7) { phoneInput.value = v + d.slice(5); return; }
+    phoneInput.value = v + d.slice(5, 7) + '-' + d.slice(7);
   });
 
   // Trial form
@@ -806,15 +861,28 @@ const groups = [
 .trial h2 .out { -webkit-text-stroke:5px var(--ink); color:var(--orange); paint-order:stroke fill; font-style:normal; display:inline-block; transform:skewX(-10deg); }
 .trial .sub { font-size:19px; line-height:1.45; max-width:48ch; color:rgba(10,10,10,0.78); margin:0 0 36px; }
 .trial-marks { display:flex; gap:16px; flex-wrap:wrap; font-family:var(--mono); font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(10,10,10,0.7); }
-.trial-form { background:var(--ink); color:var(--paper); border-radius:24px; padding:32px; display:grid; gap:18px; }
-#trialFields { display:grid; gap:28px; }
+.trial-form { background:var(--ink); color:var(--paper); border-radius:24px; padding:32px; display:flex; flex-direction:column; }
+#trialFields { display:flex; flex-direction:column; }
+.form-field { padding:20px 0; border-top:1px solid rgba(245,242,236,0.08); }
+.form-field:first-child { border-top:0; padding-top:0; }
 .trial-form .lbl { font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,242,236,0.55); margin-bottom:10px; }
-.trial-form input,.trial-form select { width:100%; background:transparent; border:0; border-bottom:1px solid var(--line); color:var(--paper); font:inherit; font-size:16px; padding:8px 0; outline:none; transition:border-color 0.2s ease; }
-.trial-form input:focus,.trial-form select:focus { border-color:var(--orange); }
+.trial-form input[type="text"],.trial-form input[type="tel"] { width:100%; background:transparent; border:0; border-bottom:1px solid var(--line); color:var(--paper); font:inherit; font-size:16px; padding:8px 0; outline:none; transition:border-color 0.2s ease; }
+.trial-form input[type="text"]:focus,.trial-form input[type="tel"]:focus { border-color:var(--orange); }
 .trial-form input::placeholder { color:rgba(245,242,236,0.35); }
-.trial-form select { color:rgba(245,242,236,0.35); }
-.trial-form select.has-value { color:var(--paper); }
-.trial-form select option { background:var(--ink); color:var(--paper); }
+.trial-form .trial-submit { margin-top:24px; }
+/* Custom select */
+.cs-wrap { position:relative; }
+.cs-trigger { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line); cursor:pointer; font-size:16px; font-family:inherit; color:rgba(245,242,236,0.35); transition:border-color 0.2s ease, color 0.2s ease; user-select:none; }
+.cs-trigger:hover,.cs-trigger.open { border-color:var(--orange); }
+.cs-trigger.has-val { color:var(--paper); }
+.cs-chevron { flex-shrink:0; color:rgba(245,242,236,0.4); transition:transform 0.2s ease; }
+.cs-trigger.open .cs-chevron { transform:rotate(180deg); }
+.cs-list { display:none; position:absolute; top:calc(100% + 4px); left:0; right:0; background:#1c1c1c; border:1px solid rgba(245,242,236,0.15); border-radius:12px; overflow:hidden; z-index:100; box-shadow:0 20px 60px rgba(0,0,0,0.7); }
+.cs-list.open { display:block; }
+.cs-opt { padding:14px 20px; font-size:15px; cursor:pointer; color:rgba(245,242,236,0.8); transition:background 0.15s ease, color 0.15s ease; border-bottom:1px solid rgba(245,242,236,0.06); }
+.cs-opt:last-child { border-bottom:0; }
+.cs-opt:hover { background:var(--orange); color:var(--ink); }
+.cs-opt.active { color:var(--orange); }
 .trial-shadow-squirrel { position:absolute; right:-120px; bottom:-120px; width:700px; opacity:0.12; z-index:1; pointer-events:none; }
 @media(max-width:900px){ .trial-inner{grid-template-columns:1fr;} }
 
