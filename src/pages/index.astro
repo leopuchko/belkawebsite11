@@ -549,21 +549,42 @@ const groups = [
     }
   });
 
-  // Phone mask — +375 (XX) XXX-XX-XX
+  // Phone: smart format after country code is detected
   const phoneInput = document.getElementById('phoneInput') as HTMLInputElement | null;
   phoneInput?.addEventListener('input', () => {
-    let d = phoneInput.value.replace(/\D/g, '');
-    if (d.startsWith('375')) d = d.slice(3);
-    else if (d.startsWith('8')) d = d.slice(1);
-    d = d.slice(0, 9);
-    if (!d) { phoneInput.value = ''; return; }
-    let v = '+375 (';
-    if (d.length <= 2) { phoneInput.value = v + d; return; }
-    v += d.slice(0, 2) + ') ';
-    if (d.length <= 5) { phoneInput.value = v + d.slice(2); return; }
-    v += d.slice(2, 5) + '-';
-    if (d.length <= 7) { phoneInput.value = v + d.slice(5); return; }
-    phoneInput.value = v + d.slice(5, 7) + '-' + d.slice(7);
+    const digits = phoneInput.value.replace(/\D/g, '');
+    if (!digits) { phoneInput.value = ''; return; }
+
+    // Belarus: 375... or local operator 029 / 033 / 044 / 025
+    if (digits.startsWith('375') || /^(025|029|033|044)/.test(digits)) {
+      const loc = digits.startsWith('375') ? digits.slice(3, 12) : digits.slice(0, 9);
+      if (!loc) { phoneInput.value = '+375'; return; }
+      let v = '+375 (';
+      if (loc.length <= 2) { phoneInput.value = v + loc; return; }
+      v += loc.slice(0,2) + ') ';
+      if (loc.length <= 5) { phoneInput.value = v + loc.slice(2); return; }
+      v += loc.slice(2,5) + '-';
+      if (loc.length <= 7) { phoneInput.value = v + loc.slice(5); return; }
+      phoneInput.value = v + loc.slice(5,7) + '-' + loc.slice(7,9);
+      return;
+    }
+
+    // Russia: 7... or 8...
+    if (digits.startsWith('7') || digits.startsWith('8')) {
+      const loc = digits.slice(1, 11);
+      if (!loc) { phoneInput.value = '+7'; return; }
+      let v = '+7 (';
+      if (loc.length <= 3) { phoneInput.value = v + loc; return; }
+      v += loc.slice(0,3) + ') ';
+      if (loc.length <= 6) { phoneInput.value = v + loc.slice(3); return; }
+      v += loc.slice(3,6) + '-';
+      if (loc.length <= 8) { phoneInput.value = v + loc.slice(6); return; }
+      phoneInput.value = v + loc.slice(6,8) + '-' + loc.slice(8,10);
+      return;
+    }
+
+    // Unknown country — just show digits
+    phoneInput.value = digits;
   });
 
   // Trial form
