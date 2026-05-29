@@ -716,6 +716,14 @@ const groups = [
 .stats .stat .l { font-family:var(--mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,242,236,0.55); margin-top:12px; line-height:1.5; }
 @media(max-width:900px){ .about{grid-template-columns:1fr;} }
 
+/* ── Section head right-descriptions ── */
+.styles-head > p, .reel-head > p, .crew-head > p,
+.groups-head > p, .stage-head > p, .alumni-head > p {
+  margin-left: auto;
+  text-align: right;
+  max-width: 38ch;
+}
+
 /* ══ STYLES ══ */
 .styles { padding:100px 0 0; background:var(--paper); color:var(--ink); }
 .styles-head { display:flex; justify-content:space-between; align-items:flex-end; padding:0 clamp(20px,4vw,64px) 64px; gap:24px; flex-wrap:wrap; }
