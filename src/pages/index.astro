@@ -417,42 +417,31 @@ const groups = [
       <p class="sub">
         Оставь номер — менеджер позвонит в течение часа в рабочее время, подберёт группу и день. Никаких автоматических рассылок.
       </p>
-      <div class="trial-marks">
-        <span>· форма не нужна</span>
-        <span>· возраст от 4</span>
-        <span>· звонок ≈ 1 час</span>
-      </div>
     </div>
     <form class="trial-form" id="trialForm">
       <div id="trialFields">
         <div>
-          <div class="lbl">Имя ребёнка / ваше</div>
-          <input type="text" name="name" placeholder="Например: Ника" required />
+          <div class="lbl">Ваше имя или имя ребёнка</div>
+          <input type="text" name="name" placeholder="Например, Ника" required />
         </div>
         <div>
-          <div class="lbl">Телефон</div>
-          <input type="tel" name="phone" placeholder="+375 ..." required />
+          <div class="lbl">Возрастная группа</div>
+          <select name="age">
+            <option value="">Выберите возраст</option>
+            <option>4–6 лет</option>
+            <option>7–11 лет</option>
+            <option>12–17 лет</option>
+            <option>18–29 лет</option>
+            <option>30+</option>
+          </select>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
-          <div>
-            <div class="lbl">Возрастная группа</div>
-            <select name="age">
-              <option>4–6</option><option>7–11</option><option>12–17</option><option>18–29</option><option>30+</option>
-            </select>
-          </div>
-          <div>
-            <div class="lbl">Стиль</div>
-            <select name="style">
-              <option>Hip-Hop</option><option>Breaking</option><option>Acro</option><option>Stretch</option><option>Ещё не выбрал</option>
-            </select>
-          </div>
+        <div>
+          <div class="lbl">Номер телефона</div>
+          <input type="tel" name="phone" placeholder="+375 XX XXX-XX-XX" required />
         </div>
-        <button type="submit" class="btn btn-primary" style="justify-content:center;margin-top:10px">
-          Записать на пробное <span class="arrow">→</span>
+        <button type="submit" class="btn btn-primary btn-white trial-submit">
+          Записаться на пробное <span class="arrow">→</span>
         </button>
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(245,242,236,0.4);text-align:center">
-          Нажимая, вы соглашаетесь с обработкой данных
-        </div>
       </div>
       <div id="trialSuccess" style="display:none;text-align:center;padding:40px 20px">
         <div style="font-family:var(--display);font-size:36px;font-weight:800;color:var(--orange);margin-bottom:12px">Готово.</div>
@@ -805,7 +794,8 @@ const groups = [
 /* ══ TRIAL ══ */
 .trial { padding:120px clamp(20px,4vw,64px); background:var(--orange); color:var(--ink); position:relative; overflow:hidden; }
 .trial-inner { display:grid; grid-template-columns:1.4fr 1fr; gap:clamp(30px,5vw,100px); align-items:center; position:relative; z-index:2; }
-.trial h2 { font-family:var(--display); font-weight:800; font-size:clamp(56px,8vw,144px); line-height:0.88; letter-spacing:-0.035em; margin:0 0 24px; font-variation-settings:"wdth" 100,"opsz" 96; }
+.trial h2 { font-family:var(--display); font-weight:800; font-size:clamp(56px,8vw,144px); line-height:0.95; letter-spacing:-0.025em; margin:0 0 24px; font-variation-settings:"wdth" 100,"opsz" 96; }
+.trial-submit { width:100%; justify-content:center; font-weight:800; font-size:15px; }
 .trial h2 .out { -webkit-text-stroke:2.5px var(--ink); color:transparent; font-style:italic; }
 .trial .sub { font-size:19px; line-height:1.45; max-width:48ch; color:rgba(10,10,10,0.78); margin:0 0 36px; }
 .trial-marks { display:flex; gap:16px; flex-wrap:wrap; font-family:var(--mono); font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(10,10,10,0.7); }
