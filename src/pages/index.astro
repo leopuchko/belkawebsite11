@@ -107,13 +107,15 @@ const groups = [
   </div>
   <div class="reel-stage shell">
     <span class="tag">Showreel · 2025</span>
-    <div class="reel-placeholder ph-ink-stripe">
-      <span class="ph-label">Showreel · видео или постер</span>
-    </div>
-    <div class="play" aria-hidden="true"></div>
-    <div class="caption">
-      <span class="ttl">Belka Crew · отчётный концерт</span>
-      <span>02:34</span>
+    <div class="reel-video-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/Uacy04Oew3g?si=2UL731LOXp21cm1S"
+        title="Belka Crew · Showreel"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      ></iframe>
     </div>
   </div>
   <div class="reel-grid shell">
@@ -645,9 +647,8 @@ const groups = [
 .reel { padding:80px 0 100px; }
 .reel-head { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:32px; }
 .reel-stage { position:relative; border-radius:24px; overflow:hidden; border:1px solid var(--line); }
-.reel-placeholder { width:100%; height:62vh; min-height:480px; max-height:720px; display:flex; align-items:flex-end; padding:16px; }
-.reel-stage .play { position:absolute; inset:0; margin:auto; width:120px; height:120px; border-radius:50%; background:var(--orange); display:flex; align-items:center; justify-content:center; pointer-events:none; z-index:3; box-shadow:0 20px 60px rgba(255,92,26,0.45); transition:transform 0.3s ease; }
-.reel-stage:hover .play { transform:scale(1.08); }
+.reel-video-wrap { position:relative; width:100%; padding-bottom:56.25%; }
+.reel-video-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
 .reel-stage .play::after { content:""; width:0; height:0; border-style:solid; border-width:18px 0 18px 28px; border-color:transparent transparent transparent var(--ink); margin-left:6px; }
 .reel-stage .tag { position:absolute; top:22px; left:22px; z-index:3; font-family:var(--mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; background:var(--ink); color:var(--orange); padding:8px 14px; border-radius:999px; border:1px solid var(--line-strong); }
 .reel-stage .caption { position:absolute; bottom:22px; left:22px; right:22px; z-index:3; display:flex; justify-content:space-between; align-items:flex-end; font-family:var(--mono); font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:var(--paper); pointer-events:none; }
