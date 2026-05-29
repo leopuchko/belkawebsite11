@@ -421,8 +421,8 @@ const groups = [
     <form class="trial-form" id="trialForm">
       <div id="trialFields">
         <div class="form-field">
-          <div class="lbl">Ваше имя</div>
-          <input type="text" name="name" placeholder="или имя ребёнка" required />
+          <div class="lbl">Как вас зовут</div>
+          <input type="text" name="name" placeholder="Например, Ника" required />
         </div>
         <div class="form-field">
           <div class="lbl">Возрастная группа</div>
@@ -886,14 +886,14 @@ const groups = [
 #trialFields { display:flex; flex-direction:column; }
 .form-field { padding:20px 0; border-top:1px solid rgba(245,242,236,0.08); }
 .form-field:first-child { border-top:0; padding-top:0; }
-.trial-form .lbl { font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,242,236,0.55); margin-bottom:10px; }
-.trial-form input[type="text"],.trial-form input[type="tel"] { width:100%; background:transparent; border:0; border-bottom:1px solid var(--line); color:var(--paper); font:inherit; font-size:16px; padding:8px 0; outline:none; transition:border-color 0.2s ease; }
+.trial-form .lbl { font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,242,236,0.75); margin-bottom:10px; }
+.trial-form input[type="text"],.trial-form input[type="tel"] { width:100%; background:transparent; border:0; border-bottom:1px solid rgba(245,242,236,0.22); color:var(--paper); font:inherit; font-size:16px; padding:8px 0; outline:none; transition:border-color 0.2s ease; }
 .trial-form input[type="text"]:focus,.trial-form input[type="tel"]:focus { border-color:var(--orange); }
-.trial-form input::placeholder { color:rgba(245,242,236,0.35); }
+.trial-form input::placeholder { color:rgba(245,242,236,0.2); }
 .trial-form .trial-submit { margin-top:24px; }
 /* Custom select */
 .cs-wrap { position:relative; }
-.cs-trigger { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line); cursor:pointer; font-size:16px; font-family:inherit; color:rgba(245,242,236,0.35); transition:border-color 0.2s ease, color 0.2s ease; user-select:none; }
+.cs-trigger { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(245,242,236,0.22); cursor:pointer; font-size:16px; font-family:inherit; color:rgba(245,242,236,0.2); transition:border-color 0.2s ease, color 0.2s ease; user-select:none; }
 .cs-trigger:hover,.cs-trigger.open { border-color:var(--orange); }
 .cs-trigger.has-val { color:var(--paper); }
 .cs-chevron { flex-shrink:0; color:rgba(245,242,236,0.4); transition:transform 0.2s ease; }
