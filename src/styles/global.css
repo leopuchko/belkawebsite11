@@ -10,7 +10,7 @@
   --line-strong: rgba(245, 242, 236, 0.32);
   --line-ink: rgba(10, 10, 10, 0.12);
   --shadow: 0 30px 80px rgba(0,0,0,0.45);
-  --display: "Bricolage Grotesque", "Arial Black", sans-serif;
+  --display: "Bricolage Grotesque", "Geologica", "Arial Black", sans-serif;
   --body: "Inter Tight", "Inter", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 }
