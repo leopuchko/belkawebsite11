@@ -998,12 +998,16 @@ const groups = [
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+.ap-tag, .ap-ach {
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(8px);
   transition: opacity 0.35s ease 0.1s, transform 0.35s ease 0.1s;
 }
-.alumni-panel:hover .ap-info,
-.alumni-panel:focus .ap-info {
+.alumni-panel:hover .ap-tag,
+.alumni-panel:hover .ap-ach,
+.alumni-panel:focus .ap-tag,
+.alumni-panel:focus .ap-ach {
   opacity: 1;
   transform: translateY(0);
 }
@@ -1038,8 +1042,11 @@ const groups = [
   font-size: clamp(18px, 2vw, 28px);
   letter-spacing: -0.02em;
   line-height: 1;
-  color: var(--paper);
+  color: rgba(245,242,236,0.4);
+  transition: color 0.3s ease;
 }
+.alumni-panel:hover .ap-name,
+.alumni-panel:focus .ap-name { color: var(--paper); }
 .ap-ach {
   font-family: var(--mono);
   font-size: 11px;
