@@ -996,14 +996,17 @@ const groups = [
 }
 .ap-tag, .ap-ach {
   opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.35s ease 0.1s, transform 0.35s ease 0.1s;
+  max-height: 0;
+  overflow: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease 0.1s, max-height 0.35s ease 0.1s, transform 0.35s ease 0.1s;
 }
 .alumni-panel:hover .ap-tag,
 .alumni-panel:hover .ap-ach,
 .alumni-panel:focus .ap-tag,
 .alumni-panel:focus .ap-ach {
   opacity: 1;
+  max-height: 60px;
   transform: translateY(0);
 }
 
