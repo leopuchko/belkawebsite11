@@ -368,13 +368,14 @@ const groups = [
     <a href="#trial" class="btn btn-ghost">Все события →</a>
   </div>
   <div class="posters-grid">
-    <article class="poster-card poster-big">
-      <div class="poster-img" style="background:url('/posters/poster-2026.jpg') center 22%/cover no-repeat"></div>
-      <div class="poster-info">
+    <article class="poster-card poster-big poster-hero">
+      <div class="ph-bg" style="background:url('/posters/poster-2026.jpg') center 35%/cover no-repeat;"></div>
+      <div class="ph-veil"></div>
+      <div class="ph-info">
         <div class="poster-date">24 ИЮЛЯ 2026 · ПЯТНИЦА · 19:00</div>
-        <h3 class="poster-title">Belka. Танцевальное шоу</h3>
-        <div class="poster-where">ДК Железнодорожников · Витебск</div>
-        <a href="https://instagram.com/belka.empire" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top:auto;justify-content:center;color:#fff;font-weight:700">Купить билет</a>
+        <h3 class="ph-title">Belka.<br/>Танцевальное шоу</h3>
+        <div class="poster-where" style="margin-bottom:20px">ДК Железнодорожников · Витебск</div>
+        <a href="https://instagram.com/belka.empire" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;color:#fff;font-weight:700">Купить билет</a>
       </div>
     </article>
     <article class="poster-card">
@@ -1106,6 +1107,31 @@ const groups = [
 }
 .poster-big .poster-img { height: 360px; }
 .poster-card:not(.poster-big) .poster-img { height: 240px; }
+
+/* Full-bleed hero poster */
+.poster-hero { position:relative; min-height:480px; display:block !important; }
+.ph-bg { position:absolute; inset:0; }
+.ph-veil {
+  position:absolute; inset:0;
+  background: linear-gradient(to top,
+    rgba(10,10,10,0.97) 0%,
+    rgba(10,10,10,0.7) 35%,
+    rgba(10,10,10,0.15) 75%,
+    rgba(10,10,10,0) 100%);
+  z-index:1;
+}
+.ph-info {
+  position:absolute; inset:0; z-index:2;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding:32px;
+}
+.ph-title {
+  font-family:var(--display); font-weight:800;
+  font-size:clamp(32px,3.5vw,56px); line-height:1;
+  letter-spacing:-0.025em; color:var(--paper);
+  margin:8px 0 10px;
+  font-variation-settings:"wdth" 100,"opsz" 96;
+}
 
 .poster-info {
   padding: 28px;
