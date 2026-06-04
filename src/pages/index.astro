@@ -146,74 +146,44 @@ const groups = [
   </div>
 </div>
 
-<!-- ══ STYLES ══ -->
-<section class="styles" id="styles">
-  <div class="styles-head">
+<!-- ══ STYLES + CREW ══ -->
+<section class="directions" id="styles">
+  <div class="dir-head">
     <div>
-      <div class="eyebrow" style="margin-bottom:16px">/ 02 — Направления</div>
+      <div class="eyebrow" style="margin-bottom:16px">/ 02 — Направления и тренеры</div>
       <h2 class="h2">Четыре <span class="o">направления.</span></h2>
     </div>
     <p class="body-text" style="color:rgba(10,10,10,0.7);max-width:42ch">Мы учим всем стилям вместе — широкая база делает танцора сильнее и свободнее.</p>
   </div>
-  {stylesData.map((s) => (
-    <div class="style-row">
-      <div class="style-num">{s.n}</div>
-      <h3 class="style-name">{s.name} <span class="ital">{s.ital}</span></h3>
-      <p class="style-meta">{s.desc}</p>
-      <div class={`style-thumb thumb-${s.thumb}`}>
-        {s.thumb === "hop" && (
-          <svg viewBox="0 0 200 140" preserveAspectRatio="xMidYMid slice">
-            <defs><pattern id="pHop" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#0A0A0A"/><rect width="7" height="14" fill="#FF5C1A"/></pattern></defs>
-            <rect width="200" height="140" fill="url(#pHop)"/>
-            <circle cx="100" cy="70" r="40" fill="#F5F2EC"/>
-            <text x="100" y="76" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#0A0A0A" letter-spacing="2">HIP-HOP</text>
-          </svg>
-        )}
-        {s.thumb === "break" && (
-          <svg viewBox="0 0 200 140" preserveAspectRatio="xMidYMid slice">
-            <rect width="200" height="140" fill="#F5F2EC"/>
-            <g stroke="#0A0A0A" stroke-width="1" fill="none">
-              {Array.from({length:14},(_,i) => <line key={i} x1="0" y1={i*10} x2="200" y2={i*10+30}/>)}
-            </g>
-            <rect x="80" y="50" width="40" height="40" fill="#FF5C1A" transform="rotate(45 100 70)"/>
-          </svg>
-        )}
-        {s.thumb === "acro" && (
-          <svg viewBox="0 0 200 140" preserveAspectRatio="xMidYMid slice">
-            <rect width="200" height="140" fill="#FF5C1A"/>
-            {Array.from({length:8},(_,i) => <circle key={i} cx={25+i*22} cy="70" r={4+(i%3)*4} fill="#0A0A0A" opacity="0.8"/>)}
-            <path d="M 0 100 Q 100 20 200 100" stroke="#0A0A0A" stroke-width="3" fill="none"/>
-          </svg>
-        )}
-        {s.thumb === "stretch" && (
-          <svg viewBox="0 0 200 140" preserveAspectRatio="xMidYMid slice">
-            <rect width="200" height="140" fill="#0A0A0A"/>
-            {Array.from({length:20},(_,i) => <line key={i} x1={i*12} y1="0" x2={i*12-40} y2="140" stroke="#FF5C1A" stroke-width="2" opacity="0.55"/>)}
-          </svg>
-        )}
-        <span class="label">PHOTO · {s.name.toUpperCase()}</span>
+  <div class="dir-body">
+    <!-- LEFT: styles list -->
+    <div class="dir-styles">
+      {stylesData.map((s) => (
+        <div class="dir-row">
+          <div class="dir-num">{s.n}</div>
+          <div>
+            <h3 class="dir-name">{s.name} <span class="ital">{s.ital}</span></h3>
+            <p class="dir-meta">{s.desc}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+    <!-- RIGHT: crew -->
+    <div class="dir-crew">
+      <div class="eyebrow" style="margin-bottom:32px">/ Тренеры</div>
+      <div class="dir-crew-grid">
+        {crewData.map((c, i) => (
+          <div class="dir-trainer">
+            <div class={`dir-trainer-photo ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}>
+              <span class="ph-label">{c.name}</span>
+            </div>
+            <div class="dir-trainer-role">{c.role}</div>
+            <div class="dir-trainer-name">{c.name}</div>
+            <p class="dir-trainer-bio">{c.bio}</p>
+          </div>
+        ))}
       </div>
     </div>
-  ))}
-</section>
-
-<!-- ══ CREW ══ -->
-<section class="crew" id="crew">
-  <div class="crew-head">
-    <div class="eyebrow">/ Тренеры</div>
-    <p class="body-text" style="color:rgba(10,10,10,0.7);margin:0">Практикующие танцоры — тренеры с живой практикой.</p>
-  </div>
-  <div class="crew-grid">
-    {crewData.map((c, i) => (
-      <div class="crew-card">
-        <div class={`crew-photo ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}>
-          <span class="ph-label">{c.name}</span>
-        </div>
-        <div class="role">{c.role}</div>
-        <h3 class="name">{c.name}</h3>
-        <p class="bio">{c.bio}</p>
-      </div>
-    ))}
   </div>
 </section>
 
@@ -790,45 +760,52 @@ const groups = [
 @media(max-width:900px){ .about{grid-template-columns:1fr;} }
 
 /* ── Section head right-descriptions ── */
-.styles-head > p, .reel-head > p, .crew-head > p,
 .groups-head > p, .stage-head > p, .alumni-head > p {
   margin-left: auto;
   text-align: right;
   max-width: 38ch;
 }
 
-/* ══ STYLES ══ */
-.styles { padding:100px 0 0; background:var(--paper); color:var(--ink); padding-bottom:60px; }
-.styles-head { display:flex; justify-content:space-between; align-items:flex-end; padding:0 clamp(20px,4vw,64px) 64px; gap:24px; flex-wrap:wrap; }
-.styles-head .h2 { color:var(--ink); }
-.styles-head .h2 .o { color:var(--orange); }
-.style-row { display:grid; grid-template-columns:200px 1fr 1.1fr 200px; gap:24px; align-items:center; padding:36px clamp(20px,4vw,64px); border-top:1px solid var(--line-ink); cursor:pointer; transition:background 0.25s ease,color 0.25s ease; }
-.style-row:last-child { border-bottom:1px solid var(--line-ink); }
-.style-row:hover { background:var(--ink); color:var(--paper); }
-.style-row:hover .style-num { color:var(--orange); }
-.style-row:hover .style-meta { color:rgba(245,242,236,0.55); }
-.style-num { font-family:var(--mono); font-size:12px; letter-spacing:0.18em; color:rgba(10,10,10,0.45); text-transform:uppercase; }
-.style-name { font-family:var(--display); font-weight:800; font-size:clamp(40px,5vw,88px); line-height:0.95; letter-spacing:-0.03em; margin:0; }
-.style-name .ital { font-style:italic; transition:color 0.2s ease; }
-.style-row:hover .style-name .ital { color:var(--orange); }
-.style-meta { font-size:15px; color:rgba(10,10,10,0.65); line-height:1.5; transition:color 0.25s ease; }
-.style-thumb { height:140px; border-radius:8px; overflow:hidden; background:var(--ink); position:relative; display:flex; align-items:center; justify-content:center; }
-.style-thumb svg { width:100%; height:100%; }
-.style-thumb .label { position:absolute; bottom:8px; left:10px; font-family:var(--mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--orange); }
-.style-row:hover .style-thumb { background:var(--orange); }
-@media(max-width:1000px){ .style-row{grid-template-columns:1fr;gap:16px;padding:28px clamp(20px,4vw,64px);} .style-thumb{height:200px;} }
+/* ══ DIRECTIONS (styles + crew merged) ══ */
+.directions { background:var(--paper); color:var(--ink); padding:100px 0 0; }
+.dir-head { display:flex; justify-content:space-between; align-items:flex-end; padding:0 clamp(20px,4vw,64px) 64px; gap:24px; flex-wrap:wrap; }
+.dir-head .h2 { color:var(--ink); }
+.dir-head .h2 .o { color:var(--orange); }
+.dir-body { display:grid; grid-template-columns:1.1fr 1fr; border-top:1px solid var(--line-ink); }
 
-/* ══ CREW ══ */
-.crew { padding:0 clamp(20px,4vw,64px) 120px; background:var(--paper); color:var(--ink); border-top:1px solid var(--line-ink); }
-.crew-head { display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; padding:32px 0 48px; }
-.crew-head .h2 .o { color:var(--orange); }
-.crew-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
-.crew-card { display:flex; flex-direction:column; gap:12px; }
-.crew-photo { width:100%; height:420px; border-radius:16px; overflow:hidden; display:flex; align-items:flex-end; padding:12px; }
-.crew-card .role { font-family:var(--mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--orange); }
-.crew-card .name { font-family:var(--display); font-weight:700; font-size:22px; letter-spacing:-0.02em; line-height:1; margin:4px 0 0; }
-.crew-card .bio { font-size:13px; line-height:1.45; color:rgba(10,10,10,0.65); }
-@media(max-width:1000px){ .crew-grid{grid-template-columns:1fr 1fr;} }
+/* Left: styles list */
+.dir-styles { }
+.dir-row { display:grid; grid-template-columns:56px 1fr; gap:16px; align-items:start; padding:28px clamp(20px,4vw,64px); border-bottom:1px solid var(--line-ink); cursor:pointer; transition:background 0.25s ease, color 0.25s ease; }
+.dir-row:hover { background:var(--ink); color:var(--paper); }
+.dir-row:hover .dir-num { color:var(--orange); }
+.dir-row:hover .dir-meta { color:rgba(245,242,236,0.55); }
+.dir-num { font-family:var(--mono); font-size:11px; letter-spacing:0.18em; color:rgba(10,10,10,0.35); padding-top:8px; }
+.dir-name { font-family:var(--display); font-weight:800; font-size:clamp(32px,3.8vw,72px); line-height:0.95; letter-spacing:-0.03em; margin:0 0 8px; }
+.dir-name .ital { font-style:italic; }
+.dir-row:hover .dir-name .ital { color:var(--orange); }
+.dir-meta { font-size:14px; color:rgba(10,10,10,0.6); line-height:1.5; margin:0; }
+
+/* Right: crew */
+.dir-crew { border-left:1px solid var(--line-ink); padding:28px clamp(16px,2.5vw,40px); padding-bottom:80px; }
+.dir-crew-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.dir-trainer { display:flex; flex-direction:column; gap:8px; }
+.dir-trainer-photo { width:100%; aspect-ratio:1/1; border-radius:12px; overflow:hidden; display:flex; align-items:flex-end; padding:10px; }
+.dir-trainer-role { font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--orange); }
+.dir-trainer-name { font-family:var(--display); font-weight:700; font-size:clamp(15px,1.4vw,20px); letter-spacing:-0.02em; line-height:1.1; }
+.dir-trainer-bio { font-size:12px; line-height:1.45; color:rgba(10,10,10,0.6); margin:0; }
+
+/* ── Section head right-descriptions ── */
+.dir-head > p, .reel-head > p,
+.groups-head > p, .stage-head > p, .alumni-head > p {
+  margin-left: auto;
+  text-align: right;
+  max-width: 38ch;
+}
+
+@media(max-width:1000px) {
+  .dir-body { grid-template-columns:1fr; }
+  .dir-crew { border-left:0; border-top:1px solid var(--line-ink); }
+}
 
 /* ══ GROUPS ══ */
 .groups { padding:120px clamp(20px,4vw,64px); background:var(--paper); color:var(--ink); border-top:1px solid var(--line-ink); }
