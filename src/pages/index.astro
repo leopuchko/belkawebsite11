@@ -200,11 +200,8 @@ const groups = [
 <!-- ══ CREW ══ -->
 <section class="crew" id="crew">
   <div class="crew-head">
-    <div>
-      <div class="eyebrow" style="margin-bottom:16px">/ Тренеры</div>
-      <h2 class="h2">Те, кто <span class="o">ведёт.</span></h2>
-    </div>
-    <p class="body-text" style="color:rgba(10,10,10,0.7)">Практикующие танцоры — тренеры с живой практикой.</p>
+    <div class="eyebrow">/ Тренеры</div>
+    <p class="body-text" style="color:rgba(10,10,10,0.7);margin:0">Практикующие танцоры — тренеры с живой практикой.</p>
   </div>
   <div class="crew-grid">
     {crewData.map((c, i) => (
@@ -801,7 +798,7 @@ const groups = [
 }
 
 /* ══ STYLES ══ */
-.styles { padding:100px 0 0; background:var(--paper); color:var(--ink); }
+.styles { padding:100px 0 0; background:var(--paper); color:var(--ink); padding-bottom:60px; }
 .styles-head { display:flex; justify-content:space-between; align-items:flex-end; padding:0 clamp(20px,4vw,64px) 64px; gap:24px; flex-wrap:wrap; }
 .styles-head .h2 { color:var(--ink); }
 .styles-head .h2 .o { color:var(--orange); }
@@ -822,8 +819,8 @@ const groups = [
 @media(max-width:1000px){ .style-row{grid-template-columns:1fr;gap:16px;padding:28px clamp(20px,4vw,64px);} .style-thumb{height:200px;} }
 
 /* ══ CREW ══ */
-.crew { padding:120px clamp(20px,4vw,64px); background:var(--paper); color:var(--ink); }
-.crew-head { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:56px; }
+.crew { padding:0 clamp(20px,4vw,64px) 120px; background:var(--paper); color:var(--ink); border-top:1px solid var(--line-ink); }
+.crew-head { display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap; padding:32px 0 48px; }
 .crew-head .h2 .o { color:var(--orange); }
 .crew-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
 .crew-card { display:flex; flex-direction:column; gap:12px; }
