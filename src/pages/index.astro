@@ -167,19 +167,18 @@ const groups = [
         </div>
       ))}
     </div>
-  </div>
-
-  <!-- TRAINERS: 4×1 full-width portrait row -->
-  <div class="dir-crew">
-    <div class="eyebrow" style="padding:0 clamp(20px,4vw,64px);margin-bottom:20px">/ Тренеры</div>
-    <div class="dir-crew-grid">
+    <!-- RIGHT: 4×1 vertical stack -->
+    <div class="dir-crew">
+      <div class="eyebrow" style="margin-bottom:4px">/ Тренеры</div>
       {crewData.map((c, i) => (
         <div class="dir-trainer">
           <div class={`dir-trainer-photo${c.photo ? '' : ` ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}`}
                style={c.photo ? `background:url('${c.photo}') ${c.photoPos ?? 'center top'}/cover no-repeat` : ''}>
           </div>
-          <div class="dir-trainer-role">{c.role}</div>
-          <div class="dir-trainer-name">{c.name}</div>
+          <div class="dir-trainer-info">
+            <div class="dir-trainer-role">{c.role}</div>
+            <div class="dir-trainer-name">{c.name}</div>
+          </div>
         </div>
       ))}
     </div>
@@ -770,7 +769,7 @@ const groups = [
 .dir-head { display:flex; justify-content:space-between; align-items:flex-end; padding:0 clamp(20px,4vw,64px) 64px; gap:24px; flex-wrap:wrap; }
 .dir-head .h2 { color:var(--ink); }
 .dir-head .h2 .o { color:var(--orange); }
-.dir-body { border-top:1px solid var(--line-ink); }
+.dir-body { display:grid; grid-template-columns:1.1fr 1fr; border-top:1px solid var(--line-ink); }
 
 /* Left: styles list */
 .dir-styles { }
@@ -784,14 +783,14 @@ const groups = [
 .dir-row:hover .dir-name .ital { color:var(--orange); }
 .dir-meta { font-size:14px; color:rgba(10,10,10,0.6); line-height:1.5; margin:0; }
 
-/* Trainers: 4×1 portrait row */
-.dir-crew { border-top:1px solid var(--line-ink); padding:28px 0 60px; }
-.dir-crew-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:0 clamp(20px,4vw,64px); }
-.dir-trainer { display:flex; flex-direction:column; gap:10px; }
-.dir-trainer-photo { width:100%; aspect-ratio:3/4; border-radius:12px; background-size:cover; background-position:center top; overflow:hidden; transition:transform 0.4s ease; }
-.dir-trainer:hover .dir-trainer-photo { transform:scale(1.02); }
+/* Right: 4×1 vertical trainer stack */
+.dir-crew { border-left:1px solid var(--line-ink); padding:28px clamp(16px,2.5vw,40px) 40px; }
+.dir-trainer { display:grid; grid-template-columns:80px 1fr; gap:14px; align-items:center; padding:16px 0; border-bottom:1px solid var(--line-ink); }
+.dir-trainer:last-child { border-bottom:0; }
+.dir-trainer-photo { width:80px; height:108px; border-radius:8px; background-size:cover; background-position:center top; flex-shrink:0; }
+.dir-trainer-info { display:flex; flex-direction:column; gap:3px; }
 .dir-trainer-role { font-family:var(--mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--orange); }
-.dir-trainer-name { font-family:var(--display); font-weight:700; font-size:clamp(14px,1.3vw,19px); letter-spacing:-0.02em; line-height:1.1; }
+.dir-trainer-name { font-family:var(--display); font-weight:700; font-size:clamp(16px,1.5vw,22px); letter-spacing:-0.02em; line-height:1.1; }
 
 /* ── Section head right-descriptions ── */
 .dir-head > p, .reel-head > p,
@@ -801,8 +800,9 @@ const groups = [
   max-width: 38ch;
 }
 
-@media(max-width:768px) {
-  .dir-crew-grid { grid-template-columns:1fr 1fr; }
+@media(max-width:1000px) {
+  .dir-body { grid-template-columns:1fr; }
+  .dir-crew { border-left:0; border-top:1px solid var(--line-ink); }
 }
 
 /* ══ GROUPS ══ */
