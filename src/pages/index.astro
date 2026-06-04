@@ -156,7 +156,6 @@ const groups = [
     <p class="body-text" style="color:rgba(10,10,10,0.7);max-width:42ch">Мы учим всем стилям вместе — широкая база делает танцора сильнее и свободнее.</p>
   </div>
   <div class="dir-body">
-    <!-- LEFT: styles list -->
     <div class="dir-styles">
       {stylesData.map((s) => (
         <div class="dir-row">
@@ -168,25 +167,26 @@ const groups = [
         </div>
       ))}
     </div>
-    <!-- RIGHT: crew accordion -->
-    <div class="dir-crew">
-      <div class="eyebrow" style="margin-bottom:20px">/ Тренеры</div>
-      <div class="dir-cp-stack">
-        {crewData.map((c, i) => (
-          <div class="dir-cp" tabindex="0">
-            <div class={`dir-cp-bg${c.photo ? '' : ` ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}`} style={c.photo ? `background:url('${c.photo}') ${c.photoPos ?? 'center'}/cover no-repeat` : ''}></div>
-            <div class="dir-cp-overlay"></div>
-            <div class="dir-cp-content">
-              {!c.photo && <div class="dir-cp-name-rot">{c.name}</div>}
-              <div class="dir-cp-info">
-                <div class="dir-cp-role">{c.role}</div>
-                <div class="dir-cp-name">{c.name}</div>
-                <p class="dir-cp-bio">{c.bio}</p>
-              </div>
+  </div>
+
+  <!-- TRAINERS: full-width strip -->
+  <div class="dir-trainers">
+    <div class="eyebrow" style="padding:0 clamp(20px,4vw,64px);margin-bottom:20px">/ Тренеры</div>
+    <div class="dir-cp-stack">
+      {crewData.map((c, i) => (
+        <div class="dir-cp" tabindex="0">
+          <div class={`dir-cp-bg${c.photo ? '' : ` ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}`} style={c.photo ? `background:url('${c.photo}') ${c.photoPos ?? 'center'}/cover no-repeat` : ''}></div>
+          <div class="dir-cp-overlay"></div>
+          <div class="dir-cp-content">
+            {!c.photo && <div class="dir-cp-name-rot">{c.name}</div>}
+            <div class="dir-cp-info">
+              <div class="dir-cp-role">{c.role}</div>
+              <div class="dir-cp-name">{c.name}</div>
+              <p class="dir-cp-bio">{c.bio}</p>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   </div>
 </section>
@@ -775,7 +775,7 @@ const groups = [
 .dir-head { display:flex; justify-content:space-between; align-items:flex-end; padding:0 clamp(20px,4vw,64px) 64px; gap:24px; flex-wrap:wrap; }
 .dir-head .h2 { color:var(--ink); }
 .dir-head .h2 .o { color:var(--orange); }
-.dir-body { display:grid; grid-template-columns:1.1fr 1fr; border-top:1px solid var(--line-ink); }
+.dir-body { border-top:1px solid var(--line-ink); }
 
 /* Left: styles list */
 .dir-styles { }
@@ -789,9 +789,9 @@ const groups = [
 .dir-row:hover .dir-name .ital { color:var(--orange); }
 .dir-meta { font-size:14px; color:rgba(10,10,10,0.6); line-height:1.5; margin:0; }
 
-/* Right: crew cards — unified block */
-.dir-crew { border-left:1px solid var(--line-ink); padding:28px clamp(16px,2.5vw,40px) 28px; display:flex; flex-direction:column; }
-.dir-cp-stack { flex:1; display:flex; gap:1px; min-height:460px; border-radius:14px; overflow:hidden; border:1px solid var(--line-ink); background:var(--line-ink); }
+/* Trainers: full-width strip */
+.dir-trainers { border-top:1px solid var(--line-ink); padding-top:28px; padding-bottom:0; }
+.dir-cp-stack { display:flex; gap:1px; height:460px; background:var(--line-ink); overflow:hidden; }
 .dir-cp { position:relative; flex:1; min-width:0; overflow:hidden; cursor:pointer; transition:flex 0.45s cubic-bezier(0.4,0,0.2,1); }
 .dir-cp:hover, .dir-cp:focus { flex:2.2; outline:none; }
 .dir-cp-bg { position:absolute; inset:0; transition:transform 0.45s ease; }
@@ -817,12 +817,10 @@ const groups = [
   max-width: 38ch;
 }
 
-@media(max-width:1000px) {
-  .dir-body { grid-template-columns:1fr; }
-  .dir-crew { border-left:0; border-top:1px solid var(--line-ink); }
-  .dir-cp-stack { flex-direction:column; min-height:auto; }
+@media(max-width:768px) {
+  .dir-cp-stack { flex-direction:column; height:auto; }
   .dir-cp { flex:none !important; height:80px; }
-  .dir-cp:focus { height:260px; }
+  .dir-cp:focus { height:280px; }
   .dir-cp-name-rot { display:none; }
 }
 
