@@ -92,7 +92,7 @@ img { display: block; max-width: 100%; }
 .btn-ghost:hover { border-color: var(--paper); background: var(--paper); color: var(--ink); }
 .btn-ink { background: var(--ink); color: var(--paper); }
 .btn-ink:hover { background: var(--orange); color: var(--ink); }
-.btn-white { color: #fff !important; font-weight: 700; }
+.btn-white { color: #fff !important; font-weight: 800; }
 .btn-white:hover { color: var(--ink) !important; }
 .btn .arrow { display: inline-flex; transition: transform 0.2s ease; }
 .btn:hover .arrow { transform: translateX(4px); }
