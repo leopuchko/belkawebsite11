@@ -15,8 +15,8 @@ const stylesData = [
 ];
 
 const crewData = [
+  { name: "Леон Пучко", role: "Режиссёр · Постановщик", bio: "Чемпион мира. Художественный руководитель и хореограф концертного состава.", photo: "/trainers/leon.jpg", photoPos: "center 15%" },
   { name: "Имя Тренера", role: "Hip-Hop · Head Coach", bio: "Призёр чемпионатов РБ. В Belka с 2016." },
-  { name: "Имя Тренера", role: "Breaking · Bboy", bio: "Battle scene, RBC One Cypher." },
   { name: "Имя Тренера", role: "Acro · Спортивная гимнастика", bio: "КМС, безопасная страховка детей." },
   { name: "Имя Тренера", role: "Kids & Stretch", bio: "Работа с малышами и группой 30+." },
 ];
@@ -174,7 +174,7 @@ const groups = [
       <div class="dir-cp-stack">
         {crewData.map((c, i) => (
           <div class="dir-cp" tabindex="0">
-            <div class={`dir-cp-bg ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}></div>
+            <div class={`dir-cp-bg${c.photo ? '' : ` ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}`} style={c.photo ? `background:url('${c.photo}') ${c.photoPos ?? 'center'}/cover no-repeat` : ''}></div>
             <div class="dir-cp-overlay"></div>
             <div class="dir-cp-content">
               <div class="dir-cp-name-rot">{c.name}</div>
