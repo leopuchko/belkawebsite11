@@ -167,20 +167,21 @@ const groups = [
         </div>
       ))}
     </div>
-    <!-- RIGHT: 2×2 portrait cards -->
-    <div class="dir-crew">
-      <div class="eyebrow" style="margin-bottom:20px">/ Тренеры</div>
-      <div class="dir-crew-grid">
-        {crewData.map((c, i) => (
-          <div class="dir-trainer">
-            <div class={`dir-trainer-photo${c.photo ? '' : ` ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}`}
-                 style={c.photo ? `background:url('${c.photo}') ${c.photoPos ?? 'center top'}/cover no-repeat` : ''}>
-            </div>
-            <div class="dir-trainer-role">{c.role}</div>
-            <div class="dir-trainer-name">{c.name}</div>
+  </div>
+
+  <!-- TRAINERS: 4×1 full-width portrait row -->
+  <div class="dir-crew">
+    <div class="eyebrow" style="padding:0 clamp(20px,4vw,64px);margin-bottom:20px">/ Тренеры</div>
+    <div class="dir-crew-grid">
+      {crewData.map((c, i) => (
+        <div class="dir-trainer">
+          <div class={`dir-trainer-photo${c.photo ? '' : ` ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}`}
+               style={c.photo ? `background:url('${c.photo}') ${c.photoPos ?? 'center top'}/cover no-repeat` : ''}>
           </div>
-        ))}
-      </div>
+          <div class="dir-trainer-role">{c.role}</div>
+          <div class="dir-trainer-name">{c.name}</div>
+        </div>
+      ))}
     </div>
   </div>
 </section>
@@ -769,7 +770,7 @@ const groups = [
 .dir-head { display:flex; justify-content:space-between; align-items:flex-end; padding:0 clamp(20px,4vw,64px) 64px; gap:24px; flex-wrap:wrap; }
 .dir-head .h2 { color:var(--ink); }
 .dir-head .h2 .o { color:var(--orange); }
-.dir-body { display:grid; grid-template-columns:1.1fr 1fr; align-items:start; border-top:1px solid var(--line-ink); }
+.dir-body { border-top:1px solid var(--line-ink); }
 
 /* Left: styles list */
 .dir-styles { }
@@ -783,14 +784,14 @@ const groups = [
 .dir-row:hover .dir-name .ital { color:var(--orange); }
 .dir-meta { font-size:14px; color:rgba(10,10,10,0.6); line-height:1.5; margin:0; }
 
-/* Right: 2×2 portrait cards */
-.dir-crew { border-left:1px solid var(--line-ink); padding:28px clamp(16px,2.5vw,40px) 40px; }
-.dir-crew-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.dir-trainer { display:flex; flex-direction:column; gap:8px; }
-.dir-trainer-photo { width:100%; aspect-ratio:3/4; border-radius:10px; background-size:cover; background-position:center top; overflow:hidden; transition:transform 0.4s ease; }
+/* Trainers: 4×1 portrait row */
+.dir-crew { border-top:1px solid var(--line-ink); padding:28px 0 60px; }
+.dir-crew-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:0 clamp(20px,4vw,64px); }
+.dir-trainer { display:flex; flex-direction:column; gap:10px; }
+.dir-trainer-photo { width:100%; aspect-ratio:3/4; border-radius:12px; background-size:cover; background-position:center top; overflow:hidden; transition:transform 0.4s ease; }
 .dir-trainer:hover .dir-trainer-photo { transform:scale(1.02); }
-.dir-trainer-role { font-family:var(--mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--orange); margin-top:2px; }
-.dir-trainer-name { font-family:var(--display); font-weight:700; font-size:clamp(13px,1.2vw,17px); letter-spacing:-0.02em; line-height:1.15; }
+.dir-trainer-role { font-family:var(--mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--orange); }
+.dir-trainer-name { font-family:var(--display); font-weight:700; font-size:clamp(14px,1.3vw,19px); letter-spacing:-0.02em; line-height:1.1; }
 
 /* ── Section head right-descriptions ── */
 .dir-head > p, .reel-head > p,
@@ -800,9 +801,8 @@ const groups = [
   max-width: 38ch;
 }
 
-@media(max-width:1000px) {
-  .dir-body { grid-template-columns:1fr; }
-  .dir-crew { border-left:0; border-top:1px solid var(--line-ink); }
+@media(max-width:768px) {
+  .dir-crew-grid { grid-template-columns:1fr 1fr; }
 }
 
 /* ══ GROUPS ══ */
