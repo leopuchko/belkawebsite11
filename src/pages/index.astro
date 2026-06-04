@@ -167,23 +167,21 @@ const groups = [
         </div>
       ))}
     </div>
-    <!-- RIGHT: trainers 2x2 grid -->
+    <!-- RIGHT: trainers compact list -->
     <div class="dir-crew">
-      <div class="eyebrow" style="margin-bottom:24px">/ Тренеры</div>
-      <div class="dir-crew-grid">
-        {crewData.map((c, i) => (
-          <div class="dir-trainer">
-            <div class={`dir-trainer-photo${c.photo ? '' : ` ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}`}
-                 style={c.photo ? `background:url('${c.photo}') ${c.photoPos ?? 'center'}/cover no-repeat` : ''}>
-            </div>
-            <div class="dir-trainer-info">
-              <div class="dir-trainer-role">{c.role}</div>
-              <div class="dir-trainer-name">{c.name}</div>
-              <p class="dir-trainer-bio">{c.bio}</p>
-            </div>
+      <div class="eyebrow" style="margin-bottom:4px">/ Тренеры</div>
+      {crewData.map((c, i) => (
+        <div class="dir-trainer">
+          <div class={`dir-trainer-thumb${c.photo ? '' : ` ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}`}
+               style={c.photo ? `background:url('${c.photo}') ${c.photoPos ?? 'center'}/cover no-repeat` : ''}>
           </div>
-        ))}
-      </div>
+          <div class="dir-trainer-info">
+            <div class="dir-trainer-role">{c.role}</div>
+            <div class="dir-trainer-name">{c.name}</div>
+            <p class="dir-trainer-bio">{c.bio}</p>
+          </div>
+        </div>
+      ))}
     </div>
   </div>
 </section>
@@ -786,16 +784,15 @@ const groups = [
 .dir-row:hover .dir-name .ital { color:var(--orange); }
 .dir-meta { font-size:14px; color:rgba(10,10,10,0.6); line-height:1.5; margin:0; }
 
-/* Right: trainers 2×2 grid */
-.dir-crew { border-left:1px solid var(--line-ink); padding:28px clamp(16px,2.5vw,40px) 40px; }
-.dir-crew-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px 12px; }
-.dir-trainer { display:flex; flex-direction:column; gap:0; }
-.dir-trainer-photo { width:100%; aspect-ratio:2/3; border-radius:10px; overflow:hidden; transition:transform 0.4s ease; background-size:cover; background-position:center; margin-bottom:10px; }
-.dir-trainer:hover .dir-trainer-photo { transform:scale(1.02); }
-.dir-trainer-info { display:flex; flex-direction:column; gap:2px; }
+/* Right: trainers compact list */
+.dir-crew { border-left:1px solid var(--line-ink); padding:28px clamp(16px,2.5vw,40px) 0; }
+.dir-trainer { display:flex; align-items:center; gap:16px; padding:20px 0; border-bottom:1px solid var(--line-ink); }
+.dir-trainer:last-child { border-bottom:0; }
+.dir-trainer-thumb { width:64px; height:64px; border-radius:10px; flex-shrink:0; background-size:cover; background-position:center; }
+.dir-trainer-info { display:flex; flex-direction:column; gap:2px; min-width:0; }
 .dir-trainer-role { font-family:var(--mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--orange); }
-.dir-trainer-name { font-family:var(--display); font-weight:700; font-size:clamp(14px,1.3vw,18px); letter-spacing:-0.02em; line-height:1.15; }
-.dir-trainer-bio { font-size:11px; line-height:1.4; color:rgba(10,10,10,0.5); margin:3px 0 0; }
+.dir-trainer-name { font-family:var(--display); font-weight:700; font-size:clamp(15px,1.4vw,20px); letter-spacing:-0.02em; line-height:1.1; }
+.dir-trainer-bio { font-size:12px; line-height:1.4; color:rgba(10,10,10,0.5); margin:2px 0 0; }
 
 /* ── Section head right-descriptions ── */
 .dir-head > p, .reel-head > p,
