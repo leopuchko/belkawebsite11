@@ -167,26 +167,23 @@ const groups = [
         </div>
       ))}
     </div>
-  </div>
-
-  <!-- TRAINERS: full-width strip -->
-  <div class="dir-trainers">
-    <div class="eyebrow" style="padding:0 clamp(20px,4vw,64px);margin-bottom:20px">/ Тренеры</div>
-    <div class="dir-cp-stack">
-      {crewData.map((c, i) => (
-        <div class="dir-cp" tabindex="0">
-          <div class={`dir-cp-bg${c.photo ? '' : ` ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}`} style={c.photo ? `background:url('${c.photo}') ${c.photoPos ?? 'center'}/cover no-repeat` : ''}></div>
-          <div class="dir-cp-overlay"></div>
-          <div class="dir-cp-content">
-            {!c.photo && <div class="dir-cp-name-rot">{c.name}</div>}
-            <div class="dir-cp-info">
-              <div class="dir-cp-role">{c.role}</div>
-              <div class="dir-cp-name">{c.name}</div>
-              <p class="dir-cp-bio">{c.bio}</p>
+    <!-- RIGHT: trainers 2x2 grid -->
+    <div class="dir-crew">
+      <div class="eyebrow" style="margin-bottom:24px">/ Тренеры</div>
+      <div class="dir-crew-grid">
+        {crewData.map((c, i) => (
+          <div class="dir-trainer">
+            <div class={`dir-trainer-photo${c.photo ? '' : ` ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}`}
+                 style={c.photo ? `background:url('${c.photo}') ${c.photoPos ?? 'center'}/cover no-repeat` : ''}>
+            </div>
+            <div class="dir-trainer-info">
+              <div class="dir-trainer-role">{c.role}</div>
+              <div class="dir-trainer-name">{c.name}</div>
+              <p class="dir-trainer-bio">{c.bio}</p>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   </div>
 </section>
@@ -775,7 +772,7 @@ const groups = [
 .dir-head { display:flex; justify-content:space-between; align-items:flex-end; padding:0 clamp(20px,4vw,64px) 64px; gap:24px; flex-wrap:wrap; }
 .dir-head .h2 { color:var(--ink); }
 .dir-head .h2 .o { color:var(--orange); }
-.dir-body { border-top:1px solid var(--line-ink); }
+.dir-body { display:grid; grid-template-columns:1.1fr 1fr; border-top:1px solid var(--line-ink); }
 
 /* Left: styles list */
 .dir-styles { }
@@ -789,25 +786,16 @@ const groups = [
 .dir-row:hover .dir-name .ital { color:var(--orange); }
 .dir-meta { font-size:14px; color:rgba(10,10,10,0.6); line-height:1.5; margin:0; }
 
-/* Trainers: full-width strip */
-.dir-trainers { border-top:1px solid var(--line-ink); padding-top:28px; padding-bottom:0; }
-.dir-cp-stack { display:flex; gap:1px; height:460px; background:var(--line-ink); overflow:hidden; }
-.dir-cp { position:relative; flex:1; min-width:0; overflow:hidden; cursor:pointer; transition:flex 0.45s cubic-bezier(0.4,0,0.2,1); }
-.dir-cp:hover, .dir-cp:focus { flex:2.2; outline:none; }
-.dir-cp-bg { position:absolute; inset:0; transition:transform 0.45s ease; }
-.dir-cp:hover .dir-cp-bg { transform:scale(1.06); }
-.dir-cp-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.35) 50%, rgba(10,10,10,0.05) 100%); z-index:1; transition:opacity 0.3s ease; }
-.dir-cp:hover .dir-cp-overlay { opacity:0.85; }
-.dir-cp-content { position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; justify-content:flex-end; padding:14px 16px; }
-.dir-cp-name-rot { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) rotate(-90deg); white-space:nowrap; font-family:var(--display); font-weight:700; font-size:12px; letter-spacing:0.05em; color:rgba(245,242,236,0.5); transition:opacity 0.25s ease; pointer-events:none; }
-.dir-cp:hover .dir-cp-name-rot, .dir-cp:focus .dir-cp-name-rot { opacity:0; }
-.dir-cp-info { display:flex; flex-direction:column; gap:4px; }
-.dir-cp-role { font-family:var(--mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--orange); opacity:0; max-height:0; overflow:hidden; transition:opacity 0.35s ease 0.15s, max-height 0.35s ease; }
-.dir-cp-name { font-family:var(--display); font-weight:800; font-size:clamp(13px,1.2vw,18px); letter-spacing:-0.02em; line-height:1.1; color:rgba(245,242,236,0.35); transition:color 0.3s ease; }
-.dir-cp:hover .dir-cp-name, .dir-cp:focus .dir-cp-name { color:var(--paper); }
-.dir-cp-bio { font-size:11px; line-height:1.4; color:rgba(245,242,236,0.55); margin:0; opacity:0; max-height:0; overflow:hidden; transform:translateY(6px); transition:opacity 0.3s ease 0.15s, max-height 0.3s ease 0.15s, transform 0.3s ease 0.15s; }
-.dir-cp:hover .dir-cp-role, .dir-cp:focus .dir-cp-role { opacity:1; max-height:30px; transform:translateY(0); }
-.dir-cp:hover .dir-cp-bio, .dir-cp:focus .dir-cp-bio { opacity:1; max-height:80px; transform:translateY(0); }
+/* Right: trainers 2×2 grid */
+.dir-crew { border-left:1px solid var(--line-ink); padding:28px clamp(16px,2.5vw,40px) 40px; }
+.dir-crew-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px 12px; }
+.dir-trainer { display:flex; flex-direction:column; gap:0; }
+.dir-trainer-photo { width:100%; aspect-ratio:2/3; border-radius:10px; overflow:hidden; transition:transform 0.4s ease; background-size:cover; background-position:center; margin-bottom:10px; }
+.dir-trainer:hover .dir-trainer-photo { transform:scale(1.02); }
+.dir-trainer-info { display:flex; flex-direction:column; gap:2px; }
+.dir-trainer-role { font-family:var(--mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--orange); }
+.dir-trainer-name { font-family:var(--display); font-weight:700; font-size:clamp(14px,1.3vw,18px); letter-spacing:-0.02em; line-height:1.15; }
+.dir-trainer-bio { font-size:11px; line-height:1.4; color:rgba(10,10,10,0.5); margin:3px 0 0; }
 
 /* ── Section head right-descriptions ── */
 .dir-head > p, .reel-head > p,
@@ -817,11 +805,9 @@ const groups = [
   max-width: 38ch;
 }
 
-@media(max-width:768px) {
-  .dir-cp-stack { flex-direction:column; height:auto; }
-  .dir-cp { flex:none !important; height:80px; }
-  .dir-cp:focus { height:280px; }
-  .dir-cp-name-rot { display:none; }
+@media(max-width:1000px) {
+  .dir-body { grid-template-columns:1fr; }
+  .dir-crew { border-left:0; border-top:1px solid var(--line-ink); }
 }
 
 /* ══ GROUPS ══ */
