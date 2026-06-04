@@ -168,18 +168,22 @@ const groups = [
         </div>
       ))}
     </div>
-    <!-- RIGHT: crew -->
+    <!-- RIGHT: crew accordion -->
     <div class="dir-crew">
-      <div class="eyebrow" style="margin-bottom:32px">/ Тренеры</div>
-      <div class="dir-crew-grid">
+      <div class="eyebrow" style="margin-bottom:20px">/ Тренеры</div>
+      <div class="dir-cp-stack">
         {crewData.map((c, i) => (
-          <div class="dir-trainer">
-            <div class={`dir-trainer-photo ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}>
-              <span class="ph-label">{c.name}</span>
+          <div class="dir-cp" tabindex="0">
+            <div class={`dir-cp-bg ph-${i % 2 === 0 ? 'ink' : 'orange'}-stripe`}></div>
+            <div class="dir-cp-overlay"></div>
+            <div class="dir-cp-content">
+              <div class="dir-cp-name-rot">{c.name}</div>
+              <div class="dir-cp-info">
+                <div class="dir-cp-role">{c.role}</div>
+                <div class="dir-cp-name">{c.name}</div>
+                <p class="dir-cp-bio">{c.bio}</p>
+              </div>
             </div>
-            <div class="dir-trainer-role">{c.role}</div>
-            <div class="dir-trainer-name">{c.name}</div>
-            <p class="dir-trainer-bio">{c.bio}</p>
           </div>
         ))}
       </div>
@@ -785,14 +789,24 @@ const groups = [
 .dir-row:hover .dir-name .ital { color:var(--orange); }
 .dir-meta { font-size:14px; color:rgba(10,10,10,0.6); line-height:1.5; margin:0; }
 
-/* Right: crew */
-.dir-crew { border-left:1px solid var(--line-ink); padding:28px clamp(16px,2.5vw,40px); padding-bottom:80px; }
-.dir-crew-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
-.dir-trainer { display:flex; flex-direction:column; gap:10px; }
-.dir-trainer-photo { width:100%; height:260px; border-radius:12px; overflow:hidden; display:flex; align-items:flex-end; padding:10px; }
-.dir-trainer-role { font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--orange); }
-.dir-trainer-name { font-family:var(--display); font-weight:700; font-size:clamp(15px,1.4vw,20px); letter-spacing:-0.02em; line-height:1.1; }
-.dir-trainer-bio { font-size:12px; line-height:1.45; color:rgba(10,10,10,0.6); margin:0; }
+/* Right: crew accordion */
+.dir-crew { border-left:1px solid var(--line-ink); padding:28px clamp(16px,2.5vw,40px) 28px; display:flex; flex-direction:column; }
+.dir-cp-stack { flex:1; display:flex; gap:5px; min-height:460px; }
+.dir-cp { position:relative; flex:1; min-width:0; border-radius:12px; overflow:hidden; cursor:pointer; transition:flex 0.5s cubic-bezier(0.4,0,0.2,1); border:1px solid var(--line-ink); }
+.dir-cp:hover, .dir-cp:focus { flex:4; outline:none; }
+.dir-cp-bg { position:absolute; inset:0; transition:transform 0.5s ease; }
+.dir-cp:hover .dir-cp-bg { transform:scale(1.04); }
+.dir-cp-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.35) 50%, rgba(10,10,10,0.05) 100%); z-index:1; transition:background 0.3s ease; }
+.dir-cp-content { position:absolute; inset:0; z-index:2; display:flex; flex-direction:column; justify-content:flex-end; padding:14px 16px; }
+.dir-cp-name-rot { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) rotate(-90deg); white-space:nowrap; font-family:var(--display); font-weight:700; font-size:13px; letter-spacing:0.04em; color:rgba(245,242,236,0.6); transition:opacity 0.2s ease; pointer-events:none; }
+.dir-cp:hover .dir-cp-name-rot, .dir-cp:focus .dir-cp-name-rot { opacity:0; }
+.dir-cp-info { display:flex; flex-direction:column; gap:4px; }
+.dir-cp-role { font-family:var(--mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--orange); opacity:0; max-height:0; overflow:hidden; transform:translateY(6px); transition:opacity 0.35s ease 0.1s, max-height 0.35s ease 0.1s, transform 0.35s ease 0.1s; }
+.dir-cp-name { font-family:var(--display); font-weight:800; font-size:clamp(15px,1.4vw,20px); letter-spacing:-0.02em; line-height:1.1; color:rgba(245,242,236,0.35); transition:color 0.3s ease; }
+.dir-cp:hover .dir-cp-name, .dir-cp:focus .dir-cp-name { color:var(--paper); }
+.dir-cp-bio { font-size:11px; line-height:1.4; color:rgba(245,242,236,0.55); margin:0; opacity:0; max-height:0; overflow:hidden; transform:translateY(6px); transition:opacity 0.35s ease 0.15s, max-height 0.35s ease 0.15s, transform 0.35s ease 0.15s; }
+.dir-cp:hover .dir-cp-role, .dir-cp:focus .dir-cp-role { opacity:1; max-height:30px; transform:translateY(0); }
+.dir-cp:hover .dir-cp-bio, .dir-cp:focus .dir-cp-bio { opacity:1; max-height:80px; transform:translateY(0); }
 
 /* ── Section head right-descriptions ── */
 .dir-head > p, .reel-head > p,
@@ -805,6 +819,10 @@ const groups = [
 @media(max-width:1000px) {
   .dir-body { grid-template-columns:1fr; }
   .dir-crew { border-left:0; border-top:1px solid var(--line-ink); }
+  .dir-cp-stack { flex-direction:column; min-height:auto; }
+  .dir-cp { flex:none !important; height:80px; }
+  .dir-cp:focus { height:260px; }
+  .dir-cp-name-rot { display:none; }
 }
 
 /* ══ GROUPS ══ */
