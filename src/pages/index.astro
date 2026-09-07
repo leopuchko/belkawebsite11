@@ -21,11 +21,11 @@ const crewData = [
 ];
 
 const stageTiles = [
-  { cls: "t-1", title: "Отчётный концерт", when: "июнь 2025", bg: "#FF5C1A" },
-  { cls: "t-2", title: "Чемпионат РБ Breaking", when: "апрель 2025", bg: "#F5F2EC" },
-  { cls: "t-3", title: "Open jam", when: "пт", bg: "#0A0A0A" },
-  { cls: "t-4", title: "Acro-шоу", when: "февраль", bg: "#FF5C1A" },
-  { cls: "t-5", title: "Belka Crew Jr.", when: "Кубок Top Step", bg: "#F5F2EC" },
+  { title: "Отчётный концерт", when: "июнь 2025" },
+  { title: "Чемпионат РБ · Breaking", when: "апрель 2025" },
+  { title: "Открытая тренировка", when: "каждую пятницу" },
+  { title: "Acro-шоу", when: "февраль 2025" },
+  { title: "Belka Crew Jr. · Кубок Top Step", when: "2025" },
 ];
 
 
@@ -240,17 +240,17 @@ const groups = [
 <section class="stage" id="perf">
   <div class="stage-head shell">
     <div>
-      <div class="eyebrow" style="margin-bottom:16px">/ 05 — Сцена и медали</div>
-      <h2 class="h2">Не репетируем <span style="color:var(--orange)">«в стол».</span></h2>
+      <div class="eyebrow" style="margin-bottom:16px">/ 05 — Сцена</div>
+      <h2 class="h2">Снимаем, выступаем, <span style="color:var(--orange)">повторяем.</span></h2>
     </div>
   </div>
   <div class="stage-wall shell">
-    {stageTiles.map((t) => (
-      <div class={`tile ${t.cls}`} style={`background:${t.bg}`}>
-        <div class="tile-inner" style={`background:${t.bg}`}></div>
-        <div class="label">
-          <span>{t.title}</span>
-          <span class="when">{t.when}</span>
+    {stageTiles.map((t, i) => (
+      <div class={`stage-tile ${i % 2 === 0 ? 'ph-ink-stripe' : 'ph-orange-stripe'}`}>
+        <div class="stage-tile-overlay"></div>
+        <div class="stage-tile-label">
+          <span class="st-title">{t.title}</span>
+          <span class="st-when">{t.when}</span>
         </div>
       </div>
     ))}
@@ -822,18 +822,17 @@ const groups = [
 /* ══ STAGE ══ */
 .stage { padding:120px 0; }
 .stage-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:48px; gap:24px; flex-wrap:wrap; }
-.stage-wall { display:grid; grid-template-columns:repeat(6,1fr); grid-auto-rows:160px; gap:14px; }
-.tile { position:relative; overflow:hidden; border-radius:14px; border:1px solid var(--line); display:flex; align-items:flex-end; }
-.tile-inner { position:absolute; inset:0; }
-.tile .label { position:relative; z-index:2; width:100%; padding:10px 12px; display:flex; justify-content:space-between; font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--paper); text-shadow:0 2px 8px rgba(0,0,0,0.7); }
-.tile .label .when { color:var(--orange); }
-.t-1 { grid-column:span 3; grid-row:span 3; }
-.t-2 { grid-column:span 2; grid-row:span 2; }
-.t-3 { grid-column:span 1; grid-row:span 1; }
-.t-4 { grid-column:span 1; grid-row:span 2; }
-.t-5 { grid-column:span 2; grid-row:span 1; }
-.t-6 { grid-column:span 3; grid-row:span 2; }
-@media(max-width:1000px){ .stage-wall{grid-template-columns:repeat(2,1fr);grid-auto-rows:180px;} .tile{grid-column:span 1!important;grid-row:span 1!important;} .t-1{grid-column:span 2!important;grid-row:span 2!important;} }
+.stage-wall { display:flex; gap:12px; }
+.stage-tile { position:relative; flex:1; min-width:0; aspect-ratio:9/16; border-radius:14px; overflow:hidden; border:1px solid var(--line); display:flex; align-items:flex-end; transition:transform 0.35s ease; }
+.stage-tile:hover { transform:translateY(-4px); }
+.stage-tile-overlay { position:absolute; inset:0; z-index:1; background:linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.15) 45%, transparent 75%); }
+.stage-tile-label { position:relative; z-index:2; width:100%; padding:14px 14px 16px; display:flex; flex-direction:column; gap:5px; }
+.st-title { font-family:var(--display); font-weight:700; font-size:clamp(13px,1.05vw,16px); line-height:1.15; letter-spacing:-0.01em; color:var(--paper); text-shadow:0 2px 10px rgba(0,0,0,0.6); }
+.st-when { font-family:var(--mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--orange); }
+@media(max-width:760px){
+  .stage-wall{ overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding-bottom:10px; }
+  .stage-tile{ flex:0 0 62%; scroll-snap-align:start; }
+}
 
 
 /* ══ TRIAL ══ */
