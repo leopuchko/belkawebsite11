@@ -375,8 +375,9 @@ const groups = [
     <div>
       <div class="eyebrow" style="color:var(--ink);margin-bottom:16px">/ 06 — Пробное занятие</div>
       <h2>
-        Первая тренировка<br/>
-        <span class="out">бесплатно</span>.
+        <span class="hline">Первая</span>
+        <span class="hline">тренировка</span>
+        <span class="hline out">бесплатно</span>.
       </h2>
       <p class="sub">
         Оставь номер — менеджер позвонит в течение часа в рабочее время, подберёт группу и день. Никаких автоматических рассылок.
@@ -861,6 +862,12 @@ const groups = [
 .trial { padding:120px clamp(20px,4vw,64px); background:var(--orange); color:var(--ink); position:relative; overflow:hidden; }
 .trial-inner { display:grid; grid-template-columns:1.4fr 1fr; gap:clamp(30px,5vw,100px); align-items:center; position:relative; z-index:2; }
 .trial h2 { font-family:var(--display); font-weight:800; font-size:clamp(56px,8vw,144px); line-height:1.05; letter-spacing:-0.025em; margin:0 0 24px; font-variation-settings:"wdth" 100,"opsz" 96; }
+/* Each heading word on its own line, optically flush-left.
+   Bricolage Grotesque left side-bearings (measured @56px): П ≈ 4px, б ≈ 1px, т ≈ 0.
+   Pull the inset lines left by their bearing (in em, so it scales with the clamped size). */
+.trial h2 .hline { display:block; }
+.trial h2 .hline:first-child { margin-left:-0.071em; }
+.trial h2 .hline.out { margin-left:-0.018em; }
 .trial-submit { width:100%; justify-content:center; font-weight:800; font-size:15px; }
 .trial .eyebrow::before { background: var(--ink); }
 .trial h2 .out { -webkit-text-stroke:5px var(--ink); color:var(--orange); paint-order:stroke fill; font-style:normal; display:inline-block; transform:skewX(-10deg); transform-origin:left bottom; letter-spacing:0.015em; }
