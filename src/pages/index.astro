@@ -17,7 +17,7 @@ const stylesData = [
 const crewData = [
   { name: "Имя Тренера", role: "Hip-Hop · Head Coach", bio: "Призёр чемпионатов РБ. В Belka с 2016." },
   { name: "Леон Пучко", role: "Режиссёр · Постановщик", bio: "Художественный руководитель и хореограф концертного состава.", photo: "/trainers/leon.jpg", photoPos: "center top" },
-  { name: "Даша", role: "Hip-Hop · Heels · Женские стили", bio: "Хип-хоп, хилс и женская хореография. Ставит технику, пластику и подачу — от базы до сцены.", photo: "/trainers/dasha.jpg", photoPos: "center top" },
+  { name: "Даша", role: "Hip-Hop · Girls Choreo", bio: "Хип-хоп и girls choreo. Ставит технику, пластику и подачу — от базы до сцены.", photo: "/trainers/dasha.jpg", photoPos: "center top" },
 ];
 
 const stageTiles = [
@@ -769,7 +769,7 @@ const groups = [
 .dir-crew { border-left:1px solid var(--line-ink); padding:28px clamp(16px,2.5vw,40px) 40px; }
 .dir-crew-strip { display:flex; gap:6px; }
 .dir-trainer { flex:1; min-width:0; }
-.dir-trainer-photo { position:relative; width:100%; height:340px; border-radius:10px; overflow:hidden; background-size:cover; background-position:center top; transition:transform 0.4s ease; }
+.dir-trainer-photo { position:relative; width:100%; aspect-ratio:3/4; border-radius:10px; overflow:hidden; background-size:cover; background-position:center top; transition:transform 0.4s ease; }
 .dir-trainer:hover .dir-trainer-photo { transform:scale(1.02); }
 .dir-trainer-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.1) 55%, transparent 100%); }
 .dir-trainer-label { position:absolute; bottom:0; left:0; right:0; padding:12px 10px; }
