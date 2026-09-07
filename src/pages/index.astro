@@ -863,10 +863,12 @@ const groups = [
 .trial-inner { display:grid; grid-template-columns:1.4fr 1fr; gap:clamp(30px,5vw,100px); align-items:center; position:relative; z-index:2; }
 .trial h2 { font-family:var(--display); font-weight:800; font-size:clamp(56px,8vw,144px); line-height:1.05; letter-spacing:-0.025em; margin:0 0 24px; font-variation-settings:"wdth" 100,"opsz" 96; }
 /* Each heading word on its own line, optically flush-left.
-   Bricolage Grotesque left side-bearings (measured @56px): П ≈ 4px, б ≈ 1px, т ≈ 0.
-   Pull the inset lines left by their bearing (in em, so it scales with the clamped size). */
+   П carries a visible left side-bearing in Bricolage Grotesque; nudge that
+   line left so «Первая», «тренировка», «бесплатно» and the paragraph below
+   share one optical edge. Value tuned by eye at the desktop (144px) size —
+   the measured small-size bearing over-corrects because of font hinting. */
 .trial h2 .hline { display:block; }
-.trial h2 .hline:first-child { margin-left:-0.071em; }
+.trial h2 .hline:first-child { margin-left:-0.04em; }
 .trial h2 .hline.out { margin-left:-0.018em; }
 .trial-submit { width:100%; justify-content:center; font-weight:800; font-size:15px; }
 .trial .eyebrow::before { background: var(--ink); }
