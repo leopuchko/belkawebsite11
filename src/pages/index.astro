@@ -1101,7 +1101,7 @@ const groups = [
 
 /* Split: fewer big upcoming on the left, a wall of past cards on the right */
 .posters-body { display:grid; grid-template-columns:1fr; gap:clamp(32px,4vw,56px); align-items:start; }
-.posters-body:has(.ev-col--upcoming):has(.ev-col--past) { grid-template-columns:minmax(0,0.82fr) minmax(0,1.18fr); }
+.posters-body:has(.ev-col--upcoming):has(.ev-col--past) { grid-template-columns:minmax(0,1.12fr) minmax(0,1fr); }
 @media(max-width:1000px){ .posters-body:has(.ev-col--upcoming):has(.ev-col--past) { grid-template-columns:1fr; } }
 
 .ev-group-label {
@@ -1111,20 +1111,18 @@ const groups = [
 .ev-group-label::after { content:""; flex:1; height:1px; background:var(--line-ink); }
 .ev-group-label--past { color:rgba(10,10,10,0.4); }
 
-.ev-grid--upcoming { display:grid; grid-template-columns:repeat(2, 1fr); gap:18px; }
-.ev-grid--past { display:grid; grid-template-columns:repeat(auto-fill, minmax(190px, 1fr)); gap:16px; }
-@media(max-width:520px){ .ev-grid--upcoming { grid-template-columns:1fr; } .ev-grid--past { grid-template-columns:repeat(2, 1fr); } }
+.ev-grid--upcoming { display:grid; grid-template-columns:repeat(2, 1fr); gap:20px; }
+.ev-grid--past { display:grid; grid-template-columns:repeat(2, 1fr); gap:16px; }
+@media(max-width:520px){ .ev-grid--upcoming { grid-template-columns:1fr; } }
 
 .ev-card { position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--line-ink); transition:transform .3s ease, box-shadow .3s ease, filter .35s ease, opacity .35s ease; }
 .ev-card.is-upcoming:hover { transform:translateY(-6px); box-shadow:0 26px 60px rgba(255,92,26,0.18); }
 
 .ev-poster {
-  position:relative;
+  position:relative; aspect-ratio:3/4;
   background-size:cover; background-position:center; background-color:var(--ink);
   display:flex; align-items:flex-end;
 }
-.ev-grid--upcoming .ev-poster { height:clamp(320px, 38vh, 430px); }
-.ev-grid--past .ev-poster { aspect-ratio:3/4; }
 .ev-poster.is-blank {
   background:
     radial-gradient(130% 80% at 50% -10%, rgba(255,92,26,0.28), transparent 62%),
