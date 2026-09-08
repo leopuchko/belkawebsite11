@@ -21,11 +21,9 @@ const crewData = [
 ];
 
 const stageTiles = [
-  { title: "Отчётный концерт", when: "июнь 2025" },
-  { title: "Чемпионат РБ · Breaking", when: "апрель 2025" },
-  { title: "Открытая тренировка", when: "каждую пятницу" },
-  { title: "Acro-шоу", when: "февраль 2025" },
-  { title: "Belka Crew Jr. · Кубок Top Step", when: "2025" },
+  { title: "Славянка", when: "2026", video: "/reels/slavyanka.mp4", poster: "/reels/slavyanka-poster.jpg" },
+  { title: "Витебская красавица", when: "2026", video: "/reels/krasavitsa.mp4", poster: "/reels/krasavitsa-poster.jpg" },
+  { title: "Сальто в костюмах", when: "репетиция", video: "/reels/salto.mp4", poster: "/reels/salto-poster.jpg" },
 ];
 
 
@@ -245,12 +243,25 @@ const groups = [
   <div class="stage-head shell">
     <div>
       <div class="eyebrow" style="margin-bottom:16px">/ 05 — Сцена</div>
-      <h2 class="h2">Снимаем, выступаем, <span style="color:var(--orange)">повторяем.</span></h2>
+      <h2 class="h2">Выступаем, снимаем, <span style="color:var(--orange)">повторяем.</span></h2>
     </div>
   </div>
   <div class="stage-wall shell">
     {stageTiles.map((t, i) => (
-      <div class={`stage-tile ${i % 2 === 0 ? 'ph-ink-stripe' : 'ph-orange-stripe'}`}>
+      <div class={`stage-tile${t.video ? '' : ` ${i % 2 === 0 ? 'ph-ink-stripe' : 'ph-orange-stripe'}`}`}>
+        {t.video && (
+          <video
+            class="stage-tile-video"
+            src={t.video}
+            poster={t.poster}
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            disablepictureinpicture
+          ></video>
+        )}
         <div class="stage-tile-overlay"></div>
         <div class="stage-tile-label">
           <span class="st-title">{t.title}</span>
@@ -833,8 +844,9 @@ const groups = [
 .stage { padding:120px 0; }
 .stage-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:48px; gap:24px; flex-wrap:wrap; }
 .stage-wall { display:flex; gap:12px; }
-.stage-tile { position:relative; flex:1; min-width:0; aspect-ratio:9/16; border-radius:14px; overflow:hidden; border:1px solid var(--line); display:flex; align-items:flex-end; transition:transform 0.35s ease; }
+.stage-tile { position:relative; flex:1; min-width:0; aspect-ratio:9/16; border-radius:14px; overflow:hidden; border:1px solid var(--line); background:var(--ink); display:flex; align-items:flex-end; transition:transform 0.35s ease; }
 .stage-tile:hover { transform:translateY(-4px); }
+.stage-tile-video { position:absolute; inset:0; z-index:0; width:100%; height:100%; object-fit:cover; }
 .stage-tile-overlay { position:absolute; inset:0; z-index:1; background:linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.15) 45%, transparent 75%); }
 .stage-tile-label { position:relative; z-index:2; width:100%; padding:14px 14px 16px; display:flex; flex-direction:column; gap:5px; }
 .st-title { font-family:var(--display); font-weight:700; font-size:clamp(13px,1.05vw,16px); line-height:1.15; letter-spacing:-0.01em; color:var(--paper); text-shadow:0 2px 10px rgba(0,0,0,0.6); }
