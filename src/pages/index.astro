@@ -347,49 +347,55 @@ const groups = [
     </div>
   </div>
 
-  {upcomingEvents.length > 0 && <div class="ev-group-label">Предстоящие</div>}
-  {upcomingEvents.length > 0 && (
-    <div class="ev-grid">
-      {upcomingEvents.map((e) => (
-        <article class="ev-card is-upcoming">
-          <div class={`ev-poster${e.img ? '' : ' is-blank'}`} style={e.img ? `background-image:url('${e.img}')` : ''}>
-            <div class="ev-veil"></div>
-            <div class="ev-body">
-              <div class="ev-date">{fmtDate(e.date)}{e.time ? ` · ${e.time}` : ''}</div>
-              <h3 class="ev-title">{e.title}</h3>
-              <div class="ev-place">{e.place}</div>
-              {e.cta && (
-                <a
-                  href={e.cta.href}
-                  target={e.cta.href.startsWith('http') ? '_blank' : undefined}
-                  rel={e.cta.href.startsWith('http') ? 'noopener' : undefined}
-                  class="btn btn-primary ev-cta"
-                >{e.cta.label} <span class="arrow">→</span></a>
-              )}
-            </div>
-          </div>
-        </article>
-      ))}
-    </div>
-  )}
+  <div class="posters-body">
+    {upcomingEvents.length > 0 && (
+      <div class="ev-col ev-col--upcoming">
+        <div class="ev-group-label">Предстоящие</div>
+        <div class="ev-grid ev-grid--upcoming">
+          {upcomingEvents.map((e) => (
+            <article class="ev-card is-upcoming">
+              <div class={`ev-poster${e.img ? '' : ' is-blank'}`} style={e.img ? `background-image:url('${e.img}')` : ''}>
+                <div class="ev-veil"></div>
+                <div class="ev-body">
+                  <div class="ev-date">{fmtDate(e.date)}{e.time ? ` · ${e.time}` : ''}</div>
+                  <h3 class="ev-title">{e.title}</h3>
+                  <div class="ev-place">{e.place}</div>
+                  {e.cta && (
+                    <a
+                      href={e.cta.href}
+                      target={e.cta.href.startsWith('http') ? '_blank' : undefined}
+                      rel={e.cta.href.startsWith('http') ? 'noopener' : undefined}
+                      class="btn btn-primary ev-cta"
+                    >{e.cta.label} <span class="arrow">→</span></a>
+                  )}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    )}
 
-  {pastEvents.length > 0 && <div class="ev-group-label ev-group-label--past">Прошедшие</div>}
-  {pastEvents.length > 0 && (
-    <div class="ev-grid ev-grid--past">
-      {pastEvents.map((e) => (
-        <article class="ev-card is-past">
-          <div class={`ev-poster${e.img ? '' : ' is-blank'}`} style={e.img ? `background-image:url('${e.img}')` : ''}>
-            <div class="ev-veil"></div>
-            <div class="ev-body">
-              <div class="ev-date">{fmtDate(e.date)}</div>
-              <h3 class="ev-title">{e.title}</h3>
-              <div class="ev-place">{e.place}</div>
-            </div>
-          </div>
-        </article>
-      ))}
-    </div>
-  )}
+    {pastEvents.length > 0 && (
+      <div class="ev-col ev-col--past">
+        <div class="ev-group-label ev-group-label--past">Прошедшие</div>
+        <div class="ev-grid ev-grid--past">
+          {pastEvents.map((e) => (
+            <article class="ev-card is-past">
+              <div class={`ev-poster${e.img ? '' : ' is-blank'}`} style={e.img ? `background-image:url('${e.img}')` : ''}>
+                <div class="ev-veil"></div>
+                <div class="ev-body">
+                  <div class="ev-date">{fmtDate(e.date)}</div>
+                  <h3 class="ev-title">{e.title}</h3>
+                  <div class="ev-place">{e.place}</div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
 </section>
 
 
@@ -1093,15 +1099,21 @@ const groups = [
 .posters-head .h2 { color: var(--ink); }
 .posters-head .h2 .o { color: var(--orange); }
 
+/* Split: big upcoming on the left, small past thumbnails on the right */
+.posters-body { display:grid; grid-template-columns:1fr; gap:clamp(32px,4vw,60px); align-items:start; }
+.posters-body:has(.ev-col--upcoming):has(.ev-col--past) { grid-template-columns:minmax(0,1.05fr) minmax(0,0.95fr); }
+@media(max-width:1000px){ .posters-body:has(.ev-col--upcoming):has(.ev-col--past) { grid-template-columns:1fr; } }
+
 .ev-group-label {
   font-family:var(--mono); font-size:11px; letter-spacing:0.22em; text-transform:uppercase;
-  color:var(--orange); margin:0 0 22px; display:flex; align-items:center; gap:16px;
+  color:var(--orange); margin:0 0 20px; display:flex; align-items:center; gap:14px;
 }
 .ev-group-label::after { content:""; flex:1; height:1px; background:var(--line-ink); }
-.ev-group-label--past { color:rgba(10,10,10,0.4); margin-top:72px; }
+.ev-group-label--past { color:rgba(10,10,10,0.4); }
 
-.ev-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:20px; }
-.ev-grid--past { grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px; }
+.ev-grid--upcoming { display:grid; grid-template-columns:repeat(2, 1fr); gap:20px; }
+.ev-grid--past { display:grid; grid-template-columns:repeat(auto-fill, minmax(118px, 1fr)); gap:12px; }
+@media(max-width:520px){ .ev-grid--upcoming { grid-template-columns:1fr; } }
 
 .ev-card { position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--line-ink); transition:transform .3s ease, box-shadow .3s ease, filter .35s ease, opacity .35s ease; }
 .ev-card.is-upcoming:hover { transform:translateY(-6px); box-shadow:0 26px 60px rgba(255,92,26,0.18); }
@@ -1111,7 +1123,6 @@ const groups = [
   background-size:cover; background-position:center; background-color:var(--ink);
   display:flex; align-items:flex-end;
 }
-.ev-grid--past .ev-poster { aspect-ratio:2/3; }
 .ev-poster.is-blank {
   background:
     radial-gradient(130% 80% at 50% -10%, rgba(255,92,26,0.28), transparent 62%),
@@ -1131,16 +1142,16 @@ const groups = [
 .ev-place { font-family:var(--mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(245,242,236,0.6); }
 .ev-cta { margin-top:14px; justify-content:center; color:#fff !important; font-weight:800; }
 
-/* Прошедшие — тускло и без цвета */
+/* Прошедшие — мелкие миниатюры, тускло и без цвета */
 .ev-card.is-past { filter:grayscale(0.92) brightness(0.72) contrast(0.95); opacity:0.58; }
 .ev-card.is-past:hover { filter:grayscale(0.3) brightness(0.92); opacity:0.95; transform:translateY(-3px); }
-.ev-card.is-past .ev-date { color:rgba(245,242,236,0.75); }
-.ev-grid--past .ev-title { font-size:clamp(15px,1.3vw,19px); }
-.ev-grid--past .ev-body { padding:16px; gap:6px; }
+.ev-grid--past .ev-body { padding:10px; gap:3px; }
+.ev-grid--past .ev-date { font-size:9px; letter-spacing:0.12em; color:rgba(245,242,236,0.8); }
+.ev-grid--past .ev-title { font-size:12px; line-height:1.1; }
+.ev-grid--past .ev-place { display:none; }
 
-@media(max-width:560px){
-  .ev-grid, .ev-grid--past { grid-template-columns:1fr 1fr; gap:12px; }
-  .ev-title { font-size:16px; }
+@media(max-width:520px){
+  .ev-grid--past { grid-template-columns:repeat(3, 1fr); }
 }
 
 /* ══ Placeholder styles ══ */
