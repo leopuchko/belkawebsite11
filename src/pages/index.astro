@@ -23,7 +23,7 @@ const crewData = [
 const stageTiles = [
   { title: "Славянка", when: "2026", video: "/reels/slavyanka.mp4", poster: "/reels/slavyanka-poster.jpg" },
   { title: "Витебская красавица", when: "2026", video: "/reels/krasavitsa.mp4", poster: "/reels/krasavitsa-poster.jpg" },
-  { title: "Acrobatics", when: "репетиция", video: "/reels/salto.mp4", poster: "/reels/salto-poster.jpg" },
+  { title: "Acrobatics", when: "", video: "/reels/salto.mp4", poster: "/reels/salto-poster.jpg" },
 ];
 
 
@@ -265,7 +265,7 @@ const groups = [
         )}
         <div class="stage-tile-overlay"></div>
         <div class="stage-tile-label">
-          <span class="st-title">{t.title} <span class="st-when">{t.when}</span></span>
+          <span class="st-title">{t.title}{t.when && <span class="st-when"> {t.when}</span>}</span>
         </div>
       </div>
     ))}
@@ -843,14 +843,14 @@ const groups = [
 /* ══ STAGE ══ */
 .stage { padding:120px 0; }
 .stage-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:48px; gap:24px; flex-wrap:wrap; }
-.stage-wall { display:flex; gap:16px; flex-wrap:wrap; max-width:900px; }
-.stage-tile { position:relative; flex:1 1 0; min-width:0; aspect-ratio:9/16; border-radius:14px; overflow:hidden; border:1px solid var(--line); background:var(--ink); display:flex; align-items:flex-end; transition:transform 0.35s ease; }
+.stage-wall { display:flex; gap:16px; }
+.stage-tile { position:relative; flex:1 1 0; min-width:0; height:clamp(400px, 54vh, 620px); border-radius:14px; overflow:hidden; border:1px solid var(--line); background:var(--ink); display:flex; align-items:flex-end; transition:transform 0.35s ease; }
 .stage-tile:hover { transform:translateY(-4px); }
 .stage-tile-video { position:absolute; inset:0; z-index:0; width:100%; height:100%; object-fit:cover; }
 .stage-tile-overlay { position:absolute; inset:0; z-index:1; background:linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.15) 45%, transparent 75%); }
-.stage-tile-label { position:relative; z-index:2; width:100%; padding:14px 14px 16px; }
-.st-title { font-family:var(--display); font-weight:700; font-size:clamp(12px,1vw,15px); line-height:1.2; letter-spacing:-0.01em; color:var(--paper); text-shadow:0 2px 10px rgba(0,0,0,0.6); }
-.st-when { font-family:var(--mono); font-size:0.8em; letter-spacing:0.06em; color:var(--orange); margin-left:2px; }
+.stage-tile-label { position:relative; z-index:2; width:100%; padding:16px 16px 18px; }
+.st-title { font-family:var(--display); font-weight:700; font-size:clamp(14px,1.1vw,17px); line-height:1.2; letter-spacing:-0.01em; color:var(--paper); text-shadow:0 2px 10px rgba(0,0,0,0.6); white-space:nowrap; }
+.st-when { color:var(--orange); }
 @media(max-width:760px){
   .stage-wall{ overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding-bottom:10px; }
   .stage-tile{ flex:0 0 62%; scroll-snap-align:start; }
