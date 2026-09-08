@@ -30,10 +30,11 @@ const stageTiles = [
 
 // Афиша. Портретные постеры 3:4. `img` — путь в /posters/ (иначе — типографская заглушка).
 // Прошедшие/предстоящие делятся автоматически по дате сборки.
-const eventsList = [
-  { title: "Belka · Танцевальное шоу", date: "2026-07-24", time: "19:00", place: "ДК Железнодорожников · Витебск", img: "/posters/poster-2026.jpg", cta: { label: "Смотреть отчёт", href: "https://instagram.com/belka.empire" } },
-  { title: "Open Jam · Hip-Hop & Break", date: "2026-10-03", place: "Belka Studio · вход свободный", cta: { label: "Участвовать", href: "#trial" } },
-  { title: "Чемпионат РБ по Breaking", date: "2026-11-15", place: "Минск · Belka Crew участвует", cta: { label: "Болеть за нас", href: "#trial" } },
+type Ev = { title: string; date: string; dateText?: string; time?: string; place?: string; img?: string; headline?: boolean; secret?: boolean; cta?: { label: string; href: string } };
+const eventsList: Ev[] = [
+  { title: "Новогодняя сказка", date: "2026-12-20", dateText: "Декабрь 2026", place: "Витебск · большая сцена", headline: true },
+  { title: "Секретное шоу", date: "2027-05-01", dateText: "Скоро", place: "Следите за анонсами", secret: true },
+  { title: "Belka · Танцевальное шоу", date: "2026-07-24", time: "19:00", place: "ДК Железнодорожников · Витебск", img: "/posters/poster-2026.jpg" },
   { title: "Отчётный концерт", date: "2025-06-20", place: "ДК Железнодорожников · Витебск" },
   { title: "Славянский базар", date: "2026-07-12", place: "Летний амфитеатр · Витебск" },
   { title: "Чемпионат РБ · Breaking", date: "2025-04-19", place: "Минск" },
@@ -353,11 +354,12 @@ const groups = [
         <div class="ev-group-label">Предстоящие</div>
         <div class="ev-grid ev-grid--upcoming">
           {upcomingEvents.map((e) => (
-            <article class="ev-card is-upcoming">
+            <article class={`ev-card is-upcoming${e.headline ? ' is-headline' : ''}${e.secret ? ' is-secret' : ''}`}>
               <div class={`ev-poster${e.img ? '' : ' is-blank'}`} style={e.img ? `background-image:url('${e.img}')` : ''}>
                 <div class="ev-veil"></div>
+                {e.secret && <div class="ev-secret-mark" aria-hidden="true">?</div>}
                 <div class="ev-body">
-                  <div class="ev-date">{fmtDate(e.date)}{e.time ? ` · ${e.time}` : ''}</div>
+                  <div class="ev-date">{e.dateText ?? `${fmtDate(e.date)}${e.time ? ` · ${e.time}` : ''}`}</div>
                   <h3 class="ev-title">{e.title}</h3>
                   <div class="ev-place">{e.place}</div>
                   {e.cta && (
@@ -1149,6 +1151,25 @@ const groups = [
 .ev-title { font-family:var(--display); font-weight:800; font-size:clamp(19px,1.7vw,26px); line-height:1.05; letter-spacing:-0.02em; margin:0; text-shadow:0 2px 14px rgba(0,0,0,0.5); }
 .ev-place { font-family:var(--mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(245,242,236,0.62); }
 .ev-cta { margin-top:14px; justify-content:center; color:#fff !important; font-weight:800; }
+
+/* Headline card — no poster yet, just the name big and centred */
+.ev-card.is-headline .ev-poster { align-items:stretch; }
+.ev-card.is-headline .ev-body { justify-content:center; gap:14px; padding:26px; }
+.ev-card.is-headline .ev-title { font-size:clamp(30px,3.4vw,46px); line-height:1; text-transform:uppercase; letter-spacing:-0.01em; }
+
+/* Secret card — teaser, big faded question mark */
+.ev-card.is-secret .ev-poster {
+  align-items:stretch;
+  background:radial-gradient(120% 90% at 50% 0%, rgba(255,92,26,0.16), transparent 58%), #0c0c0c;
+}
+.ev-card.is-secret .ev-body { justify-content:center; align-items:center; text-align:center; gap:12px; padding:26px; }
+.ev-card.is-secret .ev-title { text-transform:uppercase; letter-spacing:0.04em; }
+.ev-secret-mark {
+  position:absolute; inset:0; z-index:1;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--display); font-weight:800; font-size:clamp(90px,14vw,180px);
+  color:rgba(245,242,236,0.10); line-height:1; pointer-events:none;
+}
 
 /* Прошедшие — тускло и без цвета, но читаемо: дата, событие, площадка */
 .ev-card.is-past { filter:grayscale(0.9) brightness(0.78) contrast(0.95); opacity:0.62; }
