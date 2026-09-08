@@ -5,7 +5,6 @@ const founded = 1997;
 const yearsActive = new Date().getFullYear() - founded;
 
 const marqueeItems1 = ["Hip-Hop", "Breaking", "Acro", "Stretch", "Crew", "Battles", "Performances", "Vitebsk", "since 1997", "Belka"];
-const marqueeItems2 = ["Belka Crew", "4 to 45+", "Vitebsk · Belka", "Hip-Hop / Breaking / Acro", "2026 / 27 SEASON"];
 
 const stylesData = [
   { n: "01", name: "Hip-Hop", ital: "& Choreo", desc: "Groove, OG-style, choreo. База, на которой держится всё остальное.", thumb: "hop" },
@@ -65,7 +64,7 @@ const groups = [
     <img src="/logo-white.png" alt="Belka" width="36" height="36" />
     <span class="name">Belka</span>
   </a>
-  <nav class="nav-links">
+  <nav class="nav-links" id="navLinks">
     <a href="#styles">Стили</a>
     <a href="#groups">Группы</a>
     <a href="#perf">Выступления</a>
@@ -75,6 +74,9 @@ const groups = [
   </nav>
   <div class="nav-cta">
     <a href="#trial" class="btn btn-primary btn-white">Пробное занятие</a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Меню" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 
@@ -159,15 +161,6 @@ const groups = [
   </div>
 </section>
 
-<!-- ══ MARQUEE 2 (ink / reverse) ══ -->
-<div class="marquee reverse">
-  <div class="track">
-    {[...marqueeItems1, ...marqueeItems1].map((t) => (
-      <span class="item">{t}<span class="dot" /></span>
-    ))}
-  </div>
-</div>
-
 <!-- ══ STYLES + CREW ══ -->
 <section class="directions" id="styles">
   <div class="dir-head">
@@ -215,7 +208,7 @@ const groups = [
   <div class="groups-head">
     <div>
       <div class="eyebrow" style="margin-bottom:16px">/ Возрастные группы</div>
-      <h2 class="h2">От <span class="o">4</span> до <span class="o">∞</span>.</h2>
+      <h2 class="h2">От <span class="o">4</span> до <span class="o">45+</span>.</h2>
     </div>
   </div>
 
@@ -494,6 +487,20 @@ const groups = [
 </BaseLayout>
 
 <script>
+  // Mobile nav
+  const nav = document.querySelector('.nav');
+  const navToggle = document.getElementById('navToggle');
+  const closeNav = () => { nav?.classList.remove('open'); navToggle?.setAttribute('aria-expanded', 'false'); };
+  navToggle?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.querySelectorAll('#navLinks a').forEach((a) => a.addEventListener('click', closeNav));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNav(); });
+  document.addEventListener('click', (e) => {
+    if (nav?.classList.contains('open') && !nav.contains(e.target as Node)) closeNav();
+  });
+
   // Groups tabs
   const tabs = document.querySelectorAll('.group-tab');
   tabs.forEach(tab => {
@@ -652,7 +659,35 @@ const groups = [
 .nav-links a { font-family:var(--mono); font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(245,242,236,0.75); transition:color 0.15s ease; }
 .nav-links a:hover { color:var(--orange); }
 .nav-cta { display:flex; align-items:center; gap:14px; }
-@media(max-width:880px){ .nav-links{display:none;} }
+
+/* Hamburger — mobile only */
+.nav-toggle { display:none; position:relative; width:40px; height:40px; border-radius:10px; }
+.nav-toggle span {
+  position:absolute; left:10px; width:20px; height:2px; background:var(--paper); border-radius:2px;
+  transition:transform .25s ease, opacity .2s ease;
+}
+.nav-toggle span:nth-child(1) { top:14px; }
+.nav-toggle span:nth-child(2) { top:19px; }
+.nav-toggle span:nth-child(3) { top:24px; }
+.nav.open .nav-toggle span:nth-child(1) { transform:translateY(5px) rotate(45deg); }
+.nav.open .nav-toggle span:nth-child(2) { opacity:0; }
+.nav.open .nav-toggle span:nth-child(3) { transform:translateY(-5px) rotate(-45deg); }
+
+@media(max-width:880px){
+  .nav-toggle { display:block; }
+  .nav-links {
+    position:absolute; top:100%; left:0; right:0;
+    flex-direction:column; gap:0;
+    background:#0c0c0c;
+    border-bottom:1px solid var(--line);
+    padding:8px clamp(20px,4vw,64px) 16px;
+    transform:translateY(-8px); opacity:0; pointer-events:none;
+    transition:transform .22s ease, opacity .22s ease;
+  }
+  .nav.open .nav-links { transform:translateY(0); opacity:1; pointer-events:auto; }
+  .nav-links a { padding:16px 0; font-size:13px; border-top:1px solid var(--line); }
+  .nav-links a:first-child { border-top:0; }
+}
 @media(max-width:600px){ .nav-brand .city{display:none;} .nav-cta .btn{padding:12px 16px;font-size:11px;} }
 
 /* ══ HERO ══ */
@@ -729,10 +764,22 @@ const groups = [
   animation: pulse 1.6s ease-in-out infinite;
 }
 @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.3);} }
-@media(max-width:760px){ .hero-meta{grid-template-columns:repeat(2,minmax(0,220px));} .hero-squirrel-wrap{opacity:0.18;} }
 @media(max-height:860px){
   .hero { padding-top: 100px; }
   .hero-title { font-size: clamp(64px, 12vw, 180px); }
+}
+@media(max-width:760px){
+  .hero { min-height:auto; padding: 108px clamp(20px,4vw,64px) 44px; }
+  .hero-stage { gap:24px; }
+  .hero-title { font-size: clamp(58px, 15vw, 108px); }
+  .hero-squirrel-wrap { display:none; }
+  /* CTA right under the headline, stats last */
+  .hero-stage > div:first-child { order:1; }
+  .hero-actions { order:2; margin-top:0; }
+  .hero-meta { order:3; grid-template-columns:repeat(3,1fr); gap:14px; padding-top:22px; }
+  .hero-meta .cell:first-child { display:none; }       /* «Стили» — есть в разделе ниже */
+  .hero-meta .cell .k { font-size:10px; margin-bottom:5px; }
+  .hero-meta .cell .v { font-size:15px; white-space:normal; }
 }
 
 /* ══ MARQUEE ══ */
@@ -877,6 +924,30 @@ const groups = [
   .dir-crew { border-left:0; border-top:1px solid var(--line-ink); }
 }
 
+/* ══ MOBILE POLISH (single place) ══ */
+@media(max-width:760px){
+  /* Section-head descriptions read left on mobile, not right */
+  .dir-head > p, .reel-head > p, .groups-head > p, .stage-head > p,
+  .alumni-head > p, .posters-head > p {
+    margin-left: 0; text-align: left; max-width: none;
+  }
+  /* Trim the tall section padding so there's less dead scroll */
+  .about, .groups, .posters, .trial { padding-top: 64px; padding-bottom: 64px; }
+  .directions { padding-top: 64px; }
+  .directions .dir-head { padding-bottom: 40px; }
+  .stage, .alumni { padding-top: 64px; padding-bottom: 64px; }
+  .groups-head { margin-bottom: 36px; }
+  /* Trainers: swipeable strip instead of 3 squished cards */
+  .dir-crew { padding: 24px clamp(20px,4vw,64px) 32px; }
+  .dir-crew-strip {
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; gap: 10px; padding-bottom: 8px;
+  }
+  .dir-trainer { flex: 0 0 62%; scroll-snap-align: start; }
+  .dir-trainer-role { font-size: 10px; }
+  .dir-trainer-name { font-size: 14px; }
+}
+
 /* ══ GROUPS ══ */
 .groups { padding:120px clamp(20px,4vw,64px); background:var(--paper); color:var(--ink); border-top:1px solid var(--line-ink); }
 .groups-head { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:60px; }
@@ -898,8 +969,8 @@ const groups = [
 .group-panel li::before { content:"→"; color:var(--orange); font-weight:700; }
 .group-card { background:var(--ink); color:var(--paper); border-radius:24px; padding:36px; position:relative; overflow:hidden; }
 .group-card .ribbon { position:absolute; top:24px; right:-52px; transform:rotate(45deg); background:var(--orange); color:var(--ink); font-family:var(--mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; padding:8px 60px; }
-.group-card .price { font-family:var(--display); font-weight:800; font-size:64px; letter-spacing:-0.03em; line-height:1; color:var(--paper); display:flex; align-items:flex-start; }
-.group-card .price .cur { color:var(--orange); font-size:26px; line-height:1; padding-top:6px; margin-right:6px; }
+.group-card .price { font-family:var(--display); font-weight:800; font-size:64px; letter-spacing:-0.03em; line-height:1; color:var(--paper); display:flex; align-items:flex-start; gap:10px; }
+.group-card .price .cur { color:var(--orange); font-size:24px; line-height:1; padding-top:8px; letter-spacing:0.02em; }
 .group-card .per { font-family:var(--mono); font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(245,242,236,0.55); margin-top:8px; }
 .family-note { font-family:var(--mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(245,242,236,0.6); text-align:center; margin-top:12px; }
 .group-card .breakdown { margin-top:28px; border-top:1px solid var(--line); padding-top:20px; display:grid; gap:12px; font-size:14px; color:rgba(245,242,236,0.8); }
