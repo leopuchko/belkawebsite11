@@ -675,6 +675,8 @@ const groups = [
   align-items: flex-end;
   overflow: hidden;
   padding-bottom: clamp(48px, 6vw, 96px);
+  margin-top: -1px;            /* swallow the marquee's 1px bottom hairline */
+  background: var(--ink);      /* fallback + seamless edges into neighbouring sections */
 }
 .reel-bg {
   position: absolute;
@@ -692,11 +694,17 @@ const groups = [
 }
 .reel-overlay {
   position: absolute; inset: 0; z-index: 1;
+  /* Solid ink at both edges so the video melts into the sections above and
+     below with no seam; clears in the middle to show the footage; ramps
+     back up over the lower half to keep the bottom text readable. */
   background: linear-gradient(
-    to top,
-    rgba(10,10,10,0.92) 0%,
-    rgba(10,10,10,0.55) 40%,
-    rgba(10,10,10,0.25) 100%
+    to bottom,
+    rgb(10,10,10) 0%,
+    rgba(10,10,10,0.55) 14%,
+    rgba(10,10,10,0.12) 32%,
+    rgba(10,10,10,0.22) 50%,
+    rgba(10,10,10,0.7) 74%,
+    rgb(10,10,10) 100%
   );
 }
 .reel-content {
