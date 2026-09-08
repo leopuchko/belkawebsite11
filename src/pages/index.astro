@@ -358,7 +358,9 @@ const groups = [
             <article class={`ev-card is-upcoming${e.headline ? ' is-headline' : ''}${e.secret ? ' is-secret' : ''}`}>
               <div class={`ev-poster${e.img ? '' : ' is-blank'}`} style={e.img ? `background-image:url('${e.img}')` : ''}>
                 <div class="ev-veil"></div>
-                {e.secret && <div class="ev-secret-mark" aria-hidden="true">?</div>}
+                {(e.secret || e.headline) && (
+                  <div class="ev-bigmark" aria-hidden="true">{e.secret ? '?' : '2026'}</div>
+                )}
                 <div class="ev-body">
                   <div class="ev-date">{e.dateText ?? `${fmtDate(e.date)}${e.time ? ` · ${e.time}` : ''}`}</div>
                   <h3 class="ev-title">{e.title}</h3>
@@ -1126,13 +1128,18 @@ const groups = [
   display:flex; align-items:flex-end;
 }
 
-/* Desktop split — smaller left column (2 big posters), wider right column
-   for the 4-across thumbnail wall. */
+/* Desktop split — 2 big posters left; right column is a 4-across wall whose
+   rows always fit inside the height of one upcoming poster (no overflow). */
 @media(min-width:1001px){
   .posters-body:has(.ev-col--upcoming):has(.ev-col--past) {
     grid-template-columns:minmax(0,0.95fr) minmax(0,1.05fr);
+    align-items:stretch;
   }
-  .ev-col { min-width:0; }
+  .ev-col { min-width:0; display:flex; flex-direction:column; }
+  .ev-col--upcoming { align-self:start; }
+  .ev-grid--past { flex:1; grid-auto-rows:1fr; min-height:0; }
+  .ev-grid--past .ev-card { min-height:0; }
+  .ev-grid--past .ev-poster { aspect-ratio:auto; height:100%; }
 }
 .ev-poster.is-blank {
   background:
@@ -1153,24 +1160,46 @@ const groups = [
 .ev-place { font-family:var(--mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(245,242,236,0.62); }
 .ev-cta { margin-top:14px; justify-content:center; color:#fff !important; font-weight:800; }
 
-/* Headline card — no poster yet, just the name big and centred */
-.ev-card.is-headline .ev-poster { align-items:stretch; }
-.ev-card.is-headline .ev-body { justify-content:center; gap:14px; padding:26px; }
-.ev-card.is-headline .ev-title { font-size:clamp(30px,3.4vw,46px); line-height:1; text-transform:uppercase; letter-spacing:-0.01em; }
+/* Big faded watermark behind headline / secret cards */
+.ev-bigmark {
+  position:absolute; inset:0; z-index:1;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--display); font-weight:800; line-height:1;
+  color:rgba(245,242,236,0.09); pointer-events:none; user-select:none;
+}
+.ev-card.is-secret .ev-bigmark { font-size:clamp(90px,14vw,180px); }
+.ev-card.is-headline .ev-bigmark { font-size:clamp(64px,9vw,130px); letter-spacing:0.02em; }
 
-/* Secret card — teaser, big faded question mark */
+/* Headline card — no poster yet: name big, centred, lightly dressed up */
+.ev-card.is-headline .ev-poster {
+  align-items:stretch;
+  background:
+    radial-gradient(100% 62% at 50% 0%, rgba(255,92,26,0.24), transparent 55%),
+    radial-gradient(90% 55% at 50% 100%, rgba(255,92,26,0.12), transparent 62%),
+    repeating-linear-gradient(-45deg, rgba(245,242,236,0.045) 0 9px, transparent 9px 18px),
+    #0b0b0b;
+}
+.ev-card.is-headline .ev-body {
+  justify-content:center; align-items:center; text-align:center; gap:12px; padding:28px;
+}
+.ev-card.is-headline .ev-date { letter-spacing:0.24em; }
+.ev-card.is-headline .ev-title {
+  font-size:clamp(28px,3.2vw,44px); line-height:1.02; text-transform:uppercase; letter-spacing:0;
+  text-shadow:0 4px 24px rgba(0,0,0,0.55);
+}
+.ev-card.is-headline .ev-title::after {
+  content:""; display:block; width:44px; height:3px; background:var(--orange);
+  border-radius:2px; margin:16px auto 2px;
+}
+.ev-card.is-headline .ev-place { color:rgba(245,242,236,0.72); }
+
+/* Secret card — teaser */
 .ev-card.is-secret .ev-poster {
   align-items:stretch;
   background:radial-gradient(120% 90% at 50% 0%, rgba(255,92,26,0.16), transparent 58%), #0c0c0c;
 }
 .ev-card.is-secret .ev-body { justify-content:center; align-items:center; text-align:center; gap:12px; padding:26px; }
 .ev-card.is-secret .ev-title { text-transform:uppercase; letter-spacing:0.04em; }
-.ev-secret-mark {
-  position:absolute; inset:0; z-index:1;
-  display:flex; align-items:center; justify-content:center;
-  font-family:var(--display); font-weight:800; font-size:clamp(90px,14vw,180px);
-  color:rgba(245,242,236,0.10); line-height:1; pointer-events:none;
-}
 
 /* Прошедшие — тускло и без цвета, но читаемо: дата, событие, площадка */
 .ev-card.is-past { filter:grayscale(0.9) brightness(0.78) contrast(0.95); opacity:0.62; }
