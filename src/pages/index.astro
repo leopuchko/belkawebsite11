@@ -1099,8 +1099,8 @@ const groups = [
 .posters-head .h2 { color: var(--ink); }
 .posters-head .h2 .o { color: var(--orange); }
 
-/* Split: 2 big upcoming posters on the left; past = 2×2 thumbnails on the
-   right whose two rows together match the height of one upcoming poster. */
+/* Split: 2 big upcoming posters on the left; past = a wall of small
+   thumbnails on the right, 4 across. */
 .posters-body { display:grid; grid-template-columns:1fr; gap:clamp(32px,4vw,56px); align-items:start; }
 
 .ev-group-label {
@@ -1111,8 +1111,8 @@ const groups = [
 .ev-group-label--past { color:rgba(10,10,10,0.4); }
 
 .ev-grid--upcoming { display:grid; grid-template-columns:repeat(2, 1fr); gap:20px; }
-.ev-grid--past { display:grid; grid-template-columns:repeat(2, 1fr); gap:16px; }
-@media(max-width:520px){ .ev-grid--upcoming { grid-template-columns:1fr; } }
+.ev-grid--past { display:grid; grid-template-columns:repeat(4, 1fr); gap:14px; }
+@media(max-width:520px){ .ev-grid--upcoming { grid-template-columns:1fr; } .ev-grid--past { grid-template-columns:repeat(2, 1fr); } }
 
 .ev-card { position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--line-ink); transition:transform .3s ease, box-shadow .3s ease, filter .35s ease, opacity .35s ease; }
 .ev-card.is-upcoming:hover { transform:translateY(-6px); box-shadow:0 26px 60px rgba(255,92,26,0.18); }
@@ -1123,18 +1123,13 @@ const groups = [
   display:flex; align-items:flex-end;
 }
 
-/* Desktop split — past column stretches to the upcoming poster's height,
-   its 2 rows filling that height exactly. */
+/* Desktop split — smaller left column (2 big posters), wider right column
+   for the 4-across thumbnail wall. */
 @media(min-width:1001px){
   .posters-body:has(.ev-col--upcoming):has(.ev-col--past) {
-    grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);
-    align-items:stretch;
+    grid-template-columns:minmax(0,0.95fr) minmax(0,1.05fr);
   }
-  .ev-col { display:flex; flex-direction:column; min-width:0; }
-  .ev-col--upcoming { align-self:start; }
-  .ev-grid--past { flex:1; grid-auto-rows:1fr; min-height:0; }
-  .ev-grid--past .ev-card { min-height:0; }
-  .ev-grid--past .ev-poster { aspect-ratio:auto; height:100%; }
+  .ev-col { min-width:0; }
 }
 .ev-poster.is-blank {
   background:
@@ -1158,10 +1153,10 @@ const groups = [
 /* Прошедшие — тускло и без цвета, но читаемо: дата, событие, площадка */
 .ev-card.is-past { filter:grayscale(0.9) brightness(0.78) contrast(0.95); opacity:0.62; }
 .ev-card.is-past:hover { filter:grayscale(0.15) brightness(0.98); opacity:1; transform:translateY(-4px); }
-.ev-grid--past .ev-body { padding:14px; gap:5px; }
-.ev-grid--past .ev-date { font-size:10px; color:rgba(245,242,236,0.85); }
-.ev-grid--past .ev-title { font-size:15px; line-height:1.12; }
-.ev-grid--past .ev-place { font-size:9px; }
+.ev-grid--past .ev-body { padding:12px; gap:4px; }
+.ev-grid--past .ev-date { font-size:9px; color:rgba(245,242,236,0.85); }
+.ev-grid--past .ev-title { font-size:13px; line-height:1.12; }
+.ev-grid--past .ev-place { font-size:8px; }
 
 /* ══ Placeholder styles ══ */
 .ph-stripe { background: repeating-linear-gradient(45deg,rgba(10,10,10,0.12) 0 6px,transparent 6px 12px); }
