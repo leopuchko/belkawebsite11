@@ -100,12 +100,16 @@ const groups = [
 <!-- ══ REEL ══ -->
 <section class="reel" id="reel">
   <div class="reel-bg">
-    <iframe
-      src="https://www.youtube.com/embed/Uacy04Oew3g?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=Uacy04Oew3g&playsinline=1"
-      title="Belka Crew · Showreel"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    ></iframe>
+    <video
+      src="/video/showreel.mp4"
+      poster="/video/showreel-poster.jpg"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      disablepictureinpicture
+    ></video>
   </div>
   <div class="reel-overlay"></div>
   <div class="reel-content shell">
@@ -678,14 +682,12 @@ const groups = [
   pointer-events: none;
   z-index: 0;
 }
-.reel-bg iframe {
+.reel-bg video {
   position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 177.78vh;
-  min-width: 100%;
-  height: 56.25vw;
-  min-height: 100%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border: 0;
 }
 .reel-overlay {
