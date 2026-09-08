@@ -28,6 +28,23 @@ const stageTiles = [
   { title: "Витебская красавица", when: "2026", video: "/reels/krasavitsa.mp4", poster: "/reels/krasavitsa-poster.jpg" },
 ];
 
+// Афиша. Портретные постеры 3:4. `img` — путь в /posters/ (иначе — типографская заглушка).
+// Прошедшие/предстоящие делятся автоматически по дате сборки.
+const eventsList = [
+  { title: "Belka · Танцевальное шоу", date: "2026-07-24", time: "19:00", place: "ДК Железнодорожников · Витебск", img: "/posters/poster-2026.jpg", cta: { label: "Смотреть отчёт", href: "https://instagram.com/belka.empire" } },
+  { title: "Open Jam · Hip-Hop & Break", date: "2026-10-03", place: "Belka Studio · вход свободный", cta: { label: "Участвовать", href: "#trial" } },
+  { title: "Чемпионат РБ по Breaking", date: "2026-11-15", place: "Минск · Belka Crew участвует", cta: { label: "Болеть за нас", href: "#trial" } },
+  { title: "Отчётный концерт", date: "2025-06-20", place: "ДК Железнодорожников · Витебск" },
+  { title: "Славянский базар", date: "2026-07-12", place: "Летний амфитеатр · Витебск" },
+  { title: "Чемпионат РБ · Breaking", date: "2025-04-19", place: "Минск" },
+];
+const _MON = ["янв","фев","мар","апр","мая","июн","июл","авг","сен","окт","ноя","дек"];
+const fmtDate = (iso: string) => { const d = new Date(iso + "T00:00:00"); return `${d.getDate()} ${_MON[d.getMonth()]} ${d.getFullYear()}`; };
+const _now = Date.now();
+const _isPast = (e: { date: string }) => new Date(e.date + "T23:59:59").getTime() < _now;
+const upcomingEvents = eventsList.filter((e) => !_isPast(e)).sort((a, b) => a.date.localeCompare(b.date));
+const pastEvents = eventsList.filter(_isPast).sort((a, b) => b.date.localeCompare(a.date));
+
 
 const groups = [
   { id: "mini",   age: "4–6",   label: "Мини",       title: "Настоящий танец с 4 лет.", accent: "Никакой ритмики.", lead: "Три раза в неделю по 60 минут. Мы не играем — мы тренируемся. С первого занятия дети работают над техникой, телом и характером.", bullets: ["Реальная хореография с первого урока","Воспитываем дисциплину и уверенность","Готовим к выступлениям на сцене"], price: 130, breakdown: [["Занятий в месяц","12"],["Длительность","60 мин"],["Размер группы","до 20"]], ribbon: "Хит" },
@@ -326,40 +343,53 @@ const groups = [
   <div class="posters-head">
     <div>
       <div class="eyebrow" style="margin-bottom:16px">/ Афиши и события</div>
-      <h2 class="h2">Ближайшие <span class="o">события.</span></h2>
+      <h2 class="h2">Афиша <span class="o">Belka.</span></h2>
     </div>
-    <a href="#trial" class="btn btn-ghost">Все события →</a>
   </div>
-  <div class="posters-grid">
-    <article class="poster-card poster-big poster-hero">
-      <div class="ph-bg" style="background:url('/posters/poster-2026.jpg') center 35%/cover no-repeat;"></div>
-      <div class="ph-veil"></div>
-      <div class="ph-info">
-        <div class="poster-date">24 ИЮЛЯ 2026 · ПЯТНИЦА · 19:00</div>
-        <h3 class="ph-title">Belka.<br/>Танцевальное шоу</h3>
-        <div class="poster-where" style="margin-bottom:20px">ДК Железнодорожников · Витебск</div>
-        <a href="https://instagram.com/belka.empire" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;color:#fff;font-weight:700">Купить билет</a>
-      </div>
-    </article>
-    <article class="poster-card">
-      <div class="poster-img ph-ink-stripe"></div>
-      <div class="poster-info">
-        <div class="poster-date">3 ОКТЯБРЯ 2026</div>
-        <h3 class="poster-title">Open Jam · Hip-Hop & Break</h3>
-        <div class="poster-where">Belka Studio · вход свободный</div>
-        <a href="#trial" class="btn btn-primary" style="margin-top:auto">Участвовать <span class="arrow">→</span></a>
-      </div>
-    </article>
-    <article class="poster-card">
-      <div class="poster-img ph-orange-stripe" style="background:var(--ink) repeating-linear-gradient(-45deg,rgba(245,242,236,0.05) 0 6px,transparent 6px 12px)"></div>
-      <div class="poster-info">
-        <div class="poster-date">НОЯБРЬ 2026</div>
-        <h3 class="poster-title">Чемпионат РБ по Breaking</h3>
-        <div class="poster-where">Минск · Belka Crew участвует</div>
-        <a href="#trial" class="btn btn-ghost" style="margin-top:auto">Болеть за нас <span class="arrow">→</span></a>
-      </div>
-    </article>
-  </div>
+
+  {upcomingEvents.length > 0 && <div class="ev-group-label">Предстоящие</div>}
+  {upcomingEvents.length > 0 && (
+    <div class="ev-grid">
+      {upcomingEvents.map((e) => (
+        <article class="ev-card is-upcoming">
+          <div class={`ev-poster${e.img ? '' : ' is-blank'}`} style={e.img ? `background-image:url('${e.img}')` : ''}>
+            <div class="ev-veil"></div>
+            <div class="ev-body">
+              <div class="ev-date">{fmtDate(e.date)}{e.time ? ` · ${e.time}` : ''}</div>
+              <h3 class="ev-title">{e.title}</h3>
+              <div class="ev-place">{e.place}</div>
+              {e.cta && (
+                <a
+                  href={e.cta.href}
+                  target={e.cta.href.startsWith('http') ? '_blank' : undefined}
+                  rel={e.cta.href.startsWith('http') ? 'noopener' : undefined}
+                  class="btn btn-primary ev-cta"
+                >{e.cta.label} <span class="arrow">→</span></a>
+              )}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  )}
+
+  {pastEvents.length > 0 && <div class="ev-group-label ev-group-label--past">Прошедшие</div>}
+  {pastEvents.length > 0 && (
+    <div class="ev-grid ev-grid--past">
+      {pastEvents.map((e) => (
+        <article class="ev-card is-past">
+          <div class={`ev-poster${e.img ? '' : ' is-blank'}`} style={e.img ? `background-image:url('${e.img}')` : ''}>
+            <div class="ev-veil"></div>
+            <div class="ev-body">
+              <div class="ev-date">{fmtDate(e.date)}</div>
+              <h3 class="ev-title">{e.title}</h3>
+              <div class="ev-place">{e.place}</div>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  )}
 </section>
 
 
@@ -1052,124 +1082,65 @@ const groups = [
   .alumni-panel:hover .ap-bg { transform: none; }
 }
 
-/* ══ POSTERS ══ */
+/* ══ POSTERS / АФИША ══ */
 .posters {
   padding: 120px clamp(20px,4vw,64px);
   background: var(--paper);
   color: var(--ink);
   border-top: 1px solid var(--line-ink);
 }
-.posters-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 24px;
-  flex-wrap: wrap;
-  margin-bottom: 56px;
-}
+.posters-head { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:40px; }
 .posters-head .h2 { color: var(--ink); }
 .posters-head .h2 .o { color: var(--orange); }
-.posters-head .btn-ghost { border-color: var(--line-ink); color: var(--ink); }
-.posters-head .btn-ghost:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
-.posters-grid {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr;
-  gap: 20px;
-  align-items: start;
+.ev-group-label {
+  font-family:var(--mono); font-size:11px; letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--orange); margin:0 0 22px; display:flex; align-items:center; gap:16px;
 }
+.ev-group-label::after { content:""; flex:1; height:1px; background:var(--line-ink); }
+.ev-group-label--past { color:rgba(10,10,10,0.4); margin-top:72px; }
 
-.poster-card {
-  display: flex;
-  flex-direction: column;
-  border-radius: 20px;
-  overflow: hidden;
-  background: var(--ink);
-  color: var(--paper);
-  border: 1px solid var(--line-ink);
-  transition: transform 0.25s ease, border-color 0.25s ease;
-}
-.poster-card:hover { transform: translateY(-4px); border-color: var(--orange); }
+.ev-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:20px; }
+.ev-grid--past { grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px; }
 
-.poster-img {
-  width: 100%;
-}
-.poster-big .poster-img { height: 360px; }
-.poster-card:not(.poster-big) .poster-img { height: 240px; }
+.ev-card { position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--line-ink); transition:transform .3s ease, box-shadow .3s ease, filter .35s ease, opacity .35s ease; }
+.ev-card.is-upcoming:hover { transform:translateY(-6px); box-shadow:0 26px 60px rgba(255,92,26,0.18); }
 
-/* Full-bleed hero poster */
-.poster-hero { position:relative; min-height:480px; display:block !important; }
-.ph-bg { position:absolute; inset:0; }
-.ph-veil {
-  position:absolute; inset:0;
-  background: linear-gradient(to top,
-    rgba(10,10,10,0.97) 0%,
-    rgba(10,10,10,0.7) 35%,
-    rgba(10,10,10,0.15) 75%,
-    rgba(10,10,10,0) 100%);
-  z-index:1;
+.ev-poster {
+  position:relative; aspect-ratio:3/4;
+  background-size:cover; background-position:center; background-color:var(--ink);
+  display:flex; align-items:flex-end;
 }
-.ph-info {
-  position:absolute; inset:0; z-index:2;
-  display:flex; flex-direction:column; justify-content:flex-end;
-  padding:32px;
-}
-.ph-title {
-  font-family:var(--display); font-weight:800;
-  font-size:clamp(32px,3.5vw,56px); line-height:1;
-  letter-spacing:-0.025em; color:var(--paper);
-  margin:8px 0 10px;
-  font-variation-settings:"wdth" 100,"opsz" 96;
-  text-shadow: 0 2px 16px rgba(0,0,0,0.6);
-}
-.ph-info .poster-date {
-  font-size:13px; letter-spacing:0.2em; font-weight:600;
-  text-shadow: 0 1px 10px rgba(0,0,0,0.9);
-}
-.ph-info .poster-where {
-  font-size:13px; letter-spacing:0.16em;
-  color:rgba(245,242,236,0.9);
-  text-shadow: 0 1px 10px rgba(0,0,0,0.9);
+.ev-grid--past .ev-poster { aspect-ratio:2/3; }
+.ev-poster.is-blank {
+  background:
+    radial-gradient(130% 80% at 50% -10%, rgba(255,92,26,0.28), transparent 62%),
+    repeating-linear-gradient(-45deg, rgba(245,242,236,0.04) 0 8px, transparent 8px 16px),
+    var(--ink);
 }
 
-.poster-info {
-  padding: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 1;
+.ev-veil {
+  position:absolute; inset:0; z-index:1;
+  background:linear-gradient(to top, rgba(10,10,10,0.94) 0%, rgba(10,10,10,0.5) 42%, rgba(10,10,10,0.08) 74%, transparent 100%);
 }
-.poster-date {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--orange);
-}
-.poster-title {
-  font-family: var(--display);
-  font-weight: 800;
-  font-size: clamp(20px, 2.2vw, 30px);
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-  margin: 0;
-  color: var(--paper);
-}
-.poster-big .poster-title { font-size: clamp(24px, 2.8vw, 40px); }
-.poster-where {
-  font-size: 13px;
-  color: rgba(245,242,236,0.55);
-  font-family: var(--mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-size: 11px;
-  margin-bottom: 8px;
-}
+.ev-poster.is-blank .ev-veil { background:linear-gradient(to top, rgba(10,10,10,0.55) 0%, transparent 72%); }
 
-@media(max-width:900px) {
-  .posters-grid { grid-template-columns: 1fr; }
-  .poster-big .poster-img,
-  .poster-card:not(.poster-big) .poster-img { height: 220px; }
+.ev-body { position:relative; z-index:2; width:100%; padding:20px; display:flex; flex-direction:column; gap:8px; color:var(--paper); }
+.ev-date { font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--orange); }
+.ev-title { font-family:var(--display); font-weight:800; font-size:clamp(19px,1.7vw,26px); line-height:1.05; letter-spacing:-0.02em; margin:0; text-shadow:0 2px 14px rgba(0,0,0,0.5); }
+.ev-place { font-family:var(--mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(245,242,236,0.6); }
+.ev-cta { margin-top:14px; justify-content:center; color:#fff !important; font-weight:800; }
+
+/* Прошедшие — тускло и без цвета */
+.ev-card.is-past { filter:grayscale(0.92) brightness(0.72) contrast(0.95); opacity:0.58; }
+.ev-card.is-past:hover { filter:grayscale(0.3) brightness(0.92); opacity:0.95; transform:translateY(-3px); }
+.ev-card.is-past .ev-date { color:rgba(245,242,236,0.75); }
+.ev-grid--past .ev-title { font-size:clamp(15px,1.3vw,19px); }
+.ev-grid--past .ev-body { padding:16px; gap:6px; }
+
+@media(max-width:560px){
+  .ev-grid, .ev-grid--past { grid-template-columns:1fr 1fr; gap:12px; }
+  .ev-title { font-size:16px; }
 }
 
 /* ══ Placeholder styles ══ */
