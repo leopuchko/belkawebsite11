@@ -608,6 +608,30 @@ const groups = [
     if (fields) fields.style.display = 'none';
     if (success) success.style.display = 'block';
   });
+
+  // Deep-link to the trial form.
+  //  …/#trial            → scrolls to the form and focuses the name field
+  //  …/?age=7-11#trial   → also preselects the age group
+  //  …/?group=kids#trial → same, by group id (mini|kids|teens|adults|thirty)
+  function openTrialForm() {
+    const sec = document.getElementById('trial');
+    if (!sec) return;
+    sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const p = new URLSearchParams(location.search);
+    const byGroup: Record<string, string> = { mini: '4-6', kids: '7-11', teens: '12-17', adults: '18-29', thirty: '30+' };
+    const age = p.get('age') || byGroup[p.get('group') || ''] || '';
+    if (age) {
+      (document.querySelector(`.cs-opt[data-val="${age}"]`) as HTMLElement | null)?.click();
+    }
+    setTimeout(() => {
+      (document.querySelector('#trialFields input[name="name"]') as HTMLInputElement | null)
+        ?.focus({ preventScroll: true });
+    }, 600);
+  }
+  if (location.hash === '#trial') openTrialForm();
+  document.querySelectorAll('a[href$="#trial"]').forEach((a) => {
+    a.addEventListener('click', () => setTimeout(openTrialForm, 0));
+  });
 </script>
 
 <style>
