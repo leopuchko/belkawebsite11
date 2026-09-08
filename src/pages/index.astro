@@ -21,9 +21,9 @@ const crewData = [
 ];
 
 const stageTiles = [
-  { title: "Славянка", when: "2026", video: "/reels/slavyanka.mp4", poster: "/reels/slavyanka-poster.jpg" },
-  { title: "Детская тренировка", when: "", video: "/reels/trenirovka.mp4", poster: "/reels/trenirovka-poster.jpg" },
-  { title: "Славянка · дети", when: "2025", video: "/reels/slavyanka-deti.mp4", poster: "/reels/slavyanka-deti-poster.jpg" },
+  { title: "Славянский базар", when: "2026", video: "/reels/slavyanka.mp4", poster: "/reels/slavyanka-poster.jpg" },
+  { title: "Belka Kids", when: "", video: "/reels/trenirovka.mp4", poster: "/reels/trenirovka-poster.jpg" },
+  { title: "Звёзды тиктока", when: "2025", video: "/reels/slavyanka-deti.mp4", poster: "/reels/slavyanka-deti-poster.jpg" },
   { title: "Acrobatics", when: "", video: "/reels/salto.mp4", poster: "/reels/salto-poster.jpg" },
   { title: "Витебская красавица", when: "2026", video: "/reels/krasavitsa.mp4", poster: "/reels/krasavitsa-poster.jpg" },
 ];
@@ -852,7 +852,9 @@ const groups = [
 .stage-tile-overlay { position:absolute; inset:0; z-index:1; background:linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.15) 45%, transparent 75%); }
 .stage-tile-label { position:relative; z-index:2; width:100%; padding:16px 16px 18px; }
 .st-title { font-family:var(--display); font-weight:700; font-size:clamp(14px,1.1vw,17px); line-height:1.2; letter-spacing:-0.01em; color:var(--paper); text-shadow:0 2px 10px rgba(0,0,0,0.6); white-space:nowrap; }
-.st-when { color:var(--orange); }
+/* digits are cap-height, so next to lowercase text they read as floating
+   high even on a shared baseline — nudge down a hair to sit "in" the line */
+.st-when { color:var(--orange); position:relative; top:0.06em; }
 @media(max-width:760px){
   .stage-wall{ overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding-bottom:10px; }
   .stage-tile{ flex:0 0 62%; scroll-snap-align:start; }
