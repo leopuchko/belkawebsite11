@@ -134,9 +134,13 @@ const groups = [
   </div>
   <div class="reel-overlay"></div>
   <div class="reel-content shell">
-    <div class="eyebrow" style="margin-bottom:24px">/ Showreel</div>
-    <h2 class="h2" style="color:var(--paper)">Belka <span style="color:var(--orange)">в&nbsp;движении.</span></h2>
-    <p class="body-text" style="margin-top:24px;max-width:44ch">Живые выступления, отчётные концерты, чемпионаты.</p>
+    <div class="eyebrow reel-desk" style="margin-bottom:24px">/ Showreel</div>
+    <h2 class="h2 reel-desk" style="color:var(--paper)">Belka <span style="color:var(--orange)">в&nbsp;движении.</span></h2>
+    <p class="body-text reel-desk" style="margin-top:24px;max-width:44ch">Живые выступления, отчётные концерты, чемпионаты.</p>
+    <div class="reel-mob">
+      <h2 class="h2" style="color:var(--paper)">{yearsActive} лет <span style="color:var(--orange)">в&nbsp;движении.</span></h2>
+      <p class="body-text" style="margin-top:16px;max-width:36ch">Танцевальная семья из Витебска. От первой тренировки до сцены.</p>
+    </div>
   </div>
 </section>
 
@@ -639,6 +643,25 @@ const groups = [
   document.querySelectorAll('a[href$="#trial"]').forEach((a) => {
     a.addEventListener('click', () => setTimeout(openTrialForm, 0));
   });
+
+  // Alumni panels — tap to expand, tap again (or tap elsewhere) to collapse
+  const alumniPanels = document.querySelectorAll('.alumni-panel');
+  alumniPanels.forEach((p) => {
+    p.addEventListener('click', () => {
+      const wasOpen = p.classList.contains('is-open');
+      alumniPanels.forEach((x) => x.classList.remove('is-open'));
+      if (!wasOpen) p.classList.add('is-open');
+      (p as HTMLElement).blur();
+    });
+    p.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (p as HTMLElement).click(); }
+    });
+  });
+  document.addEventListener('click', (e) => {
+    if (![...alumniPanels].some((p) => p.contains(e.target as Node))) {
+      alumniPanels.forEach((x) => x.classList.remove('is-open'));
+    }
+  });
 </script>
 
 <style>
@@ -924,29 +947,9 @@ const groups = [
   .dir-crew { border-left:0; border-top:1px solid var(--line-ink); }
 }
 
-/* ══ MOBILE POLISH (single place) ══ */
-@media(max-width:760px){
-  /* Section-head descriptions read left on mobile, not right */
-  .dir-head > p, .reel-head > p, .groups-head > p, .stage-head > p,
-  .alumni-head > p, .posters-head > p {
-    margin-left: 0; text-align: left; max-width: none;
-  }
-  /* Trim the tall section padding so there's less dead scroll */
-  .about, .groups, .posters, .trial { padding-top: 64px; padding-bottom: 64px; }
-  .directions { padding-top: 64px; }
-  .directions .dir-head { padding-bottom: 40px; }
-  .stage, .alumni { padding-top: 64px; padding-bottom: 64px; }
-  .groups-head { margin-bottom: 36px; }
-  /* Trainers: swipeable strip instead of 3 squished cards */
-  .dir-crew { padding: 24px clamp(20px,4vw,64px) 32px; }
-  .dir-crew-strip {
-    overflow-x: auto; scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch; gap: 10px; padding-bottom: 8px;
-  }
-  .dir-trainer { flex: 0 0 62%; scroll-snap-align: start; }
-  .dir-trainer-role { font-size: 10px; }
-  .dir-trainer-name { font-size: 14px; }
-}
+/* Reel: desktop vs mobile copy (mobile overrides live in the MOBILE POLISH
+   block at the very end of this stylesheet, so they win the cascade). */
+.reel-mob { display: none; }
 
 /* ══ GROUPS ══ */
 .groups { padding:120px clamp(20px,4vw,64px); background:var(--paper); color:var(--ink); border-top:1px solid var(--line-ink); }
@@ -1078,7 +1081,8 @@ const groups = [
 }
 
 .alumni-panel:hover,
-.alumni-panel:focus { flex: 4; outline: none; }
+.alumni-panel:focus,
+.alumni-panel.is-open { flex: 4; outline: none; }
 
 .ap-bg {
   position: absolute;
@@ -1131,7 +1135,9 @@ const groups = [
 .alumni-panel:hover .ap-tag,
 .alumni-panel:hover .ap-ach,
 .alumni-panel:focus .ap-tag,
-.alumni-panel:focus .ap-ach {
+.alumni-panel:focus .ap-ach,
+.alumni-panel.is-open .ap-tag,
+.alumni-panel.is-open .ap-ach {
   opacity: 1;
   max-height: 60px;
   transform: translateY(0);
@@ -1171,7 +1177,8 @@ const groups = [
   transition: color 0.3s ease;
 }
 .alumni-panel:hover .ap-name,
-.alumni-panel:focus .ap-name { color: var(--paper); }
+.alumni-panel:focus .ap-name,
+.alumni-panel.is-open .ap-name { color: var(--paper); }
 .ap-ach {
   font-family: var(--mono);
   font-size: 11px;
@@ -1181,11 +1188,15 @@ const groups = [
 }
 
 @media(max-width:768px) {
-  .alumni-panels { height: auto; flex-direction: column; gap: 4px; }
-  .alumni-panel { flex: none !important; height: 100px; border-radius: 12px; }
-  .alumni-panel:focus { height: 300px; }
+  .alumni-panels { height: auto; flex-direction: column; gap: 6px; }
+  .alumni-panel { flex: none !important; height: 84px; border-radius: 12px; transition: height .4s cubic-bezier(0.4,0,0.2,1); }
+  .alumni-panel.is-open { height: 300px; }
   .ap-info { opacity: 1; transform: none; }
-  .alumni-panel:hover .ap-bg { transform: none; }
+  .alumni-panel:hover .ap-bg,
+  .alumni-panel:focus .ap-bg { transform: none; }
+  /* collapsed rows: only the name shows; tags/ach hidden until opened */
+  .alumni-panel .ap-tag, .alumni-panel .ap-ach { opacity: 0; max-height: 0; }
+  .alumni-panel.is-open .ap-tag, .alumni-panel.is-open .ap-ach { opacity: 1; max-height: 60px; }
 }
 
 /* ══ POSTERS / АФИША ══ */
@@ -1212,7 +1223,7 @@ const groups = [
 
 .ev-grid--upcoming { display:grid; grid-template-columns:repeat(2, 1fr); gap:20px; }
 .ev-grid--past { display:grid; grid-template-columns:repeat(4, 1fr); gap:14px; }
-@media(max-width:520px){ .ev-grid--upcoming { grid-template-columns:1fr; } .ev-grid--past { grid-template-columns:repeat(2, 1fr); } }
+@media(max-width:359px){ .ev-grid--past { grid-template-columns:repeat(2, 1fr); } }
 
 .ev-card { position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--line-ink); transition:transform .3s ease, box-shadow .3s ease, filter .35s ease, opacity .35s ease; }
 .ev-card.is-upcoming:hover { transform:translateY(-6px); box-shadow:0 26px 60px rgba(255,92,26,0.18); }
@@ -1309,4 +1320,120 @@ const groups = [
 .ph-orange-stripe { background: var(--orange) repeating-linear-gradient(45deg,rgba(10,10,10,0.12) 0 6px,transparent 6px 12px); }
 .ph-ink-stripe { background: var(--ink) repeating-linear-gradient(45deg,rgba(245,242,236,0.06) 0 6px,transparent 6px 12px); }
 .ph-label { font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; padding:4px 8px; background:var(--ink); color:var(--orange); border-radius:4px; }
+
+/* ══════════ MOBILE POLISH — kept last so it wins the cascade ══════════ */
+@media(max-width:760px){
+  /* Smaller section headings across the board */
+  .h2 { font-size: clamp(30px, 8vw, 44px); }
+
+  /* Hero — centred */
+  .hero-title { text-align: center; }
+  .hero-stage > div:first-child { text-align: center; }
+
+  /* Marquee — ~5× smaller band + text */
+  .marquee { padding: 7px 0; }
+  .marquee .track { gap: 18px; animation-duration: 18s; }
+  .marquee .item { font-size: 13px; gap: 14px; }
+  .marquee .item .dot { width: 5px; height: 5px; }
+
+  /* Reel — drop "/ Showreel · Belka в движении", show "29 лет в движении" */
+  .reel-desk { display: none; }
+  .reel-mob { display: block; }
+
+  /* About — story is on the reel now; keep just the numbers */
+  .about .col-l { display: none; }
+  .about .col-r .lead { display: none; }
+
+  /* Section-head descriptions read left, not right */
+  .dir-head > p, .reel-head > p, .groups-head > p, .stage-head > p,
+  .alumni-head > p, .posters-head > p {
+    margin-left: 0; text-align: left; max-width: none;
+  }
+
+  /* Trim the tall section padding */
+  .about, .groups, .posters { padding-top: 64px; padding-bottom: 64px; }
+  .directions { padding-top: 60px; }
+  .directions .dir-head { padding-bottom: 32px; }
+  .stage, .alumni { padding-top: 64px; padding-bottom: 64px; }
+  .groups-head { margin-bottom: 28px; }
+
+  /* Directions — no eyebrow, tighter rows */
+  .dir-head .eyebrow { display: none; }
+  .dir-row { padding: 15px clamp(20px,4vw,64px); grid-template-columns: 36px 1fr; gap: 12px; }
+  .dir-num { font-size: 10px; padding-top: 5px; }
+  .dir-name { font-size: 22px; margin-bottom: 5px; }
+  .dir-meta { font-size: 12.5px; line-height: 1.45; }
+
+  /* Trainers — swipeable strip */
+  .dir-crew { padding: 22px clamp(20px,4vw,64px) 28px; }
+  .dir-crew-strip {
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; gap: 10px; padding-bottom: 8px;
+  }
+  .dir-trainer { flex: 0 0 62%; scroll-snap-align: start; }
+  .dir-trainer-role { font-size: 10px; }
+  .dir-trainer-name { font-size: 14px; }
+
+  /* Groups — price card first, everything smaller */
+  .group-tabs { margin-bottom: 18px; }
+  .group-tab { min-width: 0; padding: 13px 12px; gap: 3px; font-size: 9px; }
+  .group-tab .age { font-size: 19px; }
+  .group-panel { gap: 18px; }
+  .group-panel > div:first-child { order: 2; }
+  .group-card { order: 1; padding: 22px; border-radius: 18px; }
+  .group-panel h3 { font-size: 25px; margin-bottom: 12px; }
+  .group-panel .lead { font-size: 14px; margin-bottom: 16px; }
+  .group-panel ul { gap: 8px; margin-bottom: 0; }
+  .group-panel li { font-size: 13px; }
+  .group-card .price { font-size: 44px; }
+  .group-card .price .cur { font-size: 17px; padding-top: 5px; }
+  .group-card .breakdown { margin-top: 16px; padding-top: 14px; gap: 8px; font-size: 13px; }
+  .group-card .per { margin-top: 6px; }
+
+  /* Afishas — 2 upcoming side by side, past 3-across, compact */
+  .posters-body { gap: 28px; }
+  .ev-grid--upcoming { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .ev-grid--past { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .ev-group-label { margin-bottom: 14px; }
+  .ev-group-label--past { margin-top: 32px; }
+  .ev-body { padding: 12px; gap: 4px; }
+  .ev-title { font-size: 12px; line-height: 1.12; }
+  .ev-date { font-size: 9px; }
+  .ev-place { font-size: 8px; }
+  .ev-cta { margin-top: 8px; font-size: 10px; padding: 11px 14px; }
+  .ev-grid--past .ev-body { padding: 8px; }
+  .ev-grid--past .ev-date { font-size: 8px; }
+  .ev-grid--past .ev-title { font-size: 10px; }
+  .ev-grid--past .ev-place { display: none; }
+  .ev-card.is-headline .ev-body { padding: 10px; gap: 6px; }
+  .ev-card.is-headline .ev-title { font-size: 13px; }
+  .ev-card.is-headline .ev-title::after { width: 26px; height: 2px; margin: 8px auto 1px; }
+  .ev-card.is-headline .ev-bigmark { font-size: 38px; }
+  .ev-card.is-headline .ev-date { letter-spacing: 0.14em; }
+  .ev-card.is-secret .ev-body { padding: 10px; }
+  .ev-card.is-secret .ev-title { font-size: 13px; }
+  .ev-card.is-secret .ev-bigmark { font-size: 54px; }
+
+  /* Trial — fit one screen, no scroll */
+  .trial { padding-top: 44px; padding-bottom: 44px; }
+  .trial .eyebrow { margin-bottom: 10px; }
+  .trial h2 { font-size: clamp(28px, 8.5vw, 38px); margin-bottom: 12px; }
+  .trial .sub { font-size: 13.5px; line-height: 1.4; margin-bottom: 18px; }
+  .trial-inner { gap: 20px; }
+  .trial-form { padding: 20px; border-radius: 18px; }
+  .form-field { padding: 12px 0; }
+  .trial-form .lbl { margin-bottom: 6px; }
+  .trial-form input[type="text"], .trial-form input[type="tel"] { padding: 6px 0; }
+  .trial-form .trial-submit { margin-top: 16px; }
+  .trial-submit { padding: 14px 20px; }
+  .trial-shadow-squirrel { display: none; }
+
+  /* Footer — tighter */
+  .footer { padding-top: 44px; padding-bottom: 22px; }
+  .footer-brand .name { font-size: 40px; margin-bottom: 14px; }
+  .footer-grid { gap: 24px 20px; margin-bottom: 28px; }
+  .footer-col h4 { margin-bottom: 12px; }
+  .footer-col ul { gap: 8px; }
+  .footer-bottom { padding-top: 16px; font-size: 10px; }
+}
 </style>
