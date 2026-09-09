@@ -139,7 +139,11 @@ const groups = [
     <p class="body-text reel-desk" style="margin-top:24px;max-width:44ch">Живые выступления, отчётные концерты, чемпионаты.</p>
     <div class="reel-mob">
       <h2 class="h2" style="color:var(--paper)">{yearsActive} лет <span style="color:var(--orange)">в&nbsp;движении.</span></h2>
-      <p class="body-text" style="margin-top:16px;max-width:36ch">Танцевальная семья из Витебска. От первой тренировки до сцены.</p>
+      <p class="body-text" style="margin-top:14px;max-width:34ch">Танцевальная семья из Витебска. От первой тренировки до сцены.</p>
+      <div class="reel-mob-stats">
+        <div><b>1&nbsp;000+</b><span>выпускников</span></div>
+        <div><b>20+</b><span>медалей на фестивалях</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1189,14 +1193,20 @@ const groups = [
 
 @media(max-width:768px) {
   .alumni-panels { height: auto; flex-direction: column; gap: 6px; }
-  .alumni-panel { flex: none !important; height: 84px; border-radius: 12px; transition: height .4s cubic-bezier(0.4,0,0.2,1); }
+  .alumni-panel { flex: none !important; height: 116px; border-radius: 12px; transition: height .4s cubic-bezier(0.4,0,0.2,1); }
   .alumni-panel.is-open { height: 300px; }
   .ap-info { opacity: 1; transform: none; }
   .alumni-panel:hover .ap-bg,
   .alumni-panel:focus .ap-bg { transform: none; }
-  /* collapsed rows: only the name shows; tags/ach hidden until opened */
-  .alumni-panel .ap-tag, .alumni-panel .ap-ach { opacity: 0; max-height: 0; }
-  .alumni-panel.is-open .ap-tag, .alumni-panel.is-open .ap-ach { opacity: 1; max-height: 60px; }
+  /* tag + achievement always visible, small; grow on tap */
+  .alumni-panel .ap-tag, .alumni-panel .ap-ach {
+    opacity: 1; max-height: 40px; transform: none;
+    font-size: 8px; letter-spacing: 0.1em;
+  }
+  .alumni-panel.is-open .ap-tag,
+  .alumni-panel.is-open .ap-ach { max-height: 60px; font-size: 11px; }
+  .ap-name { font-size: 17px; }
+  .alumni-panel.is-open .ap-name { font-size: 22px; }
 }
 
 /* ══ POSTERS / АФИША ══ */
@@ -1336,13 +1346,23 @@ const groups = [
   .marquee .item { font-size: 13px; gap: 14px; }
   .marquee .item .dot { width: 5px; height: 5px; }
 
-  /* Reel — drop "/ Showreel · Belka в движении", show "29 лет в движении" */
+  /* Reel — drop "/ Showreel · Belka в движении", show "29 лет в движении"
+     with the two headline numbers right under the tagline */
   .reel-desk { display: none; }
   .reel-mob { display: block; }
+  .reel-mob-stats { display: flex; gap: 22px; margin-top: 18px; }
+  .reel-mob-stats > div { display: flex; flex-direction: column; }
+  .reel-mob-stats b {
+    font-family: var(--display); font-weight: 800; font-size: 26px;
+    line-height: 1; letter-spacing: -0.02em; color: var(--orange);
+  }
+  .reel-mob-stats span {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: rgba(245,242,236,0.6); margin-top: 6px;
+  }
 
-  /* About — story is on the reel now; keep just the numbers */
-  .about .col-l { display: none; }
-  .about .col-r .lead { display: none; }
+  /* About — its content now lives on the reel */
+  .about { display: none; }
 
   /* Section-head descriptions read left, not right */
   .dir-head > p, .reel-head > p, .groups-head > p, .stage-head > p,
@@ -1351,11 +1371,11 @@ const groups = [
   }
 
   /* Trim the tall section padding */
-  .about, .groups, .posters { padding-top: 64px; padding-bottom: 64px; }
+  .groups, .posters { padding-top: 56px; padding-bottom: 56px; }
   .directions { padding-top: 60px; }
   .directions .dir-head { padding-bottom: 32px; }
-  .stage, .alumni { padding-top: 64px; padding-bottom: 64px; }
-  .groups-head { margin-bottom: 28px; }
+  .stage, .alumni { padding-top: 56px; padding-bottom: 56px; }
+  .groups-head { margin-bottom: 24px; }
 
   /* Directions — no eyebrow, tighter rows */
   .dir-head .eyebrow { display: none; }
@@ -1374,21 +1394,25 @@ const groups = [
   .dir-trainer-role { font-size: 10px; }
   .dir-trainer-name { font-size: 14px; }
 
-  /* Groups — price card first, everything smaller */
-  .group-tabs { margin-bottom: 18px; }
-  .group-tab { min-width: 0; padding: 13px 12px; gap: 3px; font-size: 9px; }
-  .group-tab .age { font-size: 19px; }
-  .group-panel { gap: 18px; }
-  .group-panel > div:first-child { order: 2; }
-  .group-card { order: 1; padding: 22px; border-radius: 18px; }
-  .group-panel h3 { font-size: 25px; margin-bottom: 12px; }
-  .group-panel .lead { font-size: 14px; margin-bottom: 16px; }
-  .group-panel ul { gap: 8px; margin-bottom: 0; }
-  .group-panel li { font-size: 13px; }
-  .group-card .price { font-size: 44px; }
-  .group-card .price .cur { font-size: 17px; padding-top: 5px; }
-  .group-card .breakdown { margin-top: 16px; padding-top: 14px; gap: 8px; font-size: 13px; }
-  .group-card .per { margin-top: 6px; }
+  /* Groups — age chips in ONE compact row (age only, no labels);
+     description shows first, price card right after it */
+  .group-tabs { margin-bottom: 16px; flex-wrap: nowrap; }
+  .group-tab { flex: 1 1 0; min-width: 0; padding: 10px 4px; gap: 0; text-align: center; align-items: center; }
+  .group-tab > span:not(.age) { display: none; }
+  .group-tab .age { font-size: 14px; }
+  .group-panel { gap: 16px; }
+  .group-panel > div:first-child { order: 1; }
+  .group-card { order: 2; padding: 20px; border-radius: 18px; }
+  .group-panel .pre { font-size: 10px; margin-bottom: 10px; }
+  .group-panel h3 { font-size: 22px; margin-bottom: 10px; }
+  .group-panel .lead { font-size: 13.5px; line-height: 1.45; margin-bottom: 14px; }
+  .group-panel ul { gap: 7px; margin-bottom: 0; }
+  .group-panel li { font-size: 12.5px; grid-template-columns: 16px 1fr; gap: 10px; }
+  .group-card .price { font-size: 38px; }
+  .group-card .price .cur { font-size: 15px; padding-top: 4px; }
+  .group-card .per { margin-top: 5px; font-size: 10px; }
+  .group-card .breakdown { margin-top: 14px; padding-top: 12px; gap: 7px; font-size: 12.5px; }
+  .group-card .ribbon { display: none; }
 
   /* Afishas — 2 upcoming side by side, past 3-across, compact */
   .posters-body { gap: 28px; }
@@ -1418,6 +1442,7 @@ const groups = [
   .trial { padding-top: 44px; padding-bottom: 44px; }
   .trial .eyebrow { margin-bottom: 10px; }
   .trial h2 { font-size: clamp(28px, 8.5vw, 38px); margin-bottom: 12px; }
+  .trial h2 .out { -webkit-text-stroke-width: 2px; }   /* thinner outline at small size */
   .trial .sub { font-size: 13.5px; line-height: 1.4; margin-bottom: 18px; }
   .trial-inner { gap: 20px; }
   .trial-form { padding: 20px; border-radius: 18px; }
@@ -1428,12 +1453,13 @@ const groups = [
   .trial-submit { padding: 14px 20px; }
   .trial-shadow-squirrel { display: none; }
 
-  /* Footer — tighter */
-  .footer { padding-top: 44px; padding-bottom: 22px; }
-  .footer-brand .name { font-size: 40px; margin-bottom: 14px; }
-  .footer-grid { gap: 24px 20px; margin-bottom: 28px; }
-  .footer-col h4 { margin-bottom: 12px; }
-  .footer-col ul { gap: 8px; }
-  .footer-bottom { padding-top: 16px; font-size: 10px; }
+  /* Footer / контакты — one tidy column */
+  .footer { padding: 34px clamp(20px,4vw,64px) 22px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 18px; margin-bottom: 0; }
+  .footer-brand .name { font-size: 28px; margin: 0 0 2px; }
+  .footer-col h4 { margin-bottom: 6px; font-size: 10px; }
+  .footer-col ul { gap: 5px; }
+  .footer-col li a { font-size: 13px; }
+  .phone-row { flex-wrap: wrap; }
 }
 </style>
