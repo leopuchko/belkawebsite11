@@ -651,6 +651,7 @@ const groups = [
 
   // Deep-link to the trial form.
   //  …/#trial            → scrolls to the form and focuses the name field
+  //  …/?trial=1          → same, without a "#" (Instagram's link fields mangle "#" into "%23")
   //  …/?age=7-11#trial   → also preselects the age group
   //  …/?group=kids#trial → same, by group id (mini|kids|teens|adults|thirty)
   function openTrialForm() {
@@ -668,7 +669,8 @@ const groups = [
         ?.focus({ preventScroll: true });
     }, 600);
   }
-  if (location.hash === '#trial') openTrialForm();
+  const _p0 = new URLSearchParams(location.search);
+  if (location.hash === '#trial' || _p0.has('trial') || _p0.has('age') || _p0.has('group')) openTrialForm();
   document.querySelectorAll('a[href$="#trial"]').forEach((a) => {
     a.addEventListener('click', () => setTimeout(openTrialForm, 0));
   });
