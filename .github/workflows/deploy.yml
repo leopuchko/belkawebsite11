@@ -26,14 +26,16 @@ jobs:
       - name: Deploy over rsync/ssh
         env:
           SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          HOST: ${{ secrets.DEPLOY_HOST }}
-          USERNAME: ${{ secrets.DEPLOY_USER }}
-          TARGET: ${{ secrets.DEPLOY_PATH }}
+          HOST: "45.138.25.125"
+          USERNAME: "root"
+          TARGET: "/var/www/belkadance-by"
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          echo "--- target dir before sync ---"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no "$USERNAME@$HOST" "mkdir -p '$TARGET' && ls -la '$TARGET' | head -5"
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
             dist/ "$USERNAME@$HOST:$TARGET/"
