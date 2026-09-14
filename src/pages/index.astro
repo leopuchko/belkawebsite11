@@ -450,6 +450,9 @@ const groups = [
         <button type="submit" class="btn btn-primary btn-white trial-submit">
           Записаться на пробное
         </button>
+        <div id="trialError" style="display:none;color:var(--orange);font-family:var(--mono);font-size:12px;letter-spacing:0.06em;text-align:center;margin-top:14px">
+          Не получилось отправить. Попробуй ещё раз или позвони нам напрямую.
+        </div>
       </div>
       <div id="trialSuccess" style="display:none;text-align:center;padding:40px 20px">
         <div style="font-family:var(--display);font-size:36px;font-weight:800;color:var(--orange);margin-bottom:12px">Готово.</div>
@@ -614,14 +617,36 @@ const groups = [
     // mobile: tel: opens the OS "Call / Cancel" dialog — no auto-call
   });
 
-  // Trial form
+  // Trial form — sends to /api/trial, which relays to Telegram
   const form = document.getElementById('trialForm') as HTMLFormElement | null;
-  form?.addEventListener('submit', (e) => {
+  form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const fields = document.getElementById('trialFields');
     const success = document.getElementById('trialSuccess');
-    if (fields) fields.style.display = 'none';
-    if (success) success.style.display = 'block';
+    const errorBox = document.getElementById('trialError');
+    const submitBtn = form.querySelector('.trial-submit') as HTMLButtonElement | null;
+    const nameField = form.querySelector('input[name="name"]') as HTMLInputElement | null;
+
+    if (errorBox) errorBox.style.display = 'none';
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Отправляем…'; }
+
+    try {
+      const res = await fetch('/api/trial', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: nameField?.value ?? '',
+          age: ageValInput?.value ?? '',
+          phone: phoneInput?.value ?? '',
+        }),
+      });
+      if (!res.ok) throw new Error('request failed');
+      if (fields) fields.style.display = 'none';
+      if (success) success.style.display = 'block';
+    } catch {
+      if (errorBox) errorBox.style.display = 'block';
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Записаться на пробное'; }
+    }
   });
 
   // Deep-link to the trial form.
