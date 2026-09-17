@@ -26,7 +26,7 @@ jobs:
       - name: Deploy over rsync/ssh
         env:
           SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-          HOST: "45.138.25.125"
+          HOST: "45.133.16.236"
           USERNAME: "root"
           TARGET: "/var/www/belkadance-by"
         run: |
