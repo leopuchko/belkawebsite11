@@ -14,17 +14,17 @@ const stylesData = [
 ];
 
 const crewData = [
-  { name: "Наталья Пучко", role: "Директор школы", bio: "Директор школы Belka.", photo: "/trainers/natalia.jpg", photoPos: "center top" },
-  { name: "Леон", role: "Тренер концертного состава", bio: "Ведёт концертный состав Belka.", photo: "/trainers/leon.jpg", photoPos: "center top" },
-  { name: "Даша", role: "Hip-Hop · Girls Choreo", bio: "Хип-хоп и girls choreo. Ставит технику, пластику и подачу — от базы до сцены.", photo: "/trainers/dasha.jpg", photoPos: "center top" },
+  { name: "Наталья Пучко", role: "Директор школы", bio: "Директор школы Belka.", photo: "/trainers/natalia.webp", photoPos: "center top" },
+  { name: "Леон", role: "Тренер концертного состава", bio: "Ведёт концертный состав Belka.", photo: "/trainers/leon.webp", photoPos: "center top" },
+  { name: "Даша", role: "Hip-Hop · Girls Choreo", bio: "Хип-хоп и girls choreo. Ставит технику, пластику и подачу — от базы до сцены.", photo: "/trainers/dasha.webp", photoPos: "center top" },
 ];
 
 const stageTiles = [
-  { title: "Славянский базар", when: "2026", video: "/reels/slavyanka.mp4", poster: "/reels/slavyanka-poster.jpg" },
-  { title: "Belka Kids", when: "", video: "/reels/trenirovka.mp4", poster: "/reels/trenirovka-poster.jpg" },
-  { title: "Звёзды тиктока", when: "2025", video: "/reels/slavyanka-deti.mp4", poster: "/reels/slavyanka-deti-poster.jpg" },
-  { title: "Acrobatics", when: "", video: "/reels/salto.mp4", poster: "/reels/salto-poster.jpg" },
-  { title: "Витебская красавица", when: "2026", video: "/reels/krasavitsa.mp4", poster: "/reels/krasavitsa-poster.jpg" },
+  { title: "Славянский базар", when: "2026", video: "/reels/slavyanka.mp4", poster: "/reels/slavyanka-poster.webp" },
+  { title: "Belka Kids", when: "", video: "/reels/trenirovka.mp4", poster: "/reels/trenirovka-poster.webp" },
+  { title: "Звёзды тиктока", when: "2025", video: "/reels/slavyanka-deti.mp4", poster: "/reels/slavyanka-deti-poster.webp" },
+  { title: "Acrobatics", when: "", video: "/reels/salto.mp4", poster: "/reels/salto-poster.webp" },
+  { title: "Витебская красавица", when: "2026", video: "/reels/krasavitsa.mp4", poster: "/reels/krasavitsa-poster.webp" },
 ];
 
 // Афиша. Портретные постеры 3:4. `img` — путь в /posters/ (иначе — типографская заглушка).
@@ -33,11 +33,11 @@ type Ev = { title: string; date: string; dateText?: string; time?: string; place
 const eventsList: Ev[] = [
   { title: "Новогодняя сказка", date: "2026-12-20", dateText: "Декабрь 2026", place: "Витебск · большая сцена", headline: true },
   { title: "Секретное шоу", date: "2027-05-01", dateText: "Скоро", place: "Следите за анонсами", secret: true },
-  { title: "Belka · Танцевальное шоу", date: "2026-07-24", time: "19:00", place: "ДК Железнодорожников · Витебск", img: "/posters/poster-2026.jpg" },
-  { title: "Славянский базар · закрытие", date: "2026-07-19", place: "Летний амфитеатр · Витебск", img: "/posters/slavyanka-2026-2.jpg" },
-  { title: "Славянский базар · Мировой хит", date: "2026-07-18", place: "Летний амфитеатр · Витебск", img: "/posters/slavyanka-2026-1.jpg" },
-  { title: "Витебская красавица", date: "2026-06-26", place: "Летний амфитеатр · Витебск", img: "/posters/krasavitsa-2026.jpg" },
-  { title: "Зелёный марафон · Сбер", date: "2026-05-30", place: "Парк Победителей · Витебск", img: "/posters/zeleny-marafon-2026.jpg" },
+  { title: "Belka · Танцевальное шоу", date: "2026-07-24", time: "19:00", place: "ДК Железнодорожников · Витебск", img: "/posters/poster-2026.webp" },
+  { title: "Славянский базар · закрытие", date: "2026-07-19", place: "Летний амфитеатр · Витебск", img: "/posters/slavyanka-2026-2.webp" },
+  { title: "Славянский базар · Мировой хит", date: "2026-07-18", place: "Летний амфитеатр · Витебск", img: "/posters/slavyanka-2026-1.webp" },
+  { title: "Витебская красавица", date: "2026-06-26", place: "Летний амфитеатр · Витебск", img: "/posters/krasavitsa-2026.webp" },
+  { title: "Зелёный марафон · Сбер", date: "2026-05-30", place: "Парк Победителей · Витебск", img: "/posters/zeleny-marafon-2026.webp" },
 ];
 const _MON = ["янв","фев","мар","апр","мая","июн","июл","авг","сен","окт","ноя","дек"];
 const fmtDate = (iso: string) => { const d = new Date(iso + "T00:00:00"); return `${d.getDate()} ${_MON[d.getMonth()]} ${d.getFullYear()}`; };
@@ -61,7 +61,7 @@ const groups = [
 <!-- ══ NAV ══ -->
 <header class="nav" id="top">
   <a href="#top" class="nav-brand">
-    <img src="/logo-white.png" alt="Belka" width="36" height="36" />
+    <img src="/logo-white-nav.webp" alt="Belka" width="36" height="36" />
     <span class="name">Belka</span>
   </a>
   <nav class="nav-links" id="navLinks">
@@ -83,7 +83,7 @@ const groups = [
 <!-- ══ HERO ══ -->
 <section class="hero" id="hero">
   <div class="hero-squirrel-wrap">
-    <img class="hero-bigsquirrel" src="/logo-orange.png" alt="" />
+    <img class="hero-bigsquirrel" src="/logo-orange.webp" alt="" />
   </div>
   <div class="hero-stage">
     <div>
@@ -123,7 +123,7 @@ const groups = [
   <div class="reel-bg">
     <video
       src="/video/showreel.mp4"
-      poster="/video/showreel-poster.jpg"
+      poster="/video/showreel-poster.webp"
       autoplay
       muted
       loop
@@ -305,7 +305,7 @@ const groups = [
   </div>
   <div class="alumni-panels shell">
     <div class="alumni-panel" tabindex="0">
-      <div class="ap-bg" style="background:url('/alumni/seleznev.jpg') center 25%/cover no-repeat;"></div>
+      <div class="ap-bg" style="background:url('/alumni/seleznev.webp') center 25%/cover no-repeat;"></div>
       <div class="ap-overlay"></div>
       <div class="ap-content">
         <div class="ap-info">
@@ -317,7 +317,7 @@ const groups = [
     </div>
     <div class="alumni-panel" tabindex="0">
       <!-- Пануфник — держим карточку по центру ряда -->
-      <div class="ap-bg" style="background:url('/alumni/panufnik.jpg') center/cover no-repeat;"></div>
+      <div class="ap-bg" style="background:url('/alumni/panufnik.webp') center/cover no-repeat;"></div>
       <div class="ap-overlay"></div>
       <div class="ap-content">
         <div class="ap-info">
@@ -328,7 +328,7 @@ const groups = [
       </div>
     </div>
     <div class="alumni-panel" tabindex="0">
-      <div class="ap-bg" style="background:url('/alumni/saprankov.jpg') 30% 20%/cover no-repeat;"></div>
+      <div class="ap-bg" style="background:url('/alumni/saprankov.webp') 30% 20%/cover no-repeat;"></div>
       <div class="ap-overlay"></div>
       <div class="ap-content">
         <div class="ap-info">
@@ -407,7 +407,7 @@ const groups = [
 
 <!-- ══ TRIAL CTA ══ -->
 <section class="trial" id="trial">
-  <img class="trial-shadow-squirrel" src="/logo-black.png" alt="" />
+  <img class="trial-shadow-squirrel" src="/logo-black.webp" alt="" />
   <div class="trial-inner">
     <div>
       <div class="eyebrow" style="color:var(--ink);margin-bottom:16px">/ Пробное занятие</div>
