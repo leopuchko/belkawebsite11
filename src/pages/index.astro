@@ -602,10 +602,14 @@ const groups = [
     phoneInput.value = digits;
   });
 
+  // Yandex.Metrika goals (counter is in BaseLayout)
+  const goal = (name: string) => (window as any).ym?.(114025279, 'reachGoal', name);
+
   // Footer phone — copy on desktop, tel: dialog on mobile
   const footerPhone = document.getElementById('footerPhone');
   const copyToast = document.getElementById('copyToast');
   footerPhone?.addEventListener('click', (e) => {
+    goal('phone_click');
     const isMobile = navigator.maxTouchPoints > 0 || ('ontouchstart' in window);
     if (!isMobile) {
       e.preventDefault();
@@ -641,6 +645,7 @@ const groups = [
         }),
       });
       if (!res.ok) throw new Error('request failed');
+      goal('trial_sent');
       if (fields) fields.style.display = 'none';
       if (success) success.style.display = 'block';
     } catch {
