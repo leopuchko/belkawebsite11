@@ -29,9 +29,9 @@ const stageTiles = [
 
 // Афиша. Портретные постеры 3:4. `img` — путь в /posters/ (иначе — типографская заглушка).
 // Прошедшие/предстоящие делятся автоматически по дате сборки.
-type Ev = { title: string; date: string; dateText?: string; time?: string; place?: string; img?: string; headline?: boolean; secret?: boolean; cta?: { label: string; href: string } };
+type Ev = { title: string; date: string; dateText?: string; time?: string; place?: string; img?: string; headline?: boolean; secret?: boolean; cta?: { label: string; href: string }; venue?: { name: string; street: string } };
 const eventsList: Ev[] = [
-  { title: "Новогодняя сказка", date: "2026-12-20", dateText: "Декабрь 2026", place: "Витебск · большая сцена", headline: true },
+  { title: "Новогоднее танцевальное шоу", date: "2026-12-25", time: "19:00", place: "ДК Железнодорожников · Витебск", img: "/posters/novogodnee-shou-2026.webp", cta: { label: "Билеты", href: "https://www.instagram.com/belka.empire" }, venue: { name: "Дворец культуры железнодорожников", street: "ул. Некрасова, 2а" } },
   { title: "Секретное шоу", date: "2027-05-01", dateText: "Скоро", place: "Следите за анонсами", secret: true },
   { title: "Belka · Танцевальное шоу", date: "2026-07-24", time: "19:00", place: "ДК Железнодорожников · Витебск", img: "/posters/poster-2026.webp" },
   { title: "Славянский базар · закрытие", date: "2026-07-19", place: "Летний амфитеатр · Витебск", img: "/posters/slavyanka-2026-2.webp" },
@@ -45,6 +45,19 @@ const _now = Date.now();
 const _isPast = (e: { date: string }) => new Date(e.date + "T23:59:59").getTime() < _now;
 const upcomingEvents = eventsList.filter((e) => !_isPast(e)).sort((a, b) => a.date.localeCompare(b.date));
 const pastEvents = eventsList.filter(_isPast).sort((a, b) => b.date.localeCompare(a.date));
+// schema.org Event for upcoming shows with a known venue (Yandex/Google event snippets)
+const eventsLd = upcomingEvents.filter((e) => e.venue).map((e) => ({
+  "@context": "https://schema.org",
+  "@type": "Event",
+  name: `Belka — ${e.title}`,
+  startDate: `${e.date}T${e.time ?? "19:00"}:00+03:00`,
+  eventStatus: "https://schema.org/EventScheduled",
+  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+  location: { "@type": "Place", name: e.venue!.name, address: { "@type": "PostalAddress", streetAddress: e.venue!.street, addressLocality: "Витебск", addressCountry: "BY" } },
+  image: e.img ? [`https://belkadance.by${e.img}`] : undefined,
+  organizer: { "@type": "Organization", name: "Школа танца Belka", url: "https://belkadance.by" },
+  url: "https://belkadance.by/#posters",
+}));
 
 
 const groups = [
@@ -343,6 +356,7 @@ const groups = [
 
 <!-- ══ POSTERS ══ -->
 <section class="posters" id="posters">
+  {eventsLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
   <div class="posters-head">
     <div>
       <div class="eyebrow" style="margin-bottom:16px">/ Афиши и события</div>
@@ -450,6 +464,7 @@ const groups = [
         <button type="submit" class="btn btn-primary btn-white trial-submit">
           Записаться на пробное
         </button>
+        <p class="trial-consent">Нажимая кнопку, вы соглашаетесь на <a href="/privacy/" target="_blank">обработку персональных данных</a>.</p>
         <div id="trialError" style="display:none;color:var(--orange);font-family:var(--mono);font-size:12px;letter-spacing:0.06em;text-align:center;margin-top:14px">
           Не получилось отправить. Попробуй ещё раз или позвони нам напрямую.
         </div>
@@ -492,6 +507,10 @@ const groups = [
         <li><a href="https://www.tiktok.com/@belkaempireby" target="_blank" rel="noopener">TikTok</a></li>
       </ul>
     </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© {new Date().getFullYear()} ЧУК «БелкаДанс»</span>
+    <a href="/privacy/">Политика обработки персональных данных</a>
   </div>
 </footer>
 
@@ -1090,6 +1109,10 @@ const groups = [
 .footer-col li a:hover { color:var(--orange); }
 .footer-bottom { display:flex; justify-content:space-between; align-items:center; padding-top:24px; border-top:1px solid var(--line); font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(245,242,236,0.4); flex-wrap:wrap; gap:16px; }
 .phone-row { display:flex; align-items:center; gap:10px; }
+.footer-bottom a { color:inherit; transition:color 0.15s ease; }
+.footer-bottom a:hover { color:var(--orange); }
+.trial-consent { margin:12px 0 0; text-align:center; font-size:12px; line-height:1.4; color:rgba(245,242,236,0.45); }
+.trial-consent a { color:rgba(245,242,236,0.7); text-decoration:underline; text-underline-offset:2px; }
 .footer-phone { cursor:pointer; }
 .copy-toast { font-family:var(--mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--orange); opacity:0; transition:opacity 0.3s ease; pointer-events:none; white-space:nowrap; }
 .copy-toast.show { opacity:1; }
@@ -1488,6 +1511,7 @@ const groups = [
   /* Footer / контакты — one tidy column */
   .footer { padding: 34px clamp(20px,4vw,64px) 22px; }
   .footer-grid { grid-template-columns: 1fr; gap: 18px; margin-bottom: 0; }
+  .footer-bottom { margin-top: 28px; flex-direction: column; align-items: flex-start; gap: 10px; letter-spacing: 0.1em; }
   .footer-brand .name { font-size: 28px; margin: 0 0 2px; }
   .footer-col h4 { margin-bottom: 6px; font-size: 10px; }
   .footer-col ul { gap: 5px; }
